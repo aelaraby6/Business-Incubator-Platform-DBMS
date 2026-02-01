@@ -11,8 +11,11 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", "views");
 
-app.use(helmet());
-// app.use(cors(corsOptions));
+app.use(
+  helmet({
+    contentSecurityPolicy: false, 
+  })
+);// app.use(cors(corsOptions));
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,6 +28,10 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(express.static("public"));
+
+app.get("/", (req, res) => {
+  res.render("index"); 
+});
 
 app.use(
   session({
@@ -40,15 +47,6 @@ app.use(
     },
     rolling: true,
   }),
-);
-
-app.get("/", (req, res) => {
-  res.render("index");
-});
-
-app.use(
-  "/auth",
-  await import("./routes/auth/auth.js").then((module) => module.default),
 );
 
 app.use((err, req, res, next) => {

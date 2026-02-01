@@ -1,6 +1,36 @@
 @import "tailwindcss";
 
-:root {
-	--primary-color: #1e40af; 
-	--primary-accent: #f472b6;
+@theme {
+  --color-brand-yellow: #FFDE59;
+  --color-brand-blue: #2563EB;
+  --color-brand-pink: #FF90E8; 
+  --color-neo-black: #1a1a1a;
+  --color-neo-white: #fdfdfd;
+  
+  --primary-accent: #FFDE59; 
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-sans: "Inter", sans-serif;
+
+  --shadow-neo: 5px 5px 0px 0px rgba(0,0,0,1);
+  --shadow-neo-sm: 3px 3px 0px 0px rgba(0,0,0,1);
+  --shadow-neo-hover: 2px 2px 0px 0px rgba(0,0,0,1);
+
+  --animate-scroll-rtl: scroll 20s linear infinite;
+  
+  --animate-marquee: marquee 20s linear infinite;
+  
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .pause-on-hover:hover .animate-marquee {
+    animation-play-state: paused;
+  }
 }
