@@ -17,9 +17,13 @@ const app = express();
 const pgSession = connectPgSimpleImport(session);
 
 app.set("view engine", "ejs");
-app.set("views", "views");
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false, 
+  })
+);
+
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,6 +37,10 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(express.static("public"));
+
+app.get("/", (req, res) => {
+  res.render("index"); 
+});
 
 app.use(
   session({
@@ -55,8 +63,6 @@ app.use(
 );
 
 app.use("/v1", GlobalRouter);
-
-
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
