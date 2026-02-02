@@ -10,9 +10,7 @@ import pool from "./config/db.js";
 import { GlobalRouter } from "./routes/index.js";
 import { corsOptions } from "./config/corsOptions.js";
 
-
 const app = express();
-
 
 const pgSession = connectPgSimpleImport(session);
 
@@ -20,8 +18,8 @@ app.set("view engine", "ejs");
 
 app.use(
   helmet({
-    contentSecurityPolicy: false, 
-  })
+    contentSecurityPolicy: false,
+  }),
 );
 
 app.use(morgan("dev"));
@@ -39,7 +37,12 @@ app.use(limiter);
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.render("index"); 
+  res.render("index", {
+    routes: {
+      signupRoute: "/v1/auth/signup",
+      loginRoute: "/v1/auth/login",
+    },
+  });
 });
 
 app.use(
@@ -59,7 +62,7 @@ app.use(
       sameSite: "lax",
     },
     rolling: true,
-  })
+  }),
 );
 
 app.use("/v1", GlobalRouter);
