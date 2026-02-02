@@ -5,21 +5,30 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
+import connectPgSimpleImport from "connect-pg-simple";
+import pool from "./config/db.js";
+import { GlobalRouter } from "./routes/index.js";
+import { corsOptions } from "./config/corsOptions.js";
+
 
 const app = express();
 
+
+const pgSession = connectPgSimpleImport(session);
+
 app.set("view engine", "ejs");
-app.set("views", "views");
 
 app.use(
   helmet({
     contentSecurityPolicy: false, 
   })
-);// app.use(cors(corsOptions));
+);
+
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(cors(corsOptions));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -35,6 +44,10 @@ app.get("/", (req, res) => {
 
 app.use(
   session({
+    store: new pgSession({
+      pool: pool,
+      tableName: "session",
+    }),
     secret: process.env.SESSION_SECRET || "default-secret",
     resave: false,
     saveUninitialized: false,
@@ -46,8 +59,10 @@ app.use(
       sameSite: "lax",
     },
     rolling: true,
-  }),
+  })
 );
+
+app.use("/v1", GlobalRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
