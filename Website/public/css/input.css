@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@source "../../views/**/*.ejs";
 @theme {
   --color-brand-yellow: #FFDE59;
   --color-brand-blue: #2563EB;

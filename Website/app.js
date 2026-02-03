@@ -7,6 +7,7 @@ import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import connectPgSimpleImport from "connect-pg-simple";
 import pool from "./config/db.js";
+import workshopRoutes from './routes/workshop/workshop.js';
 import { GlobalRouter } from "./routes/index.js";
 import { corsOptions } from "./config/corsOptions.js";
 
@@ -65,6 +66,7 @@ app.use(
   }),
 );
 
+app.use('/v1/workshops', workshopRoutes);
 app.use("/v1", GlobalRouter);
 
 app.use((err, req, res, next) => {
