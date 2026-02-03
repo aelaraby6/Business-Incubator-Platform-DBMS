@@ -53,6 +53,7 @@
     "pg": "^8.18.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.7",
+    "sharp": "^0.34.5",
     "validator": "^13.15.23"
   },
   "devDependencies": {

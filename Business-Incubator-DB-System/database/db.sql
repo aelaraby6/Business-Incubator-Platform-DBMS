@@ -5,6 +5,7 @@ CREATE TABLE "users" (
   "email" varchar(255) UNIQUE,
   "password" varchar(255),
   "role" varchar(50) DEFAULT 'entrepreneur',
+  "profile_image" varchar(255),
   "created_at" timestamp DEFAULT (now()),
   "updated_at" timestamp DEFAULT (now())
 );
