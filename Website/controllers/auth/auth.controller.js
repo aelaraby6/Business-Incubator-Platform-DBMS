@@ -12,6 +12,7 @@ import sharp from "sharp";
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
+import { BadRequestError, NotFoundError } from "../../utils/error.js";
 
 export const signupPage = (req, res) =>
   res.render("auth/signup", {
@@ -20,6 +21,8 @@ export const signupPage = (req, res) =>
       loginRoute: "/v1/auth/login",
     },
     pageRoute: "/v1/auth/signup",
+    error: req.flash("error")[0] || null,
+    success: req.flash("success")[0] || null,
   });
 
 export const loginPage = (req, res) =>
@@ -29,20 +32,57 @@ export const loginPage = (req, res) =>
       loginRoute: "/v1/auth/login",
     },
     pageRoute: "/v1/auth/login",
+    error: req.flash("error")[0] || null,
+    success: req.flash("success")[0] || null,
   });
+
+export const profilePage = async (req, res, next) => {
+  try {
+    const user = await getUserBasicInfo(req.session.userId);
+    if (!user) {
+      return res.redirect("/v1/auth/login");
+    }
+
+    res.render("profile/profile", {
+      user: {
+        name: user.name,
+        email: user.email,
+        profilePicture: user.profile_image || null,
+      },
+      error: req.flash("error")[0] || null,
+      success: req.flash("success")[0] || null,
+      routes: {
+        signupRoute: "/v1/auth/signup",
+        loginRoute: "/v1/auth/login",
+      },
+      pageRoute: "/v1/auth/profile",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
-    let user = await findUserByEmail(email);
+    if (!name || !email || !password) {
+      req.flash("error", "All fields are required");
+      return res.redirect("/v1/auth/signup");
+    }
 
+    if (password.length < 8) {
+      req.flash("error", "Password must be at least 8 characters");
+      return res.redirect("/v1/auth/signup");
+    }
+
+    let user = await findUserByEmail(email);
     if (user) {
-      throw new Error("user already exists");
+      req.flash("error", "User already exists with this email");
+      return res.redirect("/v1/auth/signup");
     }
 
     const hashedPassword = await hashPassword(password);
-
     let user_code = generateUserCode();
 
     const newUser = await createUser({
@@ -52,11 +92,11 @@ export const register = async (req, res, next) => {
       password: hashedPassword,
     });
 
-    // res.redirect("/auth/login");
-
-    res.json({ message: "User registered successfully!" });
+    req.flash("success", "Account created successfully! Please login.");
+    res.redirect("/v1/auth/login");
   } catch (err) {
-    next(err);
+    req.flash("error", "An error occurred during registration. Please try again.");
+    res.redirect("/v1/auth/signup");
   }
 };
 
@@ -64,24 +104,30 @@ export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
+    if (!email || !password) {
+      req.flash("error", "Email and password are required");
+      return res.redirect("/v1/auth/login");
+    }
+
     const user = await findUserByEmail(email);
     if (!user) {
-      return res.status(400).send("Invalid email or password");
+      req.flash("error", "Invalid email or password");
+      return res.redirect("/v1/auth/login");
     }
 
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
-      return res.status(400).send("Invalid email or password");
+      req.flash("error", "Invalid email or password");
+      return res.redirect("/v1/auth/login");
     }
 
     req.session.userId = user.id;
     req.session.userRole = user.role;
 
-    // res.redirect("profile");
-
-    res.json({ message: "User Login In successfully!" });
+    res.redirect("/v1/auth/profile");
   } catch (err) {
-    next(err);
+    req.flash("error", "An error occurred during login. Please try again.");
+    res.redirect("/v1/auth/login");
   }
 };
 
@@ -91,12 +137,8 @@ export const logout = (req, res, next) => {
       if (err) {
         return next(err);
       }
-
       res.clearCookie("repodoctor.sid");
-
       res.json({ message: "User logged out successfully!" });
-
-      // res.redirect("/auth/login");
     });
   } catch (err) {
     next(err);
@@ -105,112 +147,167 @@ export const logout = (req, res, next) => {
 
 export const updateProfileImage = async (req, res, next) => {
   try {
-    // Check if user is authenticated
-    if (!req.session.userId) {
-      return res
-        .status(401)
-        .json({ message: "User not authenticated. Please login first." });
-    }
-
-    // Check if file was uploaded
     if (!req.file) {
-      return res.status(400).json({ message: "No image file provided." });
+      req.flash("error", "No image file provided.");
+      return res.redirect("/v1/auth/profile");
     }
 
-    // Validate file size (already checked by multer, but extra validation)
-    const maxFileSize = 5 * 1024 * 1024; // 5MB
-    if (req.file.size > maxFileSize) {
-      // Delete the uploaded file if it exceeds size
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+    if (!allowedTypes.includes(req.file.mimetype)) {
       await fs.unlink(req.file.path);
-      return res
-        .status(400)
-        .json({ message: "Image size must not exceed 5MB." });
+      req.flash("error", "Invalid file type. Only JPG, JPEG, and PNG are allowed.");
+      return res.redirect("/v1/auth/profile");
     }
 
-    // Get user
+    const maxFileSize = 5 * 1024 * 1024;
+    if (req.file.size > maxFileSize) {
+      await fs.unlink(req.file.path);
+      req.flash("error", "Image size must not exceed 5MB.");
+      return res.redirect("/v1/auth/profile");
+    }
+
     const user = await findUserById(req.session.userId);
     if (!user) {
       await fs.unlink(req.file.path);
-      return res.status(404).json({ message: "User not found." });
+      req.flash("error", "User not found. Please login again.");
+      return res.redirect("/v1/auth/login");
     }
 
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
     const processedImageDir = path.join(
       __dirname,
-      "../../public/uploads/profile-images",
-    );
-    const processedImagePath = path.join(
-      processedImageDir,
-      `profile-${req.session.userId}-processed.jpg`,
+      "../../public/uploads/profile-images"
     );
 
-    // Process image with sharp (compress and optimize)
-    await sharp(req.file.path)
-      .resize(200, 200, {
-        fit: "cover",
-        position: "center",
-      })
-      .jpeg({ quality: 80, progressive: true })
-      .toFile(processedImagePath);
+    try {
+      await fs.mkdir(processedImageDir, { recursive: true });
+    } catch (err) {
+      await fs.unlink(req.file.path);
+      req.flash("error", "Failed to create upload directory.");
+      return res.redirect("/v1/auth/profile");
+    }
 
-    // Delete original uploaded file
-    await fs.unlink(req.file.path);
+    const timestamp = Date.now();
+    const filename = `profile-${req.session.userId}-${timestamp}.jpg`;
+    const processedImagePath = path.join(processedImageDir, filename);
 
-    // Delete old profile image if it exists
+    try {
+      await sharp(req.file.path)
+        .resize(200, 200, {
+          fit: "cover",
+          position: "center",
+        })
+        .jpeg({ quality: 80, progressive: true })
+        .toFile(processedImagePath);
+    } catch (err) {
+      await fs.unlink(req.file.path);
+      req.flash("error", "Failed to process image. Please try again with a different image.");
+      return res.redirect("/v1/auth/profile");
+    }
+
+    try {
+      await fs.unlink(req.file.path);
+    } catch (err) {
+      console.warn("⚠️ Could not delete original file:", err.message);
+    }
+
     if (user.profile_image) {
       try {
         const oldImagePath = path.join(
           __dirname,
           "../../public",
-          user.profile_image,
+          user.profile_image
         );
         await fs.unlink(oldImagePath);
       } catch (err) {
-        console.warn("Could not delete old profile image:", err.message);
+        console.warn("⚠️ Could not delete old profile image:", err.message);
       }
     }
 
-    // Save image path in database
-    const imagePath = `/uploads/profile-images/profile-${req.session.userId}-processed.jpg`;
-    const updatedUser = await updateUserProfileImage(
-      req.session.userId,
-      imagePath,
-    );
-
-    res.json({
-      message: "Profile image updated successfully!",
-      imageUrl: imagePath,
-      user: {
-        id: updatedUser.id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        profile_image: updatedUser.profile_image,
-      },
-    });
+    const imagePath = `/uploads/profile-images/${filename}`;
+    try {
+      await updateUserProfileImage(req.session.userId, imagePath);
+      req.flash("success", "Profile picture updated successfully!");
+      res.redirect("/v1/auth/profile");
+    } catch (err) {
+      try {
+        await fs.unlink(processedImagePath);
+      } catch (e) {
+        console.warn("⚠️ Could not delete processed image:", e.message);
+      }
+      req.flash("error", "Failed to update profile picture in database.");
+      return res.redirect("/v1/auth/profile");
+    }
   } catch (err) {
-    // Clean up uploaded file if error occurs
     if (req.file) {
       try {
         await fs.unlink(req.file.path);
       } catch (e) {
-        console.warn("Could not delete uploaded file:", e.message);
+        console.warn("⚠️ Could not delete uploaded file:", e.message);
       }
     }
-    next(err);
+    req.flash("error", "An unexpected error occurred. Please try again.");
+    res.redirect("/v1/auth/profile");
+  }
+};
+
+export const changePassword = async (req, res, next) => {
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      req.flash("error", "All password fields are required.");
+      return res.redirect("/v1/auth/profile");
+    }
+
+    if (newPassword.length < 8) {
+      req.flash("error", "New password must be at least 8 characters.");
+      return res.redirect("/v1/auth/profile");
+    }
+
+    if (newPassword !== confirmPassword) {
+      req.flash("error", "New password and confirmation do not match.");
+      return res.redirect("/v1/auth/profile");
+    }
+
+    const user = await findUserById(req.session.userId);
+    if (!user) {
+      req.flash("error", "User not found. Please login again.");
+      return res.redirect("/v1/auth/login");
+    }
+
+    const isMatch = await comparePassword(currentPassword, user.password);
+    if (!isMatch) {
+      req.flash("error", "Current password is incorrect.");
+      return res.redirect("/v1/auth/profile");
+    }
+
+    const isSameAsOld = await comparePassword(newPassword, user.password);
+    if (isSameAsOld) {
+      req.flash("error", "New password must be different from current password.");
+      return res.redirect("/v1/auth/profile");
+    }
+
+    const hashedPassword = await hashPassword(newPassword);
+    await updateUserPassword(req.session.userId, hashedPassword);
+
+    req.flash("success", "Password changed successfully!");
+    res.redirect("/v1/auth/profile");
+  } catch (err) {
+    req.flash("error", "Failed to change password. Please try again.");
+    res.redirect("/v1/auth/profile");
   }
 };
 
 export const getBasicUserData = async (req, res, next) => {
   try {
-    // Check if user is authenticated
-    if (!req.session.userId) {
-      return res
-        .status(401)
-        .json({ message: "User not authenticated. Please login first." });
-    }
-
-    // Get user basic info
     const user = await getUserBasicInfo(req.session.userId);
+
+    if (!user) {
+      return res.status(404).json({
+        error: "User not found",
+      });
+    }
 
     res.json({
       message: "User data retrieved successfully!",
@@ -222,68 +319,6 @@ export const getBasicUserData = async (req, res, next) => {
         role: user.role,
         created_at: user.created_at,
         updated_at: user.updated_at,
-      },
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const changePassword = async (req, res, next) => {
-  try {
-    // Check if user is authenticated
-    if (!req.session.userId) {
-      return res
-        .status(401)
-        .json({ message: "User not authenticated. Please login first." });
-    }
-
-    const { currentPassword, newPassword, confirmPassword } = req.body;
-
-    // Validate that newPassword and confirmPassword match
-    if (newPassword !== confirmPassword) {
-      return res
-        .status(400)
-        .json({ message: "New password and confirmation do not match." });
-    }
-
-    // Get user from database
-    const user = await findUserById(req.session.userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
-    }
-
-    // Verify current password
-    const isMatch = await comparePassword(currentPassword, user.password);
-    if (!isMatch) {
-      return res
-        .status(400)
-        .json({ message: "Current password is incorrect." });
-    }
-
-    // Check if new password is same as old password
-    const isSameAsOld = await comparePassword(newPassword, user.password);
-    if (isSameAsOld) {
-      return res.status(400).json({
-        message: "New password must be different from current password.",
-      });
-    }
-
-    // Hash new password
-    const hashedPassword = await hashPassword(newPassword);
-
-    // Update password in database
-    const updatedUser = await updateUserPassword(
-      req.session.userId,
-      hashedPassword,
-    );
-
-    res.json({
-      message: "Password changed successfully!",
-      user: {
-        id: updatedUser.id,
-        name: updatedUser.name,
-        email: updatedUser.email,
       },
     });
   } catch (err) {

@@ -2,11 +2,12 @@ import { Router } from "express";
 import {
   signupPage,
   loginPage,
+  profilePage,
   register,
   login,
   logout,
-  updateProfileImage,
   getBasicUserData,
+  updateProfileImage,
   changePassword,
 } from "../../controllers/auth/auth.controller.js";
 import {
@@ -16,11 +17,12 @@ import {
 } from "../../validations/auth/auth.validation.js";
 import { validateBody } from "../../utils/validate.js";
 import upload from "../../config/multer.js";
+import { isAuthenticated } from "../../middleware/auth.middlware.js";
 
 const router = Router();
 
 const uploadProfileImage = (req, res, next) => {
-  upload.single("profileImage")(req, res, (err) => {
+  upload.single("profilePicture")(req, res, (err) => { // تأكد إن الاسم "profilePicture" زي ما في الـ HTML
     if (err) {
       if (err.code === "LIMIT_FILE_SIZE") {
         return res
@@ -38,19 +40,27 @@ const uploadProfileImage = (req, res, next) => {
 // Pages
 router.get("/signup", signupPage);
 router.get("/login", loginPage);
+router.get("/profile", isAuthenticated, profilePage);
 
 // Pages Logic
-router.post("/register", validateBody(registerSchema), register);
-router.post("/login", validateBody(loginSchema), login);
-router.post("/logout", logout);
+router.post("/register", register);
+router.post("/login", login);
+router.post("/logout", isAuthenticated, logout);
 
-// Profile routes
-router.post("/update-profile-image", uploadProfileImage, updateProfileImage);
-router.get("/me", getBasicUserData);
 router.post(
-  "/change-password",
-  validateBody(updatePasswordSchema),
-  changePassword,
+  "/profile/upload-picture",
+  isAuthenticated,
+  uploadProfileImage,
+  updateProfileImage
 );
+
+router.post(
+  "/profile/update-password",
+  isAuthenticated,
+  // validateBody(updatePasswordSchema),
+  changePassword
+);
+
+router.get("/me", isAuthenticated, getBasicUserData);
 
 export { router as AuthRouter };
