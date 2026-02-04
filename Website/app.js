@@ -10,6 +10,7 @@ import pool from "./config/db.js";
 import workshopRoutes from './routes/workshop/workshop.js';
 import { GlobalRouter } from "./routes/index.js";
 import { corsOptions } from "./config/corsOptions.js";
+import { get404, get500 } from "./controllers/error/error.controller.js";
 
 const app = express();
 
@@ -69,9 +70,8 @@ app.use(
 app.use('/v1/workshops', workshopRoutes);
 app.use("/v1", GlobalRouter);
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
-});
+app.use(get404);
+app.use(get500);
+
 
 export default app;

@@ -18,7 +18,6 @@ export const getWorkshopByIdQuery = async (id) => {
     const query = `
       SELECT 
         w.*, 
-        -- السطر ده سحر: بيجمع الحضور في Array جوه الرد
         COALESCE(
           json_agg(
             json_build_object('id', u.id, 'name', u.name, 'email', u.email)

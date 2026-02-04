@@ -3,13 +3,13 @@ import {
   getWorkshopByIdQuery,
   joinWorkshopQuery,
   leaveWorkshopQuery,
-} from "../../models/workshop/workshop.js";
+} from "../../models/workshop/Workshop.js";
 
 // 1. Get All
 export const getAllWorkshops = async (req, res, next) => {
   try {
     const workshops = await getAllWorkshopsQuery();
-
+    
     res.json({
       status: "success",
       results: workshops.length,

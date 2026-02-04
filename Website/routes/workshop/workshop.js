@@ -4,21 +4,10 @@ import {
   getOneWorkshop,
   attendWorkshop,
   cancelAttendance,
-} from "../../controllers/workshop/workshop.js";
+} from "../../controllers/workshop/workshop.controller.js";
 
 const router = express.Router();
 
-export const protect = (req, res, next) => {
-  if (!req.session || !req.session.userId) {
-    return res.status(401).json({ message: "Unauthorized. Please login first." });
-  }
-  req.user = { 
-      id: req.session.userId,
-      role: req.session.userRole 
-  };
-  
-  next();
-};
 
 // Public Routes
 router.get("/", getAllWorkshops);
