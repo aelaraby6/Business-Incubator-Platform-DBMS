@@ -111,6 +111,10 @@ router.get("/", (req, res) => {
   res.render("projects/projects", { routes, projects });
 });
 
+router.get("/new" , (req ,res) => {
+  res.render("projects/add-project" , {routes});
+})
+
 router.get("/:id", (req, res) => {
   const projectId = parseInt(req.params.id);
   const project = projects.find((p) => p.id === projectId);
