@@ -8,7 +8,6 @@ import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import connectPgSimpleImport from "connect-pg-simple";
 import pool from "./config/db.js";
-import workshopRoutes from "./routes/workshop/workshop.js";
 import { GlobalRouter } from "./routes/index.js";
 import {
   get404,
@@ -72,6 +71,7 @@ app.use((req, res, next) => {
     mentors: "/v1/mentors",
     about: "/v1/about",
     workshops: "/v1/workshop",
+    projects: "/v1/projects",
   };
   res.locals.user = req.session?.userId ? { role: req.session.userRole } : null;
   next();
@@ -81,7 +81,6 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.use("/v1/workshops", workshopRoutes);
 app.use("/v1", GlobalRouter);
 
 app.use(get404);
