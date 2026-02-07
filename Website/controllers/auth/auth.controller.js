@@ -15,10 +15,6 @@ import { fileURLToPath } from "url";
 
 export const signupPage = (req, res) =>
   res.render("auth/signup", {
-    routes: {
-      signupRoute: "/v1/auth/signup",
-      loginRoute: "/v1/auth/login",
-    },
     pageRoute: "/v1/auth/signup",
     error: req.flash("error")[0] || null,
     success: req.flash("success")[0] || null,
@@ -26,10 +22,6 @@ export const signupPage = (req, res) =>
 
 export const loginPage = (req, res) =>
   res.render("auth/login", {
-    routes: {
-      signupRoute: "/v1/auth/signup",
-      loginRoute: "/v1/auth/login",
-    },
     pageRoute: "/v1/auth/login",
     error: req.flash("error")[0] || null,
     success: req.flash("success")[0] || null,
