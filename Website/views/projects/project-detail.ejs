@@ -1,286 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= project.title %> - Business Incubator Platform</title>
-    <link href="/css/style.css" rel="stylesheet" />
-  </head>
-  <body class="bg-white text-gray-900 min-h-screen flex flex-col">
-    <%- include('../partials/header.ejs') %>
-    <main class="flex-1 px-4 py-12">
-      <div class="max-w-5xl mx-auto">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    <%= project.title %> - Business Incubator Platform
+  </title>
+  <link href="/css/style.css" rel="stylesheet" />
+</head>
+
+<body class="bg-white text-gray-900 min-h-screen flex flex-col">
+  <%- include('../partials/header.ejs') %>
+
+    <section class="min-h-screen bg-neo-white py-12 px-4 border-t-2 border-neo-black">
+      <div class="max-w-7xl mx-auto">
         <!-- Back Button -->
-        <a
-          href="/v1/projects"
-          class="text-gray-600 hover:text-gray-900 flex items-center gap-2 mb-8 transition-colors"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          Back to Projects
+        <a href="<%= routes.projects %>"
+          class="inline-flex items-center gap-2 mb-8 text-lg font-bold hover:-translate-x-2 transition-transform">
+          <span class="text-2xl">←</span> Back to Projects
         </a>
+
+        <!-- Project Header -->
+        <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-8 md:p-12 mb-8">
+          <div class="flex flex-col md:flex-row justify-between items-start gap-6 mb-6">
+            <div class="flex-1">
+              <h1 class="text-5xl md:text-6xl font-display font-bold text-neo-black mb-4">
+                <%= project.title %>
+              </h1>
+              <p class="text-xl text-gray-700 leading-relaxed">
+                <%= project.description %>
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-3">
+              <span
+                class="bg-brand-yellow px-6 py-3 text-lg font-bold border-2 border-neo-black rounded-full shadow-neo text-center whitespace-nowrap">
+                <%= project.status %>
+              </span>
+            </div>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+            <div class="bg-brand-pink/20 border-2 border-neo-black rounded-2xl p-6 text-center">
+              <div class="text-4xl font-bold font-display text-brand-pink mb-2">
+                <%= project.team.length %>
+              </div>
+              <div class="text-sm font-bold uppercase tracking-wide">Team Members</div>
+            </div>
+
+            <div class="bg-brand-blue/20 border-2 border-neo-black rounded-2xl p-6 text-center">
+              <div class="text-2xl font-bold text-brand-blue mb-2">
+                <%= project.techStack[0] %>
+              </div>
+              <div class="text-sm font-bold uppercase tracking-wide">Main Framework</div>
+            </div>
+
+            <div class="bg-brand-yellow/30 border-2 border-neo-black rounded-2xl p-6 text-center">
+              <div class="text-2xl font-bold text-neo-black mb-2">
+                <%= project.targetMarket.split(',')[0] %>
+              </div>
+              <div class="text-sm font-bold uppercase tracking-wide">Industry</div>
+            </div>
+          </div>
+        </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <!-- Main Content -->
           <div class="lg:col-span-2 space-y-8">
-            <!-- Project Header -->
-            <div
-              class="bg-white border border-gray-200 rounded-xl overflow-hidden"
-            >
-              <!-- Header Info -->
-              <div class="p-8 border-b border-gray-200">
+            <!-- Problem & Solution -->
+            <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-8 md:p-10">
+              <div class="flex items-center gap-3 mb-6">
                 <div
-                  class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4"
-                >
-                  <div>
-                    <h1 class="text-4xl font-bold mb-2">
-                      <%= project.title %>
-                    </h1>
-                    <p class="text-gray-700"><%= project.description %></p>
-                  </div>
-                  <span
-                    class="bg-blue-100 border border-blue-300 text-blue-800 text-sm font-semibold px-4 py-2 rounded-full whitespace-nowrap"
-                  >
-                    <%= project.status %>
-                  </span>
+                  class="w-12 h-12 bg-brand-pink rounded-full border-2 border-neo-black flex items-center justify-center text-2xl">
+                  🎯
                 </div>
-
-                <!-- Quick Stats -->
-                <div
-                  class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-200"
-                >
-                  <div class="text-center">
-                    <div class="text-2xl font-bold text-blue-600">
-                      <%= project.team.length %>
-                    </div>
-                    <p class="text-gray-700 text-sm">Team Members</p>
-                  </div>
-                  <div class="text-center">
-                    <div class="text-2xl font-bold text-blue-600">
-                      <%= project.techStack[0] %>
-                    </div>
-                    <p class="text-gray-700 text-sm">Main Framework</p>
-                  </div>
-                  <div class="text-center">
-                    <div class="text-2xl font-bold text-blue-600">
-                      <%= project.targetMarket.split(',')[0] %>
-                    </div>
-                    <p class="text-gray-700 text-sm">Industry</p>
-                  </div>
-                </div>
+                <h2 class="text-3xl font-display font-bold">Problem Being Solved</h2>
               </div>
-            </div>
-
-            <!-- Problem Section -->
-            <div class="bg-white border border-gray-200 rounded-xl p-8">
-              <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
-                <svg
-                  class="w-6 h-6 text-red-600"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                Problem Being Solved
-              </h2>
-              <p class="text-gray-700 text-lg leading-relaxed">
+              <p class="text-lg text-gray-800 leading-relaxed">
                 <%= project.problem %>
               </p>
             </div>
 
-            <!-- Solution Section -->
-            <div class="bg-white border border-gray-200 rounded-xl p-8">
-              <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
-                <svg
-                  class="w-6 h-6 text-green-600"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 3.27v.756a3.066 3.066 0 01-3.027 3.066 3.065 3.065 0 00-1.852 1.728 3.066 3.066 0 01-5.433 0 3.065 3.065 0 00-1.852-1.728 3.066 3.066 0 01-3.027-3.066v-.756a3.066 3.066 0 012.812-3.27zM9 11a3 3 0 100-6 3 3 0 000 6zm7.25-4.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                Our Solution
-              </h2>
-              <p class="text-gray-700 text-lg leading-relaxed mb-6">
+            <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-8 md:p-10">
+              <div class="flex items-center gap-3 mb-6">
+                <div
+                  class="w-12 h-12 bg-brand-blue rounded-full border-2 border-neo-black flex items-center justify-center text-2xl">
+                  💡
+                </div>
+                <h2 class="text-3xl font-display font-bold">Our Solution</h2>
+              </div>
+              <p class="text-lg text-gray-800 leading-relaxed">
                 <%= project.solution %>
               </p>
             </div>
 
-            <!-- Tech Stack Section -->
-            <div class="bg-white border border-gray-200 rounded-xl p-8">
-              <h2 class="text-2xl font-bold mb-6 text-gray-900">Technology Stack</h2>
-              <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <% project.techStack.forEach((tech, index) => { %>
-                <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                  <h3 class="font-semibold text-sm text-gray-700 mb-2">Technology <%= index + 1 %></h3>
-                  <p class="text-gray-900"><%= tech %></p>
+            <!-- Technology Stack -->
+            <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-8 md:p-10">
+              <div class="flex items-center gap-3 mb-6">
+                <div
+                  class="w-12 h-12 bg-brand-yellow rounded-full border-2 border-neo-black flex items-center justify-center text-2xl">
+                  🛠️
                 </div>
-                <% }); %>
+                <h2 class="text-3xl font-display font-bold">Technology Stack</h2>
+              </div>
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <% project.techStack.forEach((tech, index)=> { %>
+                  <div
+                    class="bg-neo-white border-2 border-neo-black rounded-xl p-4 hover:-translate-y-1 transition-transform">
+                    <div class="text-sm font-bold text-gray-500 mb-1">Tech <%= index + 1 %>
+                    </div>
+                    <div class="font-bold text-lg">
+                      <%= tech %>
+                    </div>
+                  </div>
+                  <% }); %>
               </div>
             </div>
 
-            <!-- Additional Details -->
-            <div class="bg-white border border-gray-200 rounded-xl p-8">
-              <h2 class="text-2xl font-bold mb-6 text-gray-900">Project Details</h2>
-              <div class="space-y-4">
-                <div class="flex justify-between py-3 border-b border-gray-200">
-                  <span class="text-gray-700">Funding Stage</span>
-                  <span class="text-gray-900 font-medium"><%= project.fundingStage %></span>
+            <!-- Team -->
+            <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-8 md:p-10">
+              <div class="flex items-center gap-3 mb-8">
+                <div
+                  class="w-12 h-12 bg-brand-pink rounded-full border-2 border-neo-black flex items-center justify-center text-2xl">
+                  👥
                 </div>
-                <div class="flex justify-between py-3 border-b border-gray-200">
-                  <span class="text-gray-700">Target Market</span>
-                  <span class="text-gray-900 font-medium"><%= project.targetMarket %></span>
-                </div>
-                <div class="flex justify-between py-3 border-b border-gray-200">
-                  <span class="text-gray-700">Project Started</span>
-                  <span class="text-gray-900 font-medium"><%= project.startDate %></span>
-                </div>
-                <div class="flex justify-between py-3">
-                  <span class="text-gray-700">Looking for Co-founders</span>
-                  <span class="text-gray-900 font-medium flex items-center gap-2">
-                    <% if (project.lookingForCoFounders) { %>
-                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                    </svg>
-                    Yes - <%= project.neededRoles %>
-                    <% } else { %>
-                    <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                    </svg>
-                    No
-                    <% } %>
-                  </span>
-                </div>
+                <h2 class="text-3xl font-display font-bold">Team</h2>
               </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <% project.team.forEach(member=> { %>
+                  <div
+                    class="flex items-center gap-4 bg-neo-white border-2 border-neo-black rounded-2xl p-6 hover:shadow-neo transition-shadow">
+                    <div
+                      class="w-16 h-16 bg-brand-blue text-white border-2 border-neo-black rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
+                      <%= member.initials %>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h3 class="font-bold text-lg truncate">
+                        <%= member.name %>
+                      </h3>
+                      <p class="text-gray-600 truncate">
+                        <%= member.role %>
+                      </p>
+                    </div>
+                  </div>
+                  <% }); %>
+              </div>
+
+              <button
+                class="w-full mt-6 bg-brand-blue text-white text-lg font-bold py-4 px-8 rounded-full border-2 border-neo-black shadow-neo hover:-translate-y-1 transition-transform">
+                Connect with Team 💬
+              </button>
             </div>
           </div>
 
           <!-- Sidebar -->
-          <div class="space-y-6">
-            <!-- Team Card -->
-            <div class="bg-white border border-gray-200 rounded-xl p-6">
-              <h3 class="text-xl font-bold mb-4 text-gray-900">Team</h3>
-              <div class="space-y-4">
-                <% project.team.forEach(member => { %>
-                <div class="flex items-center gap-3">
-                  <div class="w-12 h-12 <%= member.color %> rounded-full flex items-center justify-center font-bold text-lg">
-                    <%= member.initials %>
-                  </div>
+          <div class="lg:col-span-1">
+            <div class="space-y-6 lg:sticky lg:top-6">
+              <!-- Project Details -->
+              <div class="bg-neo-black text-white border-2 border-neo-black rounded-3xl shadow-neo p-8">
+                <h2 class="text-2xl font-display font-bold mb-6">Project Details</h2>
+
+                <div class="space-y-6">
                   <div>
-                    <p class="font-semibold text-gray-900"><%= member.name %></p>
-                    <p class="text-gray-700 text-sm"><%= member.role %></p>
+                    <div class="text-sm font-bold text-gray-400 mb-2">Funding Stage</div>
+                    <div class="text-lg font-bold">
+                      <%= project.fundingStage %>
+                    </div>
+                  </div>
+
+                  <div class="border-t border-gray-700 pt-6">
+                    <div class="text-sm font-bold text-gray-400 mb-2">Target Market</div>
+                    <div class="text-lg font-bold">
+                      <%= project.targetMarket %>
+                    </div>
+                  </div>
+
+                  <div class="border-t border-gray-700 pt-6">
+                    <div class="text-sm font-bold text-gray-400 mb-2">Project Started</div>
+                    <div class="text-lg font-bold">
+                      <%= project.startDate %>
+                    </div>
+                  </div>
+
+                  <div class="border-t border-gray-700 pt-6">
+                    <div class="text-sm font-bold text-gray-400 mb-2">Looking for Co-founders</div>
+                    <% if (project.lookingForCoFounders) { %>
+                      <div
+                        class="bg-brand-yellow text-neo-black px-4 py-2 rounded-full border-2 border-white font-bold inline-block">
+                        Yes ✅
+                      </div>
+                      <div class="mt-3 text-sm">
+                        <%= project.neededRoles %>
+                      </div>
+                      <% } else { %>
+                        <div class="text-lg font-bold text-gray-400">No</div>
+                        <% } %>
                   </div>
                 </div>
-                <% }); %>
               </div>
-              <button
-                class="w-full mt-6 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-semibold transition-colors text-white"
-              >
-                Connect with Team
-              </button>
-            </div>
 
-            <!-- Action Buttons -->
-            <div
-              class="bg-white border border-gray-200 rounded-xl p-6 space-y-3"
-            >
-              <a
-                href="<%= project.links.demo %>"
-                class="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-lg font-semibold transition-colors text-white"
-              >
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"
-                  />
-                  <path d="M6 11a1 1 0 11-2 0 1 1 0 012 0z" />
-                  <path d="M16 7l-4 5-2-2-4 4" />
-                </svg>
-                View Demo
-              </a>
-              <a
-                href="<%= project.links.github %>"
-                class="w-full flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 px-4 py-3 rounded-lg font-semibold transition-colors"
-              >
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    d="M10.5 1.5H5.75A2.75 2.75 0 003 4.25v11A2.75 2.75 0 005.75 18h8.5A2.75 2.75 0 0017 15.25V9.5"
-                  />
-                  <path d="M14 4L8 10" />
-                </svg>
-                Visit GitHub
-              </a>
-              <button
-                class="w-full flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 px-4 py-3 rounded-lg font-semibold transition-colors"
-              >
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10.5 8.5H2M18 10.5l-7-7m7 7l-7 7" />
-                </svg>
-                Share Project
-              </button>
-            </div>
+              <!-- Action Buttons -->
+              <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-6 space-y-4">
+                <button
+                  class="w-full bg-brand-yellow text-neo-black text-lg font-bold py-4 px-6 rounded-full border-2 border-neo-black shadow-neo hover:-translate-y-1 transition-transform">
+                  View Demo 🚀
+                </button>
 
-            <!-- Resources Card -->
-            <div class="bg-white border border-gray-200 rounded-xl p-6">
-              <h3 class="text-xl font-bold mb-4 text-gray-900">Resources</h3>
-              <div class="space-y-2">
-                <a
-                  href="<%= project.links.github %>"
-                  class="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
-                >
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      d="M10.5 1.5H5.75A2.75 2.75 0 003 4.25v11A2.75 2.75 0 005.75 18h8.5A2.75 2.75 0 0017 15.25V9.5"
-                    />
-                  </svg>
-                  <span>GitHub Repository</span>
-                </a>
-                <a
-                  href="<%= project.links.demo %>"
-                  class="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
-                >
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM15.657 14.243a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM11 17a1 1 0 102 0v-1a1 1 0 10-2 0v1zM5.757 15.657a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM2 10a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.757 4.343a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414l-.707-.707z"
-                    />
-                  </svg>
-                  <span>Live Demo</span>
-                </a>
-                <a
-                  href="<%= project.links.website %>"
-                  class="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
-                >
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      d="M2 3a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H3a1 1 0 01-1-1V3z"
-                    />
-                  </svg>
-                  <span>Project Website</span>
-                </a>
+                <button
+                  class="w-full bg-white text-neo-black text-lg font-bold py-4 px-6 rounded-full border-2 border-neo-black shadow-neo hover:-translate-y-1 transition-transform">
+                  Visit GitHub 💻
+                </button>
+
+                <button
+                  class="w-full bg-brand-pink text-white text-lg font-bold py-4 px-6 rounded-full border-2 border-neo-black shadow-neo hover:-translate-y-1 transition-transform">
+                  Share Project 📤
+                </button>
+              </div>
+
+              <!-- Resources -->
+              <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-6">
+                <h3 class="text-xl font-display font-bold mb-4">Resources</h3>
+                <div class="space-y-3">
+                  <a href="#"
+                    class="flex items-center gap-3 p-3 bg-neo-white border-2 border-neo-black rounded-xl hover:shadow-neo transition-shadow">
+                    <span class="text-2xl">📦</span>
+                    <span class="font-bold">GitHub Repository</span>
+                  </a>
+                  <a href="#"
+                    class="flex items-center gap-3 p-3 bg-neo-white border-2 border-neo-black rounded-xl hover:shadow-neo transition-shadow">
+                    <span class="text-2xl">🌐</span>
+                    <span class="font-bold">Live Demo</span>
+                  </a>
+                  <a href="#"
+                    class="flex items-center gap-3 p-3 bg-neo-white border-2 border-neo-black rounded-xl hover:shadow-neo transition-shadow">
+                    <span class="text-2xl">🔗</span>
+                    <span class="font-bold">Project Website</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </main>
+    </section>
+
     <%- include('../partials/footer.ejs') %>
-   <script src="/js/project-details.js"></script>
-  </body>
+      <script src="/js/project-details.js"></script>
+</body>
+
 </html>
