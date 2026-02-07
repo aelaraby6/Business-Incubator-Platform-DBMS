@@ -71,6 +71,7 @@ app.use((req, res, next) => {
     loginRoute: "/v1/auth/login",
     mentors: "/v1/mentors",
     about: "/v1/about",
+    workshops: "/v1/workshop",
   };
   res.locals.user = req.session?.userId ? { role: req.session.userRole } : null;
   next();

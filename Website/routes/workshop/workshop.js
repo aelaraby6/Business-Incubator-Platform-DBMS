@@ -6,6 +6,7 @@ import {
   cancelAttendance,
 } from "../../controllers/workshop/workshop.controller.js";
 import {protect} from "../../middleware/auth.middlware.js"
+
 const router = express.Router();
 
 

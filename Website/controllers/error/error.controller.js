@@ -7,6 +7,7 @@ const getCommonData = (req) => ({
     loginRoute: "/v1/auth/login",
   },
 });
+
 export const get404 = (req, res) => {
   res.status(404).render("error/error", {
     ...getCommonData(req),
