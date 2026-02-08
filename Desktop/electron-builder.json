@@ -1,0 +1,26 @@
+{
+  "appId": "com.businessincubator.platform",
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "dist-react/**/*",
+    "src/electron/**/*",
+    "package.json"
+  ],
+  "extraMetadata": {
+    "main": "src/electron/main.js"
+  },
+  "extraResources": ["src/assets/**"],
+  "icon": "./icon.jpg",
+  "mac": {
+    "target": "dir"
+  },
+  "linux": {
+    "target": "AppImage",
+    "category": "Utility"
+  },
+  "win": {
+    "target": ["portable", "msi"]
+  }
+}
