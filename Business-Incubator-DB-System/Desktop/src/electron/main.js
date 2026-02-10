@@ -1,9 +1,12 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { isDevelopmentMode } from './util.js';
 import { getPreloadPath, getUIPath } from './pathResolver.js';
+import loginRequest from './backend/auth/login.js';
 
 app.on('ready', () => {
   const mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
     webPreferences: {
       preload: getPreloadPath(),
     },
@@ -14,25 +17,9 @@ app.on('ready', () => {
   } else {
     mainWindow.loadFile(getUIPath());
   }
-  
-  // Send test event after window is ready
-  mainWindow.webContents.on('did-finish-load', () => {
-    console.log('Window loaded, sending test event');
-    mainWindow.webContents.send('test-event', {
-      message: 'Hello from Main Process!',
-      timestamp: new Date().toISOString()
-    });
+  ipcMain.handle('auth:login', async (_event, credentials) => {
+    return await loginRequest(credentials);
   });
-  
-  // Listen for events from renderer
-  ipcMain.on('test-channel', (event, data) => {
-    console.log('Main received:', data);
-    event.reply('test-response', {
-      message: 'Main process received your message!',
-      receivedData: data
-    });
-  });
-  
   handleCloseEvents(mainWindow);
 });
 
