@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { login } from "../../services/authService.js";
+
+
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -13,14 +17,16 @@ export default function LoginPage() {
     setSuccess("");
     try {
       const response = await login({ email, password });
+
       if (response?.success) {
+
         setSuccess("Login successful! Welcome back.");
         setEmail("");
         setPassword("");
-        // Store user data in localStorage
+
         sessionStorage.setItem("isLoggedIn", "true");
         sessionStorage.setItem("user", JSON.stringify(response.user));
-        sessionStorage.setItem("loginTime", new Date().toISOString());    
+        sessionStorage.setItem("loginTime", new Date().toISOString());
         // Redirect to dashboard after a short delay
         // setTimeout(() => {
         //   window.location.href = "/dashboard"; // Adjust this path as needed
@@ -34,6 +40,8 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+
   return (
     <div className="bg-white h-screen w-screen flex flex-col relative overflow-hidden">
       {/* Decorative Elements */}
