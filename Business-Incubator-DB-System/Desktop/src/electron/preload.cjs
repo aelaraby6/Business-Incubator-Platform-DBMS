@@ -12,8 +12,8 @@ electron.contextBridge.exposeInMainWorld('electron', {
             callback(data);
         });
     },
-    invoke: (channel, data) => {
-        console.log(`Preload invoking: ${channel} with data:`, data);
-        return electron.ipcRenderer.invoke(channel, data);
+    invoke: (channel, ...args) => {
+        console.log(`Preload invoking: ${channel} with args:`, args);
+        return electron.ipcRenderer.invoke(channel, ...args);
     }
 } );
