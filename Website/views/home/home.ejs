@@ -1,483 +1,225 @@
-<section
-  id="hero-container"
-  class="relative flex flex-col items-center justify-center pt-20 pb-16 px-4 md:pt-28 md:pb-24 text-center bg-neo-white min-h-[90vh] md:min-h-[95vh]"
->
-  <div
-    class="parallax-element absolute top-10 left-5 md:left-20 md:flex pointer-events-none z-0 opacity-80"
-    data-speed="3"
-  >
-    <div
-      class="w-16 h-16 md:w-20 md:h-20 bg-brand-pink border-2 border-neo-black rounded-full flex items-center justify-center text-3xl md:text-4xl shadow-neo transform -rotate-12"
-    >
-      💰
-    </div>
-  </div>
-  <div
-    class="parallax-element absolute bottom-32 right-5 md:right-32 md:flex pointer-events-none z-0 opacity-80"
-    data-speed="-3"
-  >
-    <div
-      class="w-20 h-20 md:w-24 md:h-24 bg-brand-blue text-white border-2 border-neo-black rounded-full flex items-center justify-center text-4xl md:text-5xl shadow-neo transform rotate-12"
-    >
-      🚀
-    </div>
-  </div>
-  <div
-    class="parallax-element absolute top-20 right-5 md:right-40 md:block pointer-events-none z-0 opacity-80"
-    data-speed="2"
-  >
-    <div
-      class="px-6 py-2 md:px-8 md:py-3 bg-brand-yellow border-2 border-neo-black rounded-full font-bold text-lg md:text-xl shadow-neo transform rotate-6"
-    >
-      💡 Big Idea
-    </div>
-  </div>
-  <div
-    class="parallax-element absolute bottom-32 left-15 md:flex pointer-events-none z-0 opacity-80"
-    data-speed="-2"
-  >
-    <div
-      class="w-20 h-20 md:w-24 md:h-24 bg-white border-2 border-neo-black rounded-xl flex items-center justify-center text-4xl md:text-5xl shadow-neo transform -rotate-6"
-    >
-      📈
-    </div>
-  </div>
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %> 
 
-  <div class="relative z-10 w-full max-w-5xl mx-auto">
-    <h1
-      class="font-display text-5xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-center mb-6 md:mb-8 leading-tight text-neo-black"
-    >
-      From Napkin to <br />
-      <span class="text-brand-blue relative inline-block mt-2 md:mt-0">
-        NASDAQ
-        <svg
-          class="absolute w-full h-3 md:h-4 -bottom-1 left-0 text-brand-yellow z-[-1]"
-          viewBox="0 0 100 10"
-          preserveAspectRatio="none"
+<body class="bg-neo-white text-neo-black flex flex-col min-h-screen">
+
+    <main class="flex-grow">
+        <section
+            id="hero-container"
+            class="relative flex flex-col items-center justify-center pt-20 pb-16 px-4 md:pt-28 md:pb-24 text-center bg-brand-slate text-white border-b-4 border-black min-h-[90vh] md:min-h-[95vh]"
         >
-          <path
-            d="M0 5 Q 50 10 100 5"
-            stroke="currentColor"
-            stroke-width="12"
-            fill="none"
-            opacity="0.8"
-          />
-        </svg>
-      </span>
-    </h1>
+            <div class="parallax-element absolute top-10 left-5 md:left-20 md:flex pointer-events-none z-0 opacity-80" data-speed="3">
+                <div class="w-16 h-16 md:w-20 md:h-20 bg-brand-indigo border-4 border-black rounded-full flex items-center justify-center text-3xl md:text-4xl shadow-neo transform -rotate-12">💰</div>
+            </div>
+            <div class="parallax-element absolute bottom-32 right-5 md:right-32 md:flex pointer-events-none z-0 opacity-80" data-speed="-3">
+                <div class="w-20 h-20 md:w-24 md:h-24 bg-white text-black border-4 border-black rounded-full flex items-center justify-center text-4xl md:text-5xl shadow-neo transform rotate-12">🚀</div>
+            </div>
+            <div class="parallax-element absolute top-20 right-5 md:right-40 md:block pointer-events-none z-0 opacity-80" data-speed="2">
+                <div class="px-6 py-2 md:px-8 md:py-3 bg-brand-amber text-black border-4 border-black rounded-full font-bold text-lg md:text-xl shadow-neo transform rotate-6">💡 Big Idea</div>
+            </div>
+            <div class="parallax-element absolute bottom-32 left-15 md:flex pointer-events-none z-0 opacity-80" data-speed="-2">
+                <div class="w-20 h-20 md:w-24 md:h-24 bg-white text-black border-4 border-black rounded-xl flex items-center justify-center text-4xl md:text-5xl shadow-neo transform -rotate-6">📈</div>
+            </div>
 
-    <p
-      class="text-lg sm:text-xl md:text-2xl text-gray-800 max-w-3xl mx-auto mb-10 md:mb-12 font-medium font-sans leading-relaxed px-2"
-    >
-      The university incubator that actually gets you funded. <br class="hidden md:block" />
-      Stop dreaming, start building.
-    </p>
+            <div class="relative z-10 w-full max-w-5xl mx-auto">
+                <h1 class="font-display text-5xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-center mb-6 md:mb-8 leading-tight tracking-tighter">
+                    From Napkin to <br />
+                    <span class="bg-white text-brand-slate px-4 border-4 border-brand-indigo shadow-neo inline-block mt-2 md:mt-0 transform -rotate-1">
+                        NASDAQ
+                    </span>
+                </h1>
 
-    <div
-      class="flex flex-col md:flex-row gap-4 md:gap-6 mb-16 md:mb-24 w-full justify-center items-center px-2"
-    >
-      <a
-        href="<%= routes.signupRoute %>"
-        class="w-full md:w-auto bg-neo-black text-white text-lg md:text-xl font-bold py-4 md:py-5 px-8 md:px-12 rounded-full border-2 border-neo-black shadow-neo hover:-translate-y-1 hover:shadow-neo-hover transition-all text-center"
-      >
-        Launch Your Startup 🚀
-      </a>
-      
-      <div class="relative group w-full md:w-auto max-w-md">
-        <input
-          type="text"
-          placeholder="Search ideas..."
-          class="py-4 md:py-5 px-6 md:px-8 rounded-full border-2 border-neo-black text-lg md:text-xl w-full md:w-80 focus:outline-none focus:ring-4 focus:ring-brand-pink/50 shadow-neo transition-all bg-white"
-        />
-        <button
-          class="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 md:p-3 bg-brand-yellow border-2 border-neo-black rounded-full hover:bg-yellow-400 transition"
-        >
-          🔍
-        </button>
-      </div>
-    </div>
+                <p class="text-lg sm:text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto mb-10 md:mb-12 font-medium font-sans leading-relaxed px-2 border-l-4 border-brand-indigo pl-6 italic">
+                    The university incubator that actually gets you funded. <br class="hidden md:block" />
+                    Stop dreaming, start building.
+                </p>
 
-    <div class="w-full relative pause-on-hover cursor-pointer px-2 md:px-0">
-      <div
-        class="absolute inset-0 bg-brand-yellow border-2 border-neo-black rounded-full transform rotate-1 scale-105 shadow-neo z-0"
-      ></div>
-      <div
-        class="relative z-10 bg-brand-yellow border-2 border-neo-black rounded-full py-4 md:py-6 overflow-hidden flex items-center"
-      >
-        <div class="flex whitespace-nowrap animate-marquee w-max">
-          <div
-            class="flex gap-6 md:gap-12 px-4 md:px-6 items-center text-lg md:text-2xl font-bold font-display uppercase tracking-widest text-black"
-          >
-            <span>💡 Ideation</span> <span class="text-sm md:text-xl">●</span>
-            <span>🔨 MVP</span> <span class="text-sm md:text-xl">●</span>
-            <span>💰 Seed Fund</span> <span class="text-sm md:text-xl">●</span>
-            <span>📈 Growth</span> <span class="text-sm md:text-xl">●</span>
-            <span>🦄 Unicorn</span> <span class="text-sm md:text-xl">●</span>
-          </div>
-          <div
-            class="flex gap-6 md:gap-12 px-4 md:px-6 items-center text-lg md:text-2xl font-bold font-display uppercase tracking-widest text-black"
-          >
-            <span>💡 Ideation</span> <span class="text-sm md:text-xl">●</span>
-            <span>🔨 MVP</span> <span class="text-sm md:text-xl">●</span>
-            <span>💰 Seed Fund</span> <span class="text-sm md:text-xl">●</span>
-            <span>📈 Growth</span> <span class="text-sm md:text-xl">●</span>
-            <span>🦄 Unicorn</span> <span class="text-sm md:text-xl">●</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+                <div class="flex flex-col md:flex-row gap-4 md:gap-6 mb-16 md:mb-24 w-full justify-center items-center px-2">
+                    <a href="<%= routes.signupRoute %>" class="w-full md:w-auto bg-white text-black text-lg md:text-xl font-bold py-4 md:py-5 px-8 md:px-12 border-4 border-black shadow-neo hover:-translate-y-1 hover:shadow-none transition-all text-center">
+                        Launch Your Startup 🚀
+                    </a>
+                    <div class="relative group w-full md:w-auto max-w-md text-black text-left">
+                        <input type="text" placeholder="Search ideas..." class="py-4 md:py-5 px-6 md:px-8 rounded-none border-4 border-black text-lg md:text-xl w-full md:w-80 focus:outline-none shadow-neo bg-white" />
+                        <button class="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 md:p-3 bg-brand-amber border-2 border-black rounded-full hover:bg-yellow-400 transition">🔍</button>
+                    </div>
+                </div>
 
-<section class="py-24 px-4 bg-white border-t-2 border-neo-black">
-  <div class="max-w-7xl mx-auto">
-    <h2
-      class="text-5xl md:text-7xl font-display font-bold text-center mb-20 leading-tight"
-    >
-      Everything You Need <br />
-      <span
-        class="bg-brand-pink px-4 border-2 border-black transform -rotate-2 inline-block shadow-neo-sm text-white"
-        >No Fluff.</span
-      >
-    </h2>
+                <div class="w-full relative pause-on-hover cursor-pointer px-2 md:px-0">
+                    <div class="absolute inset-0 bg-brand-indigo border-4 border-black transform rotate-1 scale-105 shadow-neo z-0"></div>
+                    <div class="relative z-10 bg-brand-indigo border-4 border-black py-4 md:py-6 overflow-hidden flex items-center">
+                        <div class="flex whitespace-nowrap animate-marquee w-max">
+                            <div class="flex gap-6 md:gap-12 px-4 md:px-6 items-center text-lg md:text-2xl font-bold font-display uppercase tracking-widest text-white">
+                                <span>💡 Ideation</span> <span class="text-sm md:text-xl">●</span>
+                                <span>🔨 MVP</span> <span class="text-sm md:text-xl">●</span>
+                                <span>💰 Seed Fund</span> <span class="text-sm md:text-xl">●</span>
+                                <span>📈 Growth</span> <span class="text-sm md:text-xl">●</span>
+                                <span>🦄 Unicorn</span> <span class="text-sm md:text-xl">●</span>
+                            </div>
+                            <div class="flex gap-6 md:gap-12 px-4 md:px-6 items-center text-lg md:text-2xl font-bold font-display uppercase tracking-widest text-white">
+                                <span>💡 Ideation</span> <span class="text-sm md:text-xl">●</span>
+                                <span>🔨 MVP</span> <span class="text-sm md:text-xl">●</span>
+                                <span>💰 Seed Fund</span> <span class="text-sm md:text-xl">●</span>
+                                <span>📈 Growth</span> <span class="text-sm md:text-xl">●</span>
+                                <span>🦄 Unicorn</span> <span class="text-sm md:text-xl">●</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div
-        class="col-span-1 md:col-span-2 bg-brand-yellow border-2 border-neo-black p-10 rounded-3xl shadow-neo hover:-translate-y-2 transition-transform relative overflow-hidden group"
-      >
-        <div class="relative z-10">
-          <div
-            class="text-6xl mb-6 bg-white w-20 h-20 flex items-center justify-center rounded-full border-2 border-black shadow-sm"
-          >
-            💰
-          </div>
-          <h3 class="text-4xl font-display font-bold mb-4">Seed Funding</h3>
-          <p class="font-medium text-xl text-gray-900 max-w-lg">
-            Don't let money stop you. We offer up to
-            <strong>50,000 EGP</strong> in equity-free funding to build your
-            MVP.
-          </p>
-        </div>
-        <div
-          class="absolute right-[-50px] bottom-[-50px] text-[15rem] opacity-10 rotate-12 select-none"
-        >
-          💵
-        </div>
-      </div>
+        <section class="py-24 px-4 bg-white border-t-4 border-black">
+            <div class="max-w-7xl mx-auto text-black">
+                <h2 class="text-5xl md:text-7xl font-display font-bold text-center mb-20 leading-tight uppercase tracking-tighter">
+                    Everything You Need <br />
+                    <span class="bg-brand-amber px-4 border-4 border-black transform -rotate-2 inline-block shadow-neo-sm text-black">No Fluff.</span>
+                </h2>
 
-      <div
-        class="bg-white border-2 border-neo-black p-10 rounded-3xl shadow-neo hover:-translate-y-2 transition-transform"
-      >
-        <div
-          class="text-6xl mb-6 bg-brand-pink w-20 h-20 flex items-center justify-center rounded-full border-2 border-black shadow-sm text-white"
-        >
-          🏗️
-        </div>
-        <h3 class="text-3xl font-display font-bold mb-4">Coworking Space</h3>
-        <p class="font-medium text-lg text-gray-800">
-          Free access to high-speed internet, meeting rooms, and coffee.
-        </p>
-      </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-black">
+                    <div class="col-span-1 md:col-span-2 bg-slate-100 border-4 border-black p-10 shadow-neo hover:-translate-y-2 transition-transform relative overflow-hidden group">
+                        <div class="relative z-10">
+                            <div class="text-6xl mb-6 bg-brand-amber w-20 h-20 flex items-center justify-center border-4 border-black shadow-sm">💰</div>
+                            <h3 class="text-4xl font-display font-bold mb-4 uppercase">Seed Funding</h3>
+                            <p class="font-medium text-xl text-slate-700 max-w-lg">
+                                Don't let money stop you. We offer up to <strong>50,000 EGP</strong> in equity-free funding to build your MVP.
+                            </p>
+                        </div>
+                        <div class="absolute right-[-50px] bottom-[-50px] text-[15rem] opacity-10 rotate-12 select-none">💵</div>
+                    </div>
 
-      <div
-        class="bg-white border-2 border-neo-black p-10 rounded-3xl shadow-neo hover:-translate-y-2 transition-transform"
-      >
-        <div
-          class="text-6xl mb-6 bg-brand-blue w-20 h-20 flex items-center justify-center rounded-full border-2 border-black shadow-sm text-white"
-        >
-          🎓
-        </div>
-        <h3 class="text-3xl font-display font-bold mb-4">Mentorship</h3>
-        <p class="font-medium text-lg text-gray-800">
-          Weekly sessions with industry experts who have exited startups.
-        </p>
-      </div>
+                    <div class="bg-brand-indigo text-white border-4 border-black p-10 shadow-neo hover:-translate-y-2 transition-transform">
+                        <div class="text-6xl mb-6 bg-white w-20 h-20 flex items-center justify-center border-4 border-black shadow-sm text-brand-indigo">🏗️</div>
+                        <h3 class="text-3xl font-display font-bold mb-4 uppercase">Coworking Space</h3>
+                        <p class="font-medium text-lg text-indigo-100">Free access to high-speed internet, meeting rooms, and coffee.</p>
+                    </div>
 
-      <div
-        class="col-span-1 md:col-span-2 bg-neo-black text-white border-2 border-neo-black p-10 rounded-3xl shadow-neo hover:-translate-y-2 transition-transform relative overflow-hidden"
-      >
-        <div class="relative z-10">
-          <div
-            class="text-6xl mb-6 bg-gray-800 w-20 h-20 flex items-center justify-center rounded-full border-2 border-white shadow-sm"
-          >
-            🚀
-          </div>
-          <h3 class="text-4xl font-display font-bold mb-4">Launch Day</h3>
-          <p class="font-medium text-xl text-gray-300 max-w-lg">
-            Pitch your startup to real investors at our annual Demo Day event.
-          </p>
-        </div>
-        <div
-          class="absolute right-[-20px] bottom-[-20px] w-64 h-64 bg-brand-blue opacity-20 rounded-full blur-3xl"
-        ></div>
-      </div>
-    </div>
-  </div>
-</section>
+                    <div class="bg-white border-4 border-black p-10 shadow-neo hover:-translate-y-2 transition-transform">
+                        <div class="text-6xl mb-6 bg-brand-slate w-20 h-20 flex items-center justify-center border-4 border-black shadow-sm text-white">🎓</div>
+                        <h3 class="text-3xl font-display font-bold mb-4 uppercase text-black">Mentorship</h3>
+                        <p class="font-medium text-lg text-gray-700">Weekly sessions with industry experts who have exited startups.</p>
+                    </div>
 
-<section class="py-24 px-4 bg-brand-pink border-t-2 border-neo-black">
-  <div class="max-w-6xl mx-auto text-center">
-    <h2 class="text-5xl md:text-7xl font-display font-bold mb-16 text-black">
-      Your Roadmap
-    </h2>
+                    <div class="col-span-1 md:col-span-2 bg-brand-slate text-white border-4 border-black p-10 shadow-neo hover:-translate-y-2 transition-transform relative overflow-hidden">
+                        <div class="relative z-10">
+                            <div class="text-6xl mb-6 bg-brand-indigo w-20 h-20 flex items-center justify-center border-4 border-black shadow-sm">🚀</div>
+                            <h3 class="text-4xl font-display font-bold mb-4 uppercase">Launch Day</h3>
+                            <p class="font-medium text-xl text-slate-400 max-w-lg">Pitch your startup to real investors at our annual Demo Day event.</p>
+                        </div>
+                        <div class="absolute right-[-20px] bottom-[-20px] w-64 h-64 bg-brand-indigo opacity-20 rounded-full blur-3xl"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <div
-      class="relative flex flex-col md:flex-row justify-between items-center gap-8 md:gap-0"
-    >
-      <div
-        class="hidden md:block absolute top-1/2 left-0 w-full h-2 bg-black -z-0 transform -translate-y-1/2"
-      ></div>
+        <section class="py-24 px-4 bg-brand-amber border-t-4 border-black">
+            <div class="max-w-6xl mx-auto text-center text-black">
+                <h2 class="text-5xl md:text-7xl font-display font-bold mb-16 uppercase tracking-tighter">Your Roadmap</h2>
+                <div class="relative flex flex-col md:flex-row justify-between items-center gap-8 md:gap-0">
+                    <div class="hidden md:block absolute top-1/2 left-0 w-full h-2 bg-black -z-0 transform -translate-y-1/2"></div>
+                    <div class="relative z-10 bg-white border-4 border-black p-8 shadow-neo w-full md:w-1/4 hover:scale-105 transition-transform">
+                        <div class="w-12 h-12 bg-brand-indigo text-white border-4 border-black flex items-center justify-center text-xl font-bold absolute -top-6 left-1/2 transform -translate-x-1/2">1</div>
+                        <h3 class="text-2xl font-bold font-display mb-2 uppercase">Apply</h3>
+                        <p class="text-sm font-medium">Submit your idea form. No business plan needed yet.</p>
+                    </div>
+                    <div class="relative z-10 bg-white border-4 border-black p-8 shadow-neo w-full md:w-1/4 hover:scale-105 transition-transform mt-8 md:mt-0">
+                        <div class="w-12 h-12 bg-brand-slate text-white border-4 border-black flex items-center justify-center text-xl font-bold absolute -top-6 left-1/2 transform -translate-x-1/2">2</div>
+                        <h3 class="text-2xl font-bold font-display mb-2 uppercase">Validate</h3>
+                        <p class="text-sm font-medium">3 weeks bootcamp to test your market.</p>
+                    </div>
+                    <div class="relative z-10 bg-white border-4 border-black p-8 shadow-neo w-full md:w-1/4 hover:scale-105 transition-transform mt-8 md:mt-0">
+                        <div class="w-12 h-12 bg-black text-white border-4 border-black flex items-center justify-center text-xl font-bold absolute -top-6 left-1/2 transform -translate-x-1/2">3</div>
+                        <h3 class="text-2xl font-bold font-display mb-2 uppercase">Launch</h3>
+                        <p class="text-sm font-medium">Build MVP and get your first customer.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      <div
-        class="relative z-10 bg-white border-2 border-black p-8 rounded-2xl shadow-neo w-full md:w-1/4 hover:scale-105 transition-transform"
-      >
-        <div
-          class="w-12 h-12 bg-brand-yellow border-2 border-black rounded-full flex items-center justify-center text-xl font-bold absolute -top-6 left-1/2 transform -translate-x-1/2"
-        >
-          1
-        </div>
-        <h3 class="text-2xl font-bold font-display mb-2">Apply</h3>
-        <p class="text-sm">
-          Submit your idea form. No business plan needed yet.
-        </p>
-      </div>
+        <section class="py-24 px-4 bg-neo-white border-t-4 border-black">
+            <div class="max-w-6xl mx-auto text-black">
+                <h2 class="text-5xl md:text-7xl font-display font-bold text-center mb-20 uppercase tracking-tighter">
+                    Hall of <span class="text-brand-indigo underline decoration-brand-indigo decoration-8 underline-offset-8">Fame</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="flex flex-col md:flex-row bg-white border-4 border-black overflow-hidden shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
+                        <div class="w-full md:w-1/3 bg-slate-200 flex items-center justify-center text-6xl border-b-4 md:border-b-0 md:border-r-4 border-black min-h-[200px]">👨‍💻</div>
+                        <div class="p-8 w-full md:w-2/3">
+                            <h4 class="text-2xl font-bold font-display mb-2 uppercase">CodeMasters</h4>
+                            <span class="bg-brand-amber px-3 py-1 text-xs font-black border-2 border-black uppercase">Graduated 2024</span>
+                            <p class="mt-4 text-slate-700 italic border-l-4 border-brand-indigo pl-4">"The incubator helped us pivot from a service agency to a SaaS. We raised 2M EGP!"</p>
+                            <p class="mt-4 font-bold text-brand-indigo">- Abdelrahman Elaraby, Co-Founder</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row bg-white border-4 border-black overflow-hidden shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
+                        <div class="w-full md:w-1/3 bg-slate-100 flex items-center justify-center text-6xl border-b-4 md:border-b-0 md:border-r-4 border-black min-h-[200px]">🎨</div>
+                        <div class="p-8 w-full md:w-2/3">
+                            <h4 class="text-2xl font-bold font-display mb-2 uppercase">PixelPerfect</h4>
+                            <span class="bg-brand-indigo text-white px-3 py-1 text-xs font-black border-2 border-black uppercase">Graduated 2024</span>
+                            <p class="mt-4 text-slate-700 italic border-l-4 border-brand-indigo pl-4">"Turning a freelance hustle into a studio wasn't easy, but mentorship made it possible."</p>
+                            <p class="mt-4 font-bold text-brand-indigo">- Ahmed Naguib, Co-Founder</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      <div
-        class="relative z-10 bg-white border-2 border-black p-8 rounded-2xl shadow-neo w-full md:w-1/4 hover:scale-105 transition-transform mt-8 md:mt-0"
-      >
-        <div
-          class="w-12 h-12 bg-brand-blue text-white border-2 border-black rounded-full flex items-center justify-center text-xl font-bold absolute -top-6 left-1/2 transform -translate-x-1/2"
-        >
-          2
-        </div>
-        <h3 class="text-2xl font-bold font-display mb-2">Validate</h3>
-        <p class="text-sm">3 weeks bootcamp to test your market.</p>
-      </div>
+        <section class="py-24 px-4 bg-brand-amber border-t-4 border-black">
+            <div class="max-w-4xl mx-auto text-black text-left">
+                <h2 class="text-5xl font-display font-bold text-center mb-16 uppercase tracking-tighter">Common Questions</h2>
+                <div class="space-y-6">
+                    <div class="bg-white border-4 border-black p-6 shadow-neo cursor-pointer hover:translate-x-2 transition-transform">
+                        <details class="group">
+                            <summary class="flex justify-between items-center font-bold text-xl list-none">
+                                <span>Do I need a team to apply?</span> <span class="transition group-open:rotate-180">▼</span>
+                            </summary>
+                            <p class="text-slate-700 mt-4 text-lg font-medium">Not at all! Apply as an individual; we'll help you find your pack.</p>
+                        </details>
+                    </div>
+                    <div class="bg-white border-4 border-black p-6 shadow-neo cursor-pointer hover:translate-x-2 transition-transform">
+                        <details class="group">
+                            <summary class="flex justify-between items-center font-bold text-xl list-none">
+                                <span>Does the incubator take equity?</span> <span class="transition group-open:rotate-180">▼</span>
+                            </summary>
+                            <p class="text-slate-700 mt-4 text-lg font-medium">Zero. Nada. 0%. We are grant-based only.</p>
+                        </details>
+                        
+                    </div>
+                    <div class="bg-white border-4 border-black p-6 shadow-neo cursor-pointer hover:translate-x-2 transition-transform">
+                        <details class="group">
+                            <summary class="flex justify-between items-center font-bold text-xl list-none">
+                                <span>Aree Great People?</span> <span class="transition group-open:rotate-180">▼</span>
+                            </summary>
+                            <p class="text-slate-700 mt-4 text-lg font-medium">Yes, 100% we are
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      <div
-        class="relative z-10 bg-white border-2 border-black p-8 rounded-2xl shadow-neo w-full md:w-1/4 hover:scale-105 transition-transform mt-8 md:mt-0"
-      >
-        <div
-          class="w-12 h-12 bg-neo-black text-white border-2 border-black rounded-full flex items-center justify-center text-xl font-bold absolute -top-6 left-1/2 transform -translate-x-1/2"
-        >
-          3
-        </div>
-        <h3 class="text-2xl font-bold font-display mb-2">Launch</h3>
-        <p class="text-sm">Build MVP and get your first customer.</p>
-      </div>
-    </div>
-  </div>
-</section>
+        <section class="py-32 px-4 bg-brand-slate text-white border-t-4 border-black text-center">
+            <h2 class="text-6xl md:text-8xl font-display font-bold mb-8 uppercase tracking-tighter">Ready to <span class="text-brand-indigo">Build?</span></h2>
+            <p class="text-2xl text-slate-400 mb-12 max-w-2xl mx-auto font-sans italic">Stop overthinking. Start shipping. Applications for Batch 04 close soon.</p>
+            <a href="<%= routes.signupRoute %>" class="inline-block bg-white text-black text-2xl font-bold py-6 px-16 border-4 border-black shadow-neo hover:translate-y-1 hover:shadow-none transition-all">
+                APPLY NOW ⚡
+            </a>
+        </section>
+    </main>
 
-<section class="py-24 px-4 bg-neo-white border-t-2 border-neo-black">
-  <div class="max-w-6xl mx-auto">
-    <h2 class="text-5xl md:text-7xl font-display font-bold text-center mb-20">
-      Hall of
-      <span class="text-brand-blue underline decoration-4 decoration-black"
-        >Fame</span
-      >
-    </h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-      <div
-        class="flex flex-col md:flex-row bg-white border-2 border-black rounded-2xl overflow-hidden shadow-neo hover:shadow-neo-hover transition-all"
-      >
-        <div
-          class="w-full md:w-1/3 bg-gray-200 flex items-center justify-center text-6xl border-b-2 md:border-b-0 md:border-r-2 border-black min-h-[200px]"
-        >
-          👨‍💻
-        </div>
-        <div class="p-8 w-full md:w-2/3">
-          <h4 class="text-2xl font-bold font-display mb-2">CodeMasters</h4>
-          <span
-            class="bg-brand-yellow px-3 py-1 text-xs font-bold border border-black rounded-full"
-            >Graduated 2024</span
-          >
-          <p class="mt-4 text-gray-700">
-            "The incubator helped us pivot from a service agency to a SaaS
-            product. We raised 2M EGP last month!"
-          </p>
-          <p class="mt-4 font-bold text-brand-blue">
-            - Abdelrahman Elaraby, Co-Founder
-          </p>
-        </div>
-      </div>
-
-      <div
-        class="flex flex-col md:flex-row bg-white border-2 border-black rounded-2xl overflow-hidden shadow-neo hover:shadow-neo-hover transition-all"
-      >
-        <div
-          class="w-full md:w-1/3 bg-gray-100 flex items-center justify-center text-6xl border-b-2 md:border-b-0 md:border-r-2 border-black min-h-[200px]"
-        >
-          🎨
-        </div>
-        <div class="p-8 w-full md:w-2/3">
-          <h4 class="text-2xl font-bold font-display mb-2">PixelPerfect</h4>
-          <span
-            class="bg-brand-blue text-white px-3 py-1 text-xs font-bold border border-black rounded-full"
-            >Graduated 2024</span
-          >
-          <p class="mt-4 text-gray-700">
-            "Turning a freelance hustle into a full design studio wasn't easy,
-            but the mentorship here made it possible."
-          </p>
-          <p class="mt-4 font-bold text-brand-blue">
-            - Ahmed Naguib, Co-Founder
-          </p>
-        </div>
-      </div>
-
-      <div
-        class="md:col-span-2 flex flex-col md:flex-row bg-white border-2 border-black rounded-2xl overflow-hidden shadow-neo hover:shadow-neo-hover transition-all"
-      >
-        <div
-          class="w-full md:w-1/4 bg-brand-yellow/20 flex items-center justify-center text-6xl border-b-2 md:border-b-0 md:border-r-2 border-black min-h-[200px]"
-        >
-          🛒
-        </div>
-        <div class="p-8 w-full md:w-3/4">
-          <h4 class="text-2xl font-bold font-display mb-2">ShopEasy</h4>
-          <span
-            class="bg-brand-pink text-white px-3 py-1 text-xs font-bold border border-black rounded-full"
-            >Graduated 2024
-          </span>
-          <p class="mt-4 text-gray-700 text-lg">
-            "We found our CTO here. The workshops on supply chain and marketing
-            were exactly what we needed to scale our operations across Egypt."
-          </p>
-          <p class="mt-4 font-bold text-brand-blue">- Abdelrahman Selim, CEO</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="py-24 px-4 bg-brand-yellow border-t-2 border-neo-black">
-  <div class="max-w-4xl mx-auto">
-    <h2 class="text-5xl font-display font-bold text-center mb-16">
-      Common Questions
-    </h2>
-
-    <div class="space-y-6">
-      <div
-        class="bg-white border-2 border-black rounded-xl p-6 shadow-neo cursor-pointer hover:translate-x-2 transition-transform"
-        onclick="this.classList.toggle('bg-gray-50')"
-      >
-        <details class="group">
-          <summary
-            class="flex justify-between items-center font-bold text-xl list-none"
-          >
-            <span>Do I need a team to apply?</span>
-            <span class="transition group-open:rotate-180">▼</span>
-          </summary>
-          <p class="text-gray-700 mt-4 text-lg">
-            Not at all! You can apply as an individual, and we host "Co-founder
-            Matching" events to help you find the perfect team.
-          </p>
-        </details>
-      </div>
-
-      <div
-        class="bg-white border-2 border-black rounded-xl p-6 shadow-neo cursor-pointer hover:translate-x-2 transition-transform"
-      >
-        <details class="group">
-          <summary
-            class="flex justify-between items-center font-bold text-xl list-none"
-          >
-            <span>Does the incubator take equity?</span>
-            <span class="transition group-open:rotate-180">▼</span>
-          </summary>
-          <p class="text-gray-700 mt-4 text-lg">
-            Zero. Nada. We are a university-backed initiative. We take 0%
-            equity. All funding is grant-based.
-          </p>
-        </details>
-      </div>
-
-      <div
-        class="bg-white border-2 border-black rounded-xl p-6 shadow-neo cursor-pointer hover:translate-x-2 transition-transform"
-      >
-        <details class="group">
-          <summary
-            class="flex justify-between items-center font-bold text-xl list-none"
-          >
-            <span>Can I apply if I don't have an idea?</span>
-            <span class="transition group-open:rotate-180">▼</span>
-          </summary>
-          <p class="text-gray-700 mt-4 text-lg">
-            Yes! Join our "Ideation" track where we brainstorm problems and find
-            solutions worth solving.
-          </p>
-        </details>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="py-24 px-4 bg-neo-black text-white border-t-2 border-neo-black">
-  <div class="max-w-6xl mx-auto text-center">
-    <h2 class="text-5xl md:text-6xl font-display font-bold mb-16">
-      Impact in Numbers
-    </h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div
-        class="bg-gray-900 border-2 border-white p-10 rounded-3xl shadow-[4px_4px_0_0_#ffffff] hover:-translate-y-2 transition-transform"
-      >
-        <div class="text-6xl font-bold mb-2 font-display text-brand-blue">
-          +50
-        </div>
-        <div class="text-2xl font-bold font-sans">Startups Launched</div>
-      </div>
-      <div
-        class="bg-gray-900 border-2 border-white p-10 rounded-3xl shadow-[4px_4px_0_0_#ffffff] hover:-translate-y-2 transition-transform"
-      >
-        <div class="text-6xl font-bold mb-2 font-display text-brand-pink">
-          2M+
-        </div>
-        <div class="text-2xl font-bold font-sans">EGP in Funding</div>
-      </div>
-      <div
-        class="bg-gray-900 border-2 border-white p-10 rounded-3xl shadow-[4px_4px_0_0_#ffffff] hover:-translate-y-2 transition-transform"
-      >
-        <div
-          class="text-6xl font-bold mb-2 font-display text-brand-yellow drop-shadow-[2px_2px_0_rgba(255,255,255,0.5)]"
-        >
-          +100
-        </div>
-        <div class="text-2xl font-bold font-sans">Active Mentors</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="py-32 px-4 bg-white border-t-2 border-neo-black text-center">
-  <h2 class="text-6xl md:text-8xl font-display font-bold mb-8 text-neo-black">
-    Ready to <span class="text-brand-blue">Build?</span>
-  </h2>
-  <p class="text-2xl text-gray-600 mb-12 max-w-2xl mx-auto">
-    The next unicorn could be yours. Applications close soon.
-  </p>
-  <a
-    href="<%= routes.signupRoute %>"
-    class="inline-block bg-brand-yellow text-black text-2xl font-bold py-6 px-16 rounded-full border-4 border-black shadow-neo hover:scale-105 transition-transform"
-  >
-    Apply Now ⚡
-  </a>
-</section>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.addEventListener("mousemove", (e) => {
-      const elements = document.querySelectorAll(".parallax-element");
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-
-      elements.forEach((el) => {
-        const speed = parseFloat(el.getAttribute("data-speed"));
-        const x = (e.clientX - centerX) * speed * 0.03;
-        const y = (e.clientY - centerY) * speed * 0.03;
-        el.style.transform = `translate(${x}px, ${y}px) rotate(${x * 0.5}deg)`;
-      });
-    });
-  });
-</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.addEventListener("mousemove", (e) => {
+                const elements = document.querySelectorAll(".parallax-element");
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                elements.forEach((el) => {
+                    const speed = parseFloat(el.getAttribute("data-speed"));
+                    const x = (e.clientX - centerX) * speed * 0.02;
+                    const y = (e.clientY - centerY) * speed * 0.02;
+                    el.style.transform = `translate(${x}px, ${y}px) rotate(${x * 0.2}deg)`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,476 +1,379 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Workshops | Business Incubator</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>
-    
-    <link href="/css/style.css" rel="stylesheet" />
-</head>
+<%- include('../partials/head') %>
 <body class="bg-[#FFFDF5] flex flex-col min-h-screen"> 
     <%- include('../partials/header.ejs') %>
 
     <main class="flex-grow">
         
-        <!-- Hero Section -->
         <div class="container mx-auto px-4 py-16 text-center">
-            <span class="bg-black text-white px-3 py-1 font-bold text-sm uppercase tracking-wider mb-4 inline-block transform -rotate-2">
+            <span class="bg-black text-white px-3 py-1 font-bold text-sm uppercase tracking-wider mb-4 inline-block transform -rotate-2 font-display">
                 Learn & Grow
             </span>
-            <h1 class="text-6xl md:text-7xl font-bold text-black mb-6">
-                UPCOMING <span class="bg-[#FFDE59] text-black px-2 border-4 border-black shadow-neo italic">WORKSHOPS</span>
+            <h1 class="text-6xl md:text-7xl font-bold text-black mb-6 font-display tracking-tight">
+                UPCOMING <span class="bg-indigo-700 text-white px-4 border-4 border-black shadow-neo italic inline-block">WORKSHOPS</span>
             </h1>
-            <p class="text-xl text-gray-700 max-w-2xl mx-auto font-medium">
+            <p class="text-xl text-gray-700 max-w-2xl mx-auto font-medium font-inter">
                 Level up your skills with hands-on training from industry experts.
             </p>
         </div>
 
-        <!-- Marquee Banner -->
-        <div class="bg-[#5465FF] border-y-4 border-black py-3 mb-16 marquee-container">
-            <div class="marquee-content text-xl font-bold uppercase tracking-wider text-white">
-                Product Design • Marketing Strategy • Pitch Perfect • Financial Planning • User Research • Agile Methods • Growth Hacking • Leadership •  
-                Product Design • Marketing Strategy • Pitch Perfect • Financial Planning • User Research • Agile Methods • Growth Hacking • Leadership •
+        <div class="container mx-auto px-4 mb-12 pt-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
+                <div class="col-span-1 md:col-span-2 relative">
+                    <input type="text" id="searchInput" placeholder="Search by topic or trainer..."
+                        class="w-full bg-white border-4 border-black rounded-none px-4 py-3 text-black placeholder-gray-500 focus:outline-none font-bold shadow-[4px_4px_0_0_#000] font-inter focus:bg-gray-50 transition-colors" />
+                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+                
+                <select id="categoryFilter"
+                    class="bg-white border-4 border-black rounded-none px-4 py-3 text-black focus:outline-none font-bold shadow-[4px_4px_0_0_#000] font-inter cursor-pointer">
+                    <option value="">All Categories</option>
+                    <option value="product">Product Development</option>
+                    <option value="marketing">Marketing & Growth</option>
+                    <option value="finance">Finance</option>
+                    <option value="strategy">Strategy</option>
+                    <option value="legal">Legal</option>
+                </select>
             </div>
         </div>
 
-        <!-- Workshops Grid -->
         <div class="container mx-auto px-4 mb-24">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10" id="workshopsGrid">
                 
-                <!-- Workshop 1 -->
-                <div class="bg-white border-4 border-black rounded-xl overflow-hidden shadow-neo flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group">
+                <div class="workshop-card bg-white border-4 border-black rounded-xl overflow-hidden shadow-neo flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group"
+                     data-title="Building Your MVP in 4 Weeks" 
+                     data-category="product" 
+                     data-trainer="Sarah Mitchell">
                     
-                    <!-- Header with Color Band -->
-                    <div class="h-32 border-b-4 border-black relative" 
-                         style="background-color: #5465FF; background-image: radial-gradient(black 1px, transparent 1px); background-size: 10px 10px; opacity: 0.9;">
+                    <div class="h-32 border-b-4 border-black relative bg-indigo-700" 
+                         style="background-image: radial-gradient(black 1px, transparent 1px); background-size: 10px 10px; opacity: 1;">
                         <div class="absolute -bottom-12 left-6">
-                            <div class="w-24 h-24 rounded-none border-4 border-black flex items-center justify-center shadow-sm" style="background-color: #5465FF">
-                                <i class="fa-solid fa-rocket text-5xl text-black drop-shadow-lg"></i>
+                            <div class="w-24 h-24 rounded-none border-4 border-black flex items-center justify-center shadow-sm bg-indigo-700">
+                                <i class="fa-solid fa-rocket text-5xl text-white drop-shadow-lg"></i>
                             </div>
                         </div>
-                        <!-- Seats Badge -->
-                        <div class="absolute top-4 right-4 bg-white border-2 border-black px-3 py-1 font-bold text-sm">
-                            <i class="fa-solid fa-users mr-1"></i>
-                            12/30 SEATS
+                        <div class="absolute top-4 right-4 bg-white border-2 border-black px-3 py-1 font-bold text-sm font-display">
+                            <i class="fa-solid fa-users mr-1"></i> 12/30 SEATS
                         </div>
                     </div>
 
-                    <!-- Content -->
                     <div class="pt-14 pb-6 px-6 flex-grow">
-                        <h3 class="text-2xl font-black text-black mb-2">Building Your MVP in 4 Weeks</h3>
-                        
+                        <h3 class="text-2xl font-black text-black mb-2 font-display">Building Your MVP in 4 Weeks</h3>
                         <div class="flex flex-wrap items-center gap-2 mb-4">
-                            <span class="text-sm font-bold bg-black text-white px-2 py-0.5">Product Development</span>
-                            <span class="text-sm font-bold text-gray-600">
-                                <i class="fa-solid fa-clock mr-1"></i>3 Hours
-                            </span>
+                            <span class="text-sm font-bold bg-black text-white px-2 py-0.5 border border-black">Product</span>
+                            <span class="text-sm font-bold text-gray-600"><i class="fa-solid fa-clock mr-1"></i>3 Hours</span>
                         </div>
-
-                        <p class="text-gray-700 font-medium leading-relaxed mb-4">
+                        <p class="text-gray-700 font-medium leading-relaxed mb-4 font-inter">
                             Learn how to validate your idea and build a minimum viable product fast. No code? No problem.
                         </p>
-
-                        <!-- Trainer Info -->
                         <div class="bg-gray-50 border-2 border-gray-200 p-3 mb-4 flex items-center gap-3">
-                            <div class="w-10 h-10 bg-gray-300 border-2 border-black rounded-full flex items-center justify-center font-bold">
-                                S
-                            </div>
+                            <div class="w-10 h-10 bg-gray-200 border-2 border-black rounded-full flex items-center justify-center font-bold">S</div>
                             <div>
-                                <div class="text-xs text-gray-500 font-bold uppercase">Trainer</div>
+                                <div class="text-xs text-gray-500 font-bold uppercase font-display">Trainer</div>
                                 <div class="font-bold text-sm">Sarah Mitchell</div>
                             </div>
                         </div>
-
-                        <!-- Date & Time -->
                         <div class="space-y-2 mb-4">
-                            <div class="flex items-center gap-2 text-sm font-bold">
-                                <i class="fa-solid fa-calendar text-[#5465FF]"></i>
-                                <span>March 15, 2026</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-sm font-bold">
-                                <i class="fa-solid fa-location-dot text-[#FF90E8]"></i>
-                                <span>Hall A - Building 3</span>
-                            </div>
+                            <div class="flex items-center gap-2 text-sm font-bold"><i class="fa-solid fa-calendar text-indigo-700"></i><span>March 15, 2026</span></div>
+                            <div class="flex items-center gap-2 text-sm font-bold"><i class="fa-solid fa-location-dot text-gray-500"></i><span>Hall A - Building 3</span></div>
                         </div>
-
-                        <!-- Status Badge -->
                         <div class="inline-flex items-center gap-2 bg-green-100 border-2 border-green-800 px-3 py-1 rounded-full text-green-800 text-xs font-bold">
-                            <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span>
-                            Registration Open
+                            <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span> Registration Open
                         </div>
                     </div>
-
-                    <!-- Footer Action Button -->
                     <div class="p-4 border-t-4 border-black bg-gray-50">
-                        <button class="w-full bg-black text-white font-bold py-3 border-2 border-transparent hover:bg-white hover:text-black hover:border-black transition-all">
+                        <button class="w-full bg-black text-white font-bold py-3 border-2 border-transparent hover:bg-white hover:text-black hover:border-black transition-all font-display tracking-wide">
                             <i class="fa-solid fa-calendar-plus mr-2"></i>ATTEND WORKSHOP
                         </button>
                     </div>
                 </div>
 
-                <!-- Workshop 2 -->
-                <div class="bg-white border-4 border-black rounded-xl overflow-hidden shadow-neo flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group">
+                <div class="workshop-card bg-white border-4 border-black rounded-xl overflow-hidden shadow-neo flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group"
+                     data-title="Pitch Deck Mastery" 
+                     data-category="marketing"
+                     data-trainer="Ahmed Hassan">
                     
-                    <div class="h-32 border-b-4 border-black relative" 
-                         style="background-color: #FFDE59; background-image: radial-gradient(black 1px, transparent 1px); background-size: 10px 10px; opacity: 0.9;">
+                    <div class="h-32 border-b-4 border-black relative bg-amber-600" 
+                         style="background-image: radial-gradient(black 1px, transparent 1px); background-size: 10px 10px; opacity: 1;">
                         <div class="absolute -bottom-12 left-6">
-                            <div class="w-24 h-24 rounded-none border-4 border-black flex items-center justify-center shadow-sm" style="background-color: #FFDE59">
-                                 <i class="fa-solid fa-gavel text-5xl text-black drop-shadow-lg"></i>
+                            <div class="w-24 h-24 rounded-none border-4 border-black flex items-center justify-center shadow-sm bg-amber-600">
+                                 <i class="fa-solid fa-gavel text-5xl text-white drop-shadow-lg"></i>
                             </div>
                         </div>
-                        <div class="absolute top-4 right-4 bg-white border-2 border-black px-3 py-1 font-bold text-sm">
-                            <i class="fa-solid fa-users mr-1"></i>
-                            8/25 SEATS
+                        <div class="absolute top-4 right-4 bg-white border-2 border-black px-3 py-1 font-bold text-sm font-display">
+                            <i class="fa-solid fa-users mr-1"></i> 8/25 SEATS
                         </div>
                     </div>
 
                     <div class="pt-14 pb-6 px-6 flex-grow">
-                        <h3 class="text-2xl font-black text-black mb-2">Pitch Deck Mastery</h3>
-                        
+                        <h3 class="text-2xl font-black text-black mb-2 font-display">Pitch Deck Mastery</h3>
                         <div class="flex flex-wrap items-center gap-2 mb-4">
-                            <span class="text-sm font-bold bg-black text-white px-2 py-0.5">Fundraising</span>
-                            <span class="text-sm font-bold text-gray-600">
-                                <i class="fa-solid fa-clock mr-1"></i>2 Hours
-                            </span>
+                            <span class="text-sm font-bold bg-black text-white px-2 py-0.5 border border-black">Fundraising</span>
+                            <span class="text-sm font-bold text-gray-600"><i class="fa-solid fa-clock mr-1"></i>2 Hours</span>
                         </div>
-
-                        <p class="text-gray-700 font-medium leading-relaxed mb-4">
+                        <p class="text-gray-700 font-medium leading-relaxed mb-4 font-inter">
                             Craft a compelling pitch deck that investors can't ignore. Learn storytelling, design, and delivery.
                         </p>
-
                         <div class="bg-gray-50 border-2 border-gray-200 p-3 mb-4 flex items-center gap-3">
-                            <div class="w-10 h-10 bg-gray-300 border-2 border-black rounded-full flex items-center justify-center font-bold">
-                                A
-                            </div>
+                            <div class="w-10 h-10 bg-gray-200 border-2 border-black rounded-full flex items-center justify-center font-bold">A</div>
                             <div>
-                                <div class="text-xs text-gray-500 font-bold uppercase">Trainer</div>
+                                <div class="text-xs text-gray-500 font-bold uppercase font-display">Trainer</div>
                                 <div class="font-bold text-sm">Ahmed Hassan</div>
                             </div>
                         </div>
-
                         <div class="space-y-2 mb-4">
-                            <div class="flex items-center gap-2 text-sm font-bold">
-                                <i class="fa-solid fa-calendar text-[#5465FF]"></i>
-                                <span>March 18, 2026</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-sm font-bold">
-                                <i class="fa-solid fa-location-dot text-[#FF90E8]"></i>
-                                <span>Innovation Lab</span>
-                            </div>
+                            <div class="flex items-center gap-2 text-sm font-bold"><i class="fa-solid fa-calendar text-amber-600"></i><span>March 18, 2026</span></div>
+                            <div class="flex items-center gap-2 text-sm font-bold"><i class="fa-solid fa-location-dot text-gray-500"></i><span>Innovation Lab</span></div>
                         </div>
-
                         <div class="inline-flex items-center gap-2 bg-green-100 border-2 border-green-800 px-3 py-1 rounded-full text-green-800 text-xs font-bold">
-                            <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span>
-                            Registration Open
+                            <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span> Registration Open
                         </div>
                     </div>
-
                     <div class="p-4 border-t-4 border-black bg-gray-50">
-                        <button class="w-full bg-black text-white font-bold py-3 border-2 border-transparent hover:bg-white hover:text-black hover:border-black transition-all">
+                        <button class="w-full bg-black text-white font-bold py-3 border-2 border-transparent hover:bg-white hover:text-black hover:border-black transition-all font-display tracking-wide">
                             <i class="fa-solid fa-calendar-plus mr-2"></i>ATTEND WORKSHOP
                         </button>
                     </div>
                 </div>
 
-                <!-- Workshop 3 -->
-                <div class="bg-white border-4 border-black rounded-xl overflow-hidden shadow-neo flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group">
+                <div class="workshop-card bg-white border-4 border-black rounded-xl overflow-hidden shadow-neo flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group"
+                     data-title="Growth Hacking 101" 
+                     data-category="marketing"
+                     data-trainer="Maria Rodriguez">
                     
-                    <div class="h-32 border-b-4 border-black relative" 
-                         style="background-color: #FF90E8; background-image: radial-gradient(black 1px, transparent 1px); background-size: 10px 10px; opacity: 0.9;">
+                    <div class="h-32 border-b-4 border-black relative bg-rose-600" 
+                         style="background-image: radial-gradient(black 1px, transparent 1px); background-size: 10px 10px; opacity: 1;">
                         <div class="absolute -bottom-12 left-6">
-                            <div class="w-24 h-24 rounded-none border-4 border-black flex items-center justify-center shadow-sm" style="background-color: #FF90E8">
-                                <i class="fa-solid fa-chart-line text-5xl text-black drop-shadow-lg"></i>
+                            <div class="w-24 h-24 rounded-none border-4 border-black flex items-center justify-center shadow-sm bg-rose-600">
+                                <i class="fa-solid fa-chart-line text-5xl text-white drop-shadow-lg"></i>
                             </div>
                         </div>
-                        <div class="absolute top-4 right-4 bg-white border-2 border-black px-3 py-1 font-bold text-sm">
-                            <i class="fa-solid fa-users mr-1"></i>
-                            0/20 SEATS
+                        <div class="absolute top-4 right-4 bg-white border-2 border-black px-3 py-1 font-bold text-sm font-display">
+                            <i class="fa-solid fa-users mr-1"></i> 0/20 SEATS
                         </div>
                     </div>
 
                     <div class="pt-14 pb-6 px-6 flex-grow">
-                        <h3 class="text-2xl font-black text-black mb-2">Growth Hacking 101</h3>
-                        
+                        <h3 class="text-2xl font-black text-black mb-2 font-display">Growth Hacking 101</h3>
                         <div class="flex flex-wrap items-center gap-2 mb-4">
-                            <span class="text-sm font-bold bg-black text-white px-2 py-0.5">Marketing</span>
-                            <span class="text-sm font-bold text-gray-600">
-                                <i class="fa-solid fa-clock mr-1"></i>4 Hours
-                            </span>
+                            <span class="text-sm font-bold bg-black text-white px-2 py-0.5 border border-black">Marketing</span>
+                            <span class="text-sm font-bold text-gray-600"><i class="fa-solid fa-clock mr-1"></i>4 Hours</span>
                         </div>
-
-                        <p class="text-gray-700 font-medium leading-relaxed mb-4">
+                        <p class="text-gray-700 font-medium leading-relaxed mb-4 font-inter">
                             Grow your startup without breaking the bank. Viral loops, referral programs, and SEO hacks.
                         </p>
-
                         <div class="bg-gray-50 border-2 border-gray-200 p-3 mb-4 flex items-center gap-3">
-                            <div class="w-10 h-10 bg-gray-300 border-2 border-black rounded-full flex items-center justify-center font-bold">
-                                M
-                            </div>
+                            <div class="w-10 h-10 bg-gray-200 border-2 border-black rounded-full flex items-center justify-center font-bold">M</div>
                             <div>
-                                <div class="text-xs text-gray-500 font-bold uppercase">Trainer</div>
+                                <div class="text-xs text-gray-500 font-bold uppercase font-display">Trainer</div>
                                 <div class="font-bold text-sm">Maria Rodriguez</div>
                             </div>
                         </div>
-
                         <div class="space-y-2 mb-4">
-                            <div class="flex items-center gap-2 text-sm font-bold">
-                                <i class="fa-solid fa-calendar text-[#5465FF]"></i>
-                                <span>March 22, 2026</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-sm font-bold">
-                                <i class="fa-solid fa-location-dot text-[#FF90E8]"></i>
-                                <span>Workshop Room B</span>
-                            </div>
+                            <div class="flex items-center gap-2 text-sm font-bold"><i class="fa-solid fa-calendar text-rose-600"></i><span>March 22, 2026</span></div>
+                            <div class="flex items-center gap-2 text-sm font-bold"><i class="fa-solid fa-location-dot text-gray-500"></i><span>Workshop Room B</span></div>
                         </div>
-
                         <div class="inline-flex items-center gap-2 bg-red-500 border-2 border-red-900 px-3 py-1 rounded-full text-white text-xs font-bold">
-                            <span class="w-2 h-2 bg-white rounded-full"></span>
-                            Fully Booked
+                            <span class="w-2 h-2 bg-white rounded-full"></span> Fully Booked
                         </div>
                     </div>
-
                     <div class="p-4 border-t-4 border-black bg-gray-50">
-                        <button class="w-full bg-gray-400 text-white font-bold py-3 border-2 border-gray-600 cursor-not-allowed" disabled>
+                        <button class="w-full bg-gray-400 text-white font-bold py-3 border-2 border-gray-600 cursor-not-allowed font-display tracking-wide" disabled>
                             <i class="fa-solid fa-ban mr-2"></i>FULLY BOOKED
                         </button>
                     </div>
                 </div>
 
-                <!-- Workshop 4 -->
-                <div class="bg-white border-4 border-black rounded-xl overflow-hidden shadow-neo flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group">
+                <div class="workshop-card bg-white border-4 border-black rounded-xl overflow-hidden shadow-neo flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group"
+                     data-title="Customer Discovery" 
+                     data-category="strategy"
+                     data-trainer="David Chen">
                     
-                    <div class="h-32 border-b-4 border-black relative" 
-                         style="background-color: #78FFD6; background-image: radial-gradient(black 1px, transparent 1px); background-size: 10px 10px; opacity: 0.9;">
+                    <div class="h-32 border-b-4 border-black relative bg-teal-600" 
+                         style="background-image: radial-gradient(black 1px, transparent 1px); background-size: 10px 10px; opacity: 1;">
                         <div class="absolute -bottom-12 left-6">
-                            <div class="w-24 h-24 rounded-none border-4 border-black flex items-center justify-center shadow-sm" style="background-color: #78FFD6">
-                                <i class="fa-solid fa-users text-5xl text-black drop-shadow-lg"></i>
+                            <div class="w-24 h-24 rounded-none border-4 border-black flex items-center justify-center shadow-sm bg-teal-600">
+                                <i class="fa-solid fa-users text-5xl text-white drop-shadow-lg"></i>
                             </div>
                         </div>
-                        <div class="absolute top-4 right-4 bg-white border-2 border-black px-3 py-1 font-bold text-sm">
-                            <i class="fa-solid fa-users mr-1"></i>
-                            5/15 SEATS
+                        <div class="absolute top-4 right-4 bg-white border-2 border-black px-3 py-1 font-bold text-sm font-display">
+                            <i class="fa-solid fa-users mr-1"></i> 5/15 SEATS
                         </div>
                     </div>
 
                     <div class="pt-14 pb-6 px-6 flex-grow">
-                        <h3 class="text-2xl font-black text-black mb-2">Customer Discovery Workshop</h3>
-                        
+                        <h3 class="text-2xl font-black text-black mb-2 font-display">Customer Discovery</h3>
                         <div class="flex flex-wrap items-center gap-2 mb-4">
-                            <span class="text-sm font-bold bg-black text-white px-2 py-0.5">Strategy</span>
-                            <span class="text-sm font-bold text-gray-600">
-                                <i class="fa-solid fa-clock mr-1"></i>3 Hours
-                            </span>
+                            <span class="text-sm font-bold bg-black text-white px-2 py-0.5 border border-black">Strategy</span>
+                            <span class="text-sm font-bold text-gray-600"><i class="fa-solid fa-clock mr-1"></i>3 Hours</span>
                         </div>
-
-                        <p class="text-gray-700 font-medium leading-relaxed mb-4">
+                        <p class="text-gray-700 font-medium leading-relaxed mb-4 font-inter">
                             Talk to users. Validate assumptions. Build what people actually want.
                         </p>
-
                         <div class="bg-gray-50 border-2 border-gray-200 p-3 mb-4 flex items-center gap-3">
-                            <div class="w-10 h-10 bg-gray-300 border-2 border-black rounded-full flex items-center justify-center font-bold">
-                                D
-                            </div>
+                            <div class="w-10 h-10 bg-gray-200 border-2 border-black rounded-full flex items-center justify-center font-bold">D</div>
                             <div>
-                                <div class="text-xs text-gray-500 font-bold uppercase">Trainer</div>
+                                <div class="text-xs text-gray-500 font-bold uppercase font-display">Trainer</div>
                                 <div class="font-bold text-sm">David Chen</div>
                             </div>
                         </div>
-
                         <div class="space-y-2 mb-4">
-                            <div class="flex items-center gap-2 text-sm font-bold">
-                                <i class="fa-solid fa-calendar text-[#5465FF]"></i>
-                                <span>March 25, 2026</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-sm font-bold">
-                                <i class="fa-solid fa-location-dot text-[#FF90E8]"></i>
-                                <span>Meeting Room 2</span>
-                            </div>
+                            <div class="flex items-center gap-2 text-sm font-bold"><i class="fa-solid fa-calendar text-teal-600"></i><span>March 25, 2026</span></div>
+                            <div class="flex items-center gap-2 text-sm font-bold"><i class="fa-solid fa-location-dot text-gray-500"></i><span>Meeting Room 2</span></div>
                         </div>
-
                         <div class="inline-flex items-center gap-2 bg-green-100 border-2 border-green-800 px-3 py-1 rounded-full text-green-800 text-xs font-bold">
-                            <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span>
-                            Registration Open
+                            <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span> Registration Open
                         </div>
                     </div>
-
                     <div class="p-4 border-t-4 border-black bg-gray-50">
-                        <button class="w-full bg-black text-white font-bold py-3 border-2 border-transparent hover:bg-white hover:text-black hover:border-black transition-all">
+                        <button class="w-full bg-black text-white font-bold py-3 border-2 border-transparent hover:bg-white hover:text-black hover:border-black transition-all font-display tracking-wide">
                             <i class="fa-solid fa-calendar-plus mr-2"></i>ATTEND WORKSHOP
                         </button>
                     </div>
                 </div>
 
-                <!-- Workshop 5 -->
-                <div class="bg-white border-4 border-black rounded-xl overflow-hidden shadow-neo flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group">
+                <div class="workshop-card bg-white border-4 border-black rounded-xl overflow-hidden shadow-neo flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group"
+                     data-title="Legal Basics for Startups" 
+                     data-category="legal"
+                     data-trainer="Layla Ibrahim">
                     
-                    <div class="h-32 border-b-4 border-black relative" 
-                         style="background-color: #FFB5E8; background-image: radial-gradient(black 1px, transparent 1px); background-size: 10px 10px; opacity: 0.9;">
+                    <div class="h-32 border-b-4 border-black relative bg-slate-700" 
+                         style="background-image: radial-gradient(black 1px, transparent 1px); background-size: 10px 10px; opacity: 1;">
                         <div class="absolute -bottom-12 left-6">
-                            <div class="w-24 h-24 rounded-none border-4 border-black flex items-center justify-center shadow-sm" style="background-color: #FFB5E8">
-                                <i class="fa-solid fa-gavel text-5xl text-black drop-shadow-lg"></i>
+                            <div class="w-24 h-24 rounded-none border-4 border-black flex items-center justify-center shadow-sm bg-slate-700">
+                                <i class="fa-solid fa-gavel text-5xl text-white drop-shadow-lg"></i>
                             </div>
                         </div>
-                        <div class="absolute top-4 right-4 bg-white border-2 border-black px-3 py-1 font-bold text-sm">
-                            <i class="fa-solid fa-users mr-1"></i>
-                            18/30 SEATS
+                        <div class="absolute top-4 right-4 bg-white border-2 border-black px-3 py-1 font-bold text-sm font-display">
+                            <i class="fa-solid fa-users mr-1"></i> 18/30 SEATS
                         </div>
                     </div>
 
                     <div class="pt-14 pb-6 px-6 flex-grow">
-                        <h3 class="text-2xl font-black text-black mb-2">Legal Basics for Startups</h3>
-                        
+                        <h3 class="text-2xl font-black text-black mb-2 font-display">Legal Basics for Startups</h3>
                         <div class="flex flex-wrap items-center gap-2 mb-4">
-                            <span class="text-sm font-bold bg-black text-white px-2 py-0.5">Legal & Compliance</span>
-                            <span class="text-sm font-bold text-gray-600">
-                                <i class="fa-solid fa-clock mr-1"></i>2 Hours
-                            </span>
+                            <span class="text-sm font-bold bg-black text-white px-2 py-0.5 border border-black">Legal</span>
+                            <span class="text-sm font-bold text-gray-600"><i class="fa-solid fa-clock mr-1"></i>2 Hours</span>
                         </div>
-
-                        <p class="text-gray-700 font-medium leading-relaxed mb-4">
+                        <p class="text-gray-700 font-medium leading-relaxed mb-4 font-inter">
                             Incorporation, contracts, IP protection. Everything you need to know to avoid legal disasters.
                         </p>
-
                         <div class="bg-gray-50 border-2 border-gray-200 p-3 mb-4 flex items-center gap-3">
-                            <div class="w-10 h-10 bg-gray-300 border-2 border-black rounded-full flex items-center justify-center font-bold">
-                                L
-                            </div>
+                            <div class="w-10 h-10 bg-gray-200 border-2 border-black rounded-full flex items-center justify-center font-bold">L</div>
                             <div>
-                                <div class="text-xs text-gray-500 font-bold uppercase">Trainer</div>
+                                <div class="text-xs text-gray-500 font-bold uppercase font-display">Trainer</div>
                                 <div class="font-bold text-sm">Layla Ibrahim</div>
                             </div>
                         </div>
-
                         <div class="space-y-2 mb-4">
-                            <div class="flex items-center gap-2 text-sm font-bold">
-                                <i class="fa-solid fa-calendar text-[#5465FF]"></i>
-                                <span>March 28, 2026</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-sm font-bold">
-                                <i class="fa-solid fa-location-dot text-[#FF90E8]"></i>
-                                <span>Conference Room</span>
-                            </div>
+                            <div class="flex items-center gap-2 text-sm font-bold"><i class="fa-solid fa-calendar text-slate-700"></i><span>March 28, 2026</span></div>
+                            <div class="flex items-center gap-2 text-sm font-bold"><i class="fa-solid fa-location-dot text-gray-500"></i><span>Conference Room</span></div>
                         </div>
-
                         <div class="inline-flex items-center gap-2 bg-green-100 border-2 border-green-800 px-3 py-1 rounded-full text-green-800 text-xs font-bold">
-                            <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span>
-                            Registration Open
+                            <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span> Registration Open
                         </div>
                     </div>
-
                     <div class="p-4 border-t-4 border-black bg-gray-50">
-                        <button class="w-full bg-black text-white font-bold py-3 border-2 border-transparent hover:bg-white hover:text-black hover:border-black transition-all">
+                        <button class="w-full bg-black text-white font-bold py-3 border-2 border-transparent hover:bg-white hover:text-black hover:border-black transition-all font-display tracking-wide">
                             <i class="fa-solid fa-calendar-plus mr-2"></i>ATTEND WORKSHOP
                         </button>
                     </div>
                 </div>
 
-                <!-- Workshop 6 -->
-                <div class="bg-white border-4 border-black rounded-xl overflow-hidden shadow-neo flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group">
+                <div class="workshop-card bg-white border-4 border-black rounded-xl overflow-hidden shadow-neo flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group"
+                     data-title="Financial Modeling" 
+                     data-category="finance"
+                     data-trainer="Omar Khalil">
                     
-                    <div class="h-32 border-b-4 border-black relative" 
-                         style="background-color: #B4E7CE; background-image: radial-gradient(black 1px, transparent 1px); background-size: 10px 10px; opacity: 0.9;">
+                    <div class="h-32 border-b-4 border-black relative bg-emerald-700" 
+                         style="background-image: radial-gradient(black 1px, transparent 1px); background-size: 10px 10px; opacity: 1;">
                         <div class="absolute -bottom-12 left-6">
-                            <div class="w-24 h-24 rounded-none border-4 border-black flex items-center justify-center shadow-sm" style="background-color: #B4E7CE">
-                                <i class="fa-solid fa-chart-pie text-5xl text-black drop-shadow-lg"></i>
+                            <div class="w-24 h-24 rounded-none border-4 border-black flex items-center justify-center shadow-sm bg-emerald-700">
+                                <i class="fa-solid fa-chart-pie text-5xl text-white drop-shadow-lg"></i>
                             </div>
                         </div>
-                        <div class="absolute top-4 right-4 bg-white border-2 border-black px-3 py-1 font-bold text-sm">
-                            <i class="fa-solid fa-users mr-1"></i>
-                            15/25 SEATS
+                        <div class="absolute top-4 right-4 bg-white border-2 border-black px-3 py-1 font-bold text-sm font-display">
+                            <i class="fa-solid fa-users mr-1"></i> 15/25 SEATS
                         </div>
                     </div>
 
                     <div class="pt-14 pb-6 px-6 flex-grow">
-                        <h3 class="text-2xl font-black text-black mb-2">Financial Modeling for Non-Finance Founders</h3>
-                        
+                        <h3 class="text-2xl font-black text-black mb-2 font-display">Financial Modeling</h3>
                         <div class="flex flex-wrap items-center gap-2 mb-4">
-                            <span class="text-sm font-bold bg-black text-white px-2 py-0.5">Finance</span>
-                            <span class="text-sm font-bold text-gray-600">
-                                <i class="fa-solid fa-clock mr-1"></i>4 Hours
-                            </span>
+                            <span class="text-sm font-bold bg-black text-white px-2 py-0.5 border border-black">Finance</span>
+                            <span class="text-sm font-bold text-gray-600"><i class="fa-solid fa-clock mr-1"></i>4 Hours</span>
                         </div>
-
-                        <p class="text-gray-700 font-medium leading-relaxed mb-4">
+                        <p class="text-gray-700 font-medium leading-relaxed mb-4 font-inter">
                             Revenue projections, burn rate, unit economics. Master the numbers that matter.
                         </p>
-
                         <div class="bg-gray-50 border-2 border-gray-200 p-3 mb-4 flex items-center gap-3">
-                            <div class="w-10 h-10 bg-gray-300 border-2 border-black rounded-full flex items-center justify-center font-bold">
-                                O
-                            </div>
+                            <div class="w-10 h-10 bg-gray-200 border-2 border-black rounded-full flex items-center justify-center font-bold">O</div>
                             <div>
-                                <div class="text-xs text-gray-500 font-bold uppercase">Trainer</div>
+                                <div class="text-xs text-gray-500 font-bold uppercase font-display">Trainer</div>
                                 <div class="font-bold text-sm">Omar Khalil</div>
                             </div>
                         </div>
-
                         <div class="space-y-2 mb-4">
-                            <div class="flex items-center gap-2 text-sm font-bold">
-                                <i class="fa-solid fa-calendar text-[#5465FF]"></i>
-                                <span>April 2, 2026</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-sm font-bold">
-                                <i class="fa-solid fa-location-dot text-[#FF90E8]"></i>
-                                <span>Hall A - Building 3</span>
-                            </div>
+                            <div class="flex items-center gap-2 text-sm font-bold"><i class="fa-solid fa-calendar text-emerald-700"></i><span>April 2, 2026</span></div>
+                            <div class="flex items-center gap-2 text-sm font-bold"><i class="fa-solid fa-location-dot text-gray-500"></i><span>Hall A - Building 3</span></div>
                         </div>
-
                         <div class="inline-flex items-center gap-2 bg-green-100 border-2 border-green-800 px-3 py-1 rounded-full text-green-800 text-xs font-bold">
-                            <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span>
-                            Registration Open
+                            <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span> Registration Open
                         </div>
                     </div>
-
                     <div class="p-4 border-t-4 border-black bg-gray-50">
-                        <button class="w-full bg-black text-white font-bold py-3 border-2 border-transparent hover:bg-white hover:text-black hover:border-black transition-all">
+                        <button class="w-full bg-black text-white font-bold py-3 border-2 border-transparent hover:bg-white hover:text-black hover:border-black transition-all font-display tracking-wide">
                             <i class="fa-solid fa-calendar-plus mr-2"></i>ATTEND WORKSHOP
                         </button>
                     </div>
                 </div>
 
             </div>
+
+            <div class="text-center py-24 border-4 border-black bg-white shadow-neo mt-10 hidden" id="emptyState">
+                <div class="text-7xl mb-6 opacity-50">🧐</div>
+                <h3 class="text-4xl font-black mb-4 text-black font-display uppercase">No Workshops Found</h3>
+                <p class="text-gray-700 mb-8 font-medium text-xl max-w-md mx-auto font-inter">
+                    Try adjusting your search or category filter.
+                </p>
+                <button id="resetFilters" class="bg-black text-white px-8 py-3 border-2 border-black font-bold hover:bg-white hover:text-black transition-all shadow-[4px_4px_0_0_#000] hover:shadow-none">
+                    CLEAR FILTERS
+                </button>
+            </div>
         </div>
 
-        <!-- How It Works Section -->
-        <div class="bg-[#FF90E8] border-y-4 border-black py-20 mb-20 text-black">
+        <div class="bg-slate-900 border-y-4 border-black py-20 mb-20 text-white">
             <div class="container mx-auto px-4 max-w-6xl">
-                <h2 class="text-5xl font-black text-center mb-16 drop-shadow-[4px_4px_0_#000]">HOW TO JOIN A WORKSHOP</h2>
-                
+                <h2 class="text-5xl font-black text-center mb-16 drop-shadow-[4px_4px_0_#000] font-display">HOW TO JOIN</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-white text-black border-4 border-black p-8 shadow-[8px_8px_0_0_#000]">
-                        <div class="text-6xl font-black text-[#FFE5F8] mb-4">01</div>
-                        <h3 class="text-2xl font-bold mb-3">Browse & Pick</h3>
-                        <p class="font-medium">Check out upcoming workshops. Find what matches your goals.</p>
+                    <div class="bg-white text-black border-4 border-black p-8 shadow-[8px_8px_0_0_#FFF]">
+                        <div class="text-6xl font-black text-slate-200 mb-4 font-display">01</div>
+                        <h3 class="text-2xl font-bold mb-3 font-display">Browse & Pick</h3>
+                        <p class="font-medium font-inter">Check out upcoming workshops. Find what matches your goals.</p>
                     </div>
-                    <div class="bg-white text-black border-4 border-black p-8 shadow-[8px_8px_0_0_#000] relative top-4 md:top-8">
-                        <div class="text-6xl font-black text-[#FFE5F8] mb-4">02</div>
-                        <h3 class="text-2xl font-bold mb-3">Click Attend</h3>
-                        <p class="font-medium">Reserve your seat. Get confirmation. Mark your calendar.</p>
+                    <div class="bg-white text-black border-4 border-black p-8 shadow-[8px_8px_0_0_#FFF] relative top-4 md:top-8">
+                        <div class="text-6xl font-black text-slate-200 mb-4 font-display">02</div>
+                        <h3 class="text-2xl font-bold mb-3 font-display">Click Attend</h3>
+                        <p class="font-medium font-inter">Reserve your seat. Get confirmation. Mark your calendar.</p>
                     </div>
-                    <div class="bg-white text-black border-4 border-black p-8 shadow-[8px_8px_0_0_#000] relative top-8 md:top-16">
-                        <div class="text-6xl font-black text-[#FFE5F8] mb-4">03</div>
-                        <h3 class="text-2xl font-bold mb-3">Show Up & Learn</h3>
-                        <p class="font-medium">Take notes. Ask questions. Apply what you learn to your startup.</p>
+                    <div class="bg-white text-black border-4 border-black p-8 shadow-[8px_8px_0_0_#FFF] relative top-8 md:top-16">
+                        <div class="text-6xl font-black text-slate-200 mb-4 font-display">03</div>
+                        <h3 class="text-2xl font-bold mb-3 font-display">Show Up & Learn</h3>
+                        <p class="font-medium font-inter">Take notes. Ask questions. Apply what you learn to your startup.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- CTA Section -->
         <div class="container mx-auto px-4 mb-20">
-            <div class="bg-[#5465FF] border-4 border-black p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-10 shadow-neo">
+            <div class="bg-gray-900 border-4 border-black p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-10 shadow-neo">
                 <div class="flex-1">
-                    <h2 class="text-4xl md:text-5xl font-black mb-4 leading-tight text-white">WANT TO HOST <br> A WORKSHOP?</h2>
-                    <p class="text-xl font-bold text-white">Share your expertise. Help entrepreneurs build better startups.</p>
+                    <h2 class="text-4xl md:text-5xl font-black mb-4 leading-tight text-white font-display">WANT TO HOST <br> A WORKSHOP?</h2>
+                    <p class="text-xl font-bold text-gray-300 font-inter">Share your expertise. Help entrepreneurs build better startups.</p>
                 </div>
                 <div>
-                    <a href="#" class="inline-block bg-white text-black text-xl font-bold px-8 py-4 border-4 border-black shadow-[4px_4px_0_0_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                    <a href="#" class="inline-block bg-white text-black text-xl font-bold px-8 py-4 border-4 border-black shadow-[4px_4px_0_0_#FFF] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all font-display">
                         BECOME A MENTOR <i class="fa-solid fa-arrow-right ml-2"></i>
                     </a>
                 </div>
@@ -481,6 +384,53 @@
 
     <%- include('../partials/footer.ejs') %>
 
-    <script src="/js/workshops.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const cards = document.querySelectorAll('.workshop-card');
+            const emptyState = document.getElementById('emptyState');
+            const resetBtn = document.getElementById('resetFilters');
+
+            function filterWorkshops() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedCategory = categoryFilter.value.toLowerCase();
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+                    const title = card.getAttribute('data-title').toLowerCase();
+                    const trainer = card.getAttribute('data-trainer').toLowerCase();
+                    const category = card.getAttribute('data-category').toLowerCase();
+
+                    const matchesSearch = title.includes(searchTerm) || trainer.includes(searchTerm);
+                    const matchesCategory = selectedCategory === '' || category === selectedCategory;
+
+                    if (matchesSearch && matchesCategory) {
+                        card.style.display = 'flex'; // Restore flex display
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Toggle empty state
+                if (visibleCount === 0) {
+                    emptyState.classList.remove('hidden');
+                } else {
+                    emptyState.classList.add('hidden');
+                }
+            }
+
+            // Event Listeners
+            searchInput.addEventListener('input', filterWorkshops);
+            categoryFilter.addEventListener('change', filterWorkshops);
+            
+            resetBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                categoryFilter.value = '';
+                filterWorkshops();
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,253 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
+<%- include('../partials/head') %> 
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>
-    <%= project.title %> - Business Incubator Platform
-  </title>
-  <link href="/css/style.css" rel="stylesheet" />
-</head>
+<body class="bg-neo-white text-neo-black flex flex-col min-h-screen">
+    <%- include('../partials/header.ejs') %>
 
-<body class="bg-white text-gray-900 min-h-screen flex flex-col">
-  <%- include('../partials/header.ejs') %>
+    <section class="py-12 px-4 border-t-4 border-black min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <a href="<%= routes.projects %>"
+                class="inline-flex items-center gap-3 mb-10 text-lg font-black uppercase tracking-widest hover:-translate-x-2 transition-transform group font-display">
+                <span class="w-10 h-10 border-4 border-black bg-brand-amber flex items-center justify-center shadow-neo-sm group-hover:shadow-none transition-all">←</span> 
+                Back to Projects
+            </a>
 
-    <section class="min-h-screen bg-neo-white py-12 px-4 border-t-2 border-neo-black">
-      <div class="max-w-7xl mx-auto">
-        <!-- Back Button -->
-        <a href="<%= routes.projects %>"
-          class="inline-flex items-center gap-2 mb-8 text-lg font-bold hover:-translate-x-2 transition-transform">
-          <span class="text-2xl">←</span> Back to Projects
-        </a>
+            <div class="bg-white border-4 border-black shadow-neo p-8 md:p-12 mb-12 relative overflow-hidden">
+                <div class="flex flex-col md:flex-row justify-between items-start gap-8 relative z-10">
+                    <div class="flex-1">
+                        <h1 class="text-5xl md:text-7xl font-display font-bold text-neo-black mb-6 uppercase tracking-tighter">
+                            <%= project.title %>
+                        </h1>
+                        <p class="text-xl text-slate-600 leading-relaxed max-w-3xl font-sans italic border-l-4 border-brand-indigo pl-6">
+                            "<%= project.description %>"
+                        </p>
+                    </div>
 
-        <!-- Project Header -->
-        <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-8 md:p-12 mb-8">
-          <div class="flex flex-col md:flex-row justify-between items-start gap-6 mb-6">
-            <div class="flex-1">
-              <h1 class="text-5xl md:text-6xl font-display font-bold text-neo-black mb-4">
-                <%= project.title %>
-              </h1>
-              <p class="text-xl text-gray-700 leading-relaxed">
-                <%= project.description %>
-              </p>
+                    <div class="flex flex-col gap-3">
+                        <span class="bg-brand-amber px-8 py-4 text-xl font-black border-4 border-black shadow-neo uppercase tracking-widest font-display">
+                            <%= project.status %>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+                    <div class="bg-brand-indigo text-white border-4 border-black p-6 shadow-neo-sm">
+                        <div class="text-5xl font-black font-display mb-1"><%= project.team.length %></div>
+                        <div class="text-xs font-black uppercase tracking-widest opacity-80">Team Members</div>
+                    </div>
+
+                    <div class="bg-white border-4 border-black p-6 shadow-neo-sm">
+                        <div class="text-2xl font-black font-display text-brand-indigo uppercase mb-1 truncate">
+                            <%= project.techStack[0] %>
+                        </div>
+                        <div class="text-xs font-black uppercase tracking-widest text-slate-400">Main Framework</div>
+                    </div>
+
+                    <div class="bg-brand-slate text-white border-4 border-black p-6 shadow-neo-sm text-black">
+                        <div class="text-2xl font-black font-display text-brand-amber uppercase mb-1">
+                            <%= project.targetMarket.split(',')[0] %>
+                        </div>
+                        <div class="text-xs font-black uppercase tracking-widest text-slate-400">Industry</div>
+                    </div>
+                </div>
+                <div class="absolute top-0 right-0 w-32 h-32 bg-slate-50 border-l-4 border-b-4 border-black -z-0 opacity-50"></div>
             </div>
 
-            <div class="flex flex-col gap-3">
-              <span
-                class="bg-brand-yellow px-6 py-3 text-lg font-bold border-2 border-neo-black rounded-full shadow-neo text-center whitespace-nowrap">
-                <%= project.status %>
-              </span>
-            </div>
-          </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 text-left">
+                <div class="lg:col-span-2 space-y-10">
+                    
+                    <div class="bg-white border-4 border-black shadow-neo p-8 md:p-10">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-14 h-14 bg-brand-indigo text-white border-4 border-black flex items-center justify-center text-3xl shadow-neo-sm">🎯</div>
+                            <h2 class="text-3xl font-display font-bold uppercase tracking-tight">The Problem</h2>
+                        </div>
+                        <p class="text-lg text-slate-700 leading-relaxed font-sans font-medium">
+                            <%= project.problem %>
+                        </p>
+                    </div>
 
-          <!-- Quick Stats -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-            <div class="bg-brand-pink/20 border-2 border-neo-black rounded-2xl p-6 text-center">
-              <div class="text-4xl font-bold font-display text-brand-pink mb-2">
-                <%= project.team.length %>
-              </div>
-              <div class="text-sm font-bold uppercase tracking-wide">Team Members</div>
-            </div>
+                    <div class="bg-white border-4 border-black shadow-neo p-8 md:p-10">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-14 h-14 bg-brand-amber text-black border-4 border-black flex items-center justify-center text-3xl shadow-neo-sm">💡</div>
+                            <h2 class="text-3xl font-display font-bold uppercase tracking-tight">Our Solution</h2>
+                        </div>
+                        <p class="text-lg text-slate-700 leading-relaxed font-sans font-medium">
+                            <%= project.solution %>
+                        </p>
+                    </div>
 
-            <div class="bg-brand-blue/20 border-2 border-neo-black rounded-2xl p-6 text-center">
-              <div class="text-2xl font-bold text-brand-blue mb-2">
-                <%= project.techStack[0] %>
-              </div>
-              <div class="text-sm font-bold uppercase tracking-wide">Main Framework</div>
-            </div>
+                    <div class="bg-white border-4 border-black shadow-neo p-8 md:p-10">
+                        <div class="flex items-center gap-4 mb-10">
+                            <div class="w-14 h-14 bg-brand-slate text-white border-4 border-black flex items-center justify-center text-3xl shadow-neo-sm">🛠️</div>
+                            <h2 class="text-3xl font-display font-bold uppercase tracking-tight">Technology Stack</h2>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                            <% project.techStack.forEach((tech, index)=> { %>
+                                <div class="bg-slate-50 border-4 border-black p-5 hover:-translate-y-1 transition-all group">
+                                    <div class="text-[10px] font-black text-slate-400 mb-2 uppercase tracking-tighter">Technology <%= index + 1 %></div>
+                                    <div class="font-black text-xl font-display uppercase group-hover:text-brand-indigo"><%= tech %></div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
 
-            <div class="bg-brand-yellow/30 border-2 border-neo-black rounded-2xl p-6 text-center">
-              <div class="text-2xl font-bold text-neo-black mb-2">
-                <%= project.targetMarket.split(',')[0] %>
-              </div>
-              <div class="text-sm font-bold uppercase tracking-wide">Industry</div>
+                    <div class="bg-white border-4 border-black shadow-neo p-8 md:p-10">
+                        <div class="flex items-center gap-4 mb-10">
+                            <div class="w-14 h-14 bg-brand-indigo text-white border-4 border-black flex items-center justify-center text-3xl shadow-neo-sm">👥</div>
+                            <h2 class="text-3xl font-display font-bold uppercase tracking-tight">The Team</h2>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <% project.team.forEach(member=> { %>
+                                <div class="flex items-center gap-5 bg-slate-50 border-4 border-black p-6 hover:shadow-neo transition-all">
+                                    <div class="w-16 h-16 bg-brand-slate text-brand-amber border-4 border-black flex items-center justify-center font-black text-2xl shadow-neo-sm">
+                                        <%= member.initials %>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="font-black text-xl font-display uppercase truncate"><%= member.name %></h3>
+                                        <p class="text-slate-500 font-bold uppercase text-xs tracking-widest italic"><%= member.role %></p>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                        <button class="w-full mt-10 bg-brand-indigo text-white text-xl font-black py-5 border-4 border-black shadow-neo hover:translate-y-1 hover:shadow-none transition-all font-display tracking-widest uppercase">
+                            Connect with Team 💬
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-1">
+                    <div class="space-y-8 lg:sticky lg:top-24">
+                        
+                        <div class="bg-brand-slate text-white border-4 border-black shadow-neo p-8">
+                            <h2 class="text-2xl font-display font-bold mb-8 uppercase tracking-widest border-b-4 border-white/10 pb-4 text-brand-amber">Project Intel</h2>
+                            <div class="space-y-8">
+                                <div>
+                                    <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Funding Stage</div>
+                                    <div class="text-xl font-black uppercase font-display"><%= project.fundingStage %></div>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Target Market</div>
+                                    <div class="text-xl font-black uppercase font-display leading-tight text-brand-indigo"><%= project.targetMarket %></div>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Launch Date</div>
+                                    <div class="text-xl font-black uppercase font-display"><%= project.startDate %></div>
+                                </div>
+                                <% if (project.lookingForCoFounders) { %>
+                                    <div class="bg-brand-amber p-4 border-4 border-black text-black">
+                                        <div class="text-[10px] font-black uppercase mb-1">HIRING CO-FOUNDERS</div>
+                                        <div class="font-black font-display uppercase tracking-tight"><%= project.neededRoles %></div>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border-4 border-black shadow-neo p-6 space-y-4">
+                            <button class="w-full bg-brand-amber text-black text-lg font-black py-4 border-4 border-black shadow-neo-sm hover:translate-y-1 hover:shadow-none transition-all uppercase font-display tracking-widest">
+                                Live Demo 🚀
+                            </button>
+                            <button class="w-full bg-white text-black text-lg font-black py-4 border-4 border-black shadow-neo-sm hover:translate-y-1 hover:shadow-none transition-all uppercase font-display tracking-widest">
+                                Visit GitHub 💻
+                            </button>
+                        </div>
+
+                        <div class="bg-white border-4 border-black shadow-neo p-8">
+                            <h3 class="text-xl font-display font-bold mb-6 uppercase tracking-widest">Resources</h3>
+                            <div class="space-y-4">
+                                <a href="#" class="flex items-center gap-4 p-4 bg-slate-50 border-4 border-black hover:bg-brand-indigo hover:text-white transition-all group">
+                                    <span class="text-2xl">📦</span>
+                                    <span class="font-black uppercase text-sm tracking-tight">Repository</span>
+                                </a>
+                                <a href="#" class="flex items-center gap-4 p-4 bg-slate-50 border-4 border-black hover:bg-brand-indigo hover:text-white transition-all group">
+                                    <span class="text-2xl">🌐</span>
+                                    <span class="font-black uppercase text-sm tracking-tight">Documentation</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <!-- Main Content -->
-          <div class="lg:col-span-2 space-y-8">
-            <!-- Problem & Solution -->
-            <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-8 md:p-10">
-              <div class="flex items-center gap-3 mb-6">
-                <div
-                  class="w-12 h-12 bg-brand-pink rounded-full border-2 border-neo-black flex items-center justify-center text-2xl">
-                  🎯
-                </div>
-                <h2 class="text-3xl font-display font-bold">Problem Being Solved</h2>
-              </div>
-              <p class="text-lg text-gray-800 leading-relaxed">
-                <%= project.problem %>
-              </p>
-            </div>
-
-            <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-8 md:p-10">
-              <div class="flex items-center gap-3 mb-6">
-                <div
-                  class="w-12 h-12 bg-brand-blue rounded-full border-2 border-neo-black flex items-center justify-center text-2xl">
-                  💡
-                </div>
-                <h2 class="text-3xl font-display font-bold">Our Solution</h2>
-              </div>
-              <p class="text-lg text-gray-800 leading-relaxed">
-                <%= project.solution %>
-              </p>
-            </div>
-
-            <!-- Technology Stack -->
-            <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-8 md:p-10">
-              <div class="flex items-center gap-3 mb-6">
-                <div
-                  class="w-12 h-12 bg-brand-yellow rounded-full border-2 border-neo-black flex items-center justify-center text-2xl">
-                  🛠️
-                </div>
-                <h2 class="text-3xl font-display font-bold">Technology Stack</h2>
-              </div>
-              <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <% project.techStack.forEach((tech, index)=> { %>
-                  <div
-                    class="bg-neo-white border-2 border-neo-black rounded-xl p-4 hover:-translate-y-1 transition-transform">
-                    <div class="text-sm font-bold text-gray-500 mb-1">Tech <%= index + 1 %>
-                    </div>
-                    <div class="font-bold text-lg">
-                      <%= tech %>
-                    </div>
-                  </div>
-                  <% }); %>
-              </div>
-            </div>
-
-            <!-- Team -->
-            <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-8 md:p-10">
-              <div class="flex items-center gap-3 mb-8">
-                <div
-                  class="w-12 h-12 bg-brand-pink rounded-full border-2 border-neo-black flex items-center justify-center text-2xl">
-                  👥
-                </div>
-                <h2 class="text-3xl font-display font-bold">Team</h2>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <% project.team.forEach(member=> { %>
-                  <div
-                    class="flex items-center gap-4 bg-neo-white border-2 border-neo-black rounded-2xl p-6 hover:shadow-neo transition-shadow">
-                    <div
-                      class="w-16 h-16 bg-brand-blue text-white border-2 border-neo-black rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
-                      <%= member.initials %>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <h3 class="font-bold text-lg truncate">
-                        <%= member.name %>
-                      </h3>
-                      <p class="text-gray-600 truncate">
-                        <%= member.role %>
-                      </p>
-                    </div>
-                  </div>
-                  <% }); %>
-              </div>
-
-              <button
-                class="w-full mt-6 bg-brand-blue text-white text-lg font-bold py-4 px-8 rounded-full border-2 border-neo-black shadow-neo hover:-translate-y-1 transition-transform">
-                Connect with Team 💬
-              </button>
-            </div>
-          </div>
-
-          <!-- Sidebar -->
-          <div class="lg:col-span-1">
-            <div class="space-y-6 lg:sticky lg:top-6">
-              <!-- Project Details -->
-              <div class="bg-neo-black text-white border-2 border-neo-black rounded-3xl shadow-neo p-8">
-                <h2 class="text-2xl font-display font-bold mb-6">Project Details</h2>
-
-                <div class="space-y-6">
-                  <div>
-                    <div class="text-sm font-bold text-gray-400 mb-2">Funding Stage</div>
-                    <div class="text-lg font-bold">
-                      <%= project.fundingStage %>
-                    </div>
-                  </div>
-
-                  <div class="border-t border-gray-700 pt-6">
-                    <div class="text-sm font-bold text-gray-400 mb-2">Target Market</div>
-                    <div class="text-lg font-bold">
-                      <%= project.targetMarket %>
-                    </div>
-                  </div>
-
-                  <div class="border-t border-gray-700 pt-6">
-                    <div class="text-sm font-bold text-gray-400 mb-2">Project Started</div>
-                    <div class="text-lg font-bold">
-                      <%= project.startDate %>
-                    </div>
-                  </div>
-
-                  <div class="border-t border-gray-700 pt-6">
-                    <div class="text-sm font-bold text-gray-400 mb-2">Looking for Co-founders</div>
-                    <% if (project.lookingForCoFounders) { %>
-                      <div
-                        class="bg-brand-yellow text-neo-black px-4 py-2 rounded-full border-2 border-white font-bold inline-block">
-                        Yes ✅
-                      </div>
-                      <div class="mt-3 text-sm">
-                        <%= project.neededRoles %>
-                      </div>
-                      <% } else { %>
-                        <div class="text-lg font-bold text-gray-400">No</div>
-                        <% } %>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Action Buttons -->
-              <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-6 space-y-4">
-                <button
-                  class="w-full bg-brand-yellow text-neo-black text-lg font-bold py-4 px-6 rounded-full border-2 border-neo-black shadow-neo hover:-translate-y-1 transition-transform">
-                  View Demo 🚀
-                </button>
-
-                <button
-                  class="w-full bg-white text-neo-black text-lg font-bold py-4 px-6 rounded-full border-2 border-neo-black shadow-neo hover:-translate-y-1 transition-transform">
-                  Visit GitHub 💻
-                </button>
-
-                <button
-                  class="w-full bg-brand-pink text-white text-lg font-bold py-4 px-6 rounded-full border-2 border-neo-black shadow-neo hover:-translate-y-1 transition-transform">
-                  Share Project 📤
-                </button>
-              </div>
-
-              <!-- Resources -->
-              <div class="bg-white border-2 border-neo-black rounded-3xl shadow-neo p-6">
-                <h3 class="text-xl font-display font-bold mb-4">Resources</h3>
-                <div class="space-y-3">
-                  <a href="#"
-                    class="flex items-center gap-3 p-3 bg-neo-white border-2 border-neo-black rounded-xl hover:shadow-neo transition-shadow">
-                    <span class="text-2xl">📦</span>
-                    <span class="font-bold">GitHub Repository</span>
-                  </a>
-                  <a href="#"
-                    class="flex items-center gap-3 p-3 bg-neo-white border-2 border-neo-black rounded-xl hover:shadow-neo transition-shadow">
-                    <span class="text-2xl">🌐</span>
-                    <span class="font-bold">Live Demo</span>
-                  </a>
-                  <a href="#"
-                    class="flex items-center gap-3 p-3 bg-neo-white border-2 border-neo-black rounded-xl hover:shadow-neo transition-shadow">
-                    <span class="text-2xl">🔗</span>
-                    <span class="font-bold">Project Website</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
 
     <%- include('../partials/footer.ejs') %>
-      <script src="/js/project-details.js"></script>
+    <script src="/js/project-details.js"></script>
 </body>
-
 </html>

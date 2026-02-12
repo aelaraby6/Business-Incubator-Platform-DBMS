@@ -1,36 +1,32 @@
 @import "tailwindcss";
-@source "../../views/**/*.ejs";
-@theme {
-  --color-brand-yellow: #FFDE59;
-  --color-brand-blue: #2563EB;
-  --color-brand-pink: #FF90E8; 
-  --color-neo-black: #1a1a1a;
-  --color-neo-white: #fdfdfd;
-  
-  --primary-accent: #FFDE59; 
 
+@theme {
+  /* Palette*/
+  --color-neo-black: #000000;
+  --color-neo-white: #FFFDF5;
+  --color-brand-indigo: #4f46e5;
+  --color-brand-slate: #0f172a;
+  --color-brand-amber: #f59e0b;
+
+  /* fonts */
   --font-display: "Space Grotesk", sans-serif;
   --font-sans: "Inter", sans-serif;
 
-  --shadow-neo: 5px 5px 0px 0px rgba(0,0,0,1);
-  --shadow-neo-sm: 3px 3px 0px 0px rgba(0,0,0,1);
-  --shadow-neo-hover: 2px 2px 0px 0px rgba(0,0,0,1);
-
-  --animate-scroll-rtl: scroll 20s linear infinite;
-  
-  --animate-marquee: marquee 20s linear infinite;
-  
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
+  --shadow-neo: 6px 6px 0px 0px #000000;
+  --shadow-neo-sm: 4px 4px 0px 0px #000000;
+  --shadow-neo-hover: 2px 2px 0px 0px #000000;
 }
 
-@layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .pause-on-hover:hover .animate-marquee {
-    animation-play-state: paused;
-  }
+/* Marquee */
+@utility animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.pause-on-hover:hover {
+  animation-play-state: paused;
 }
