@@ -1,32 +1,32 @@
 import React, { useState, useEffect } from "react";
 import {
-  Box,
+  UserTie,
   Plus,
-  Building,
   ChalkboardTeacher,
-  Laptop,
-  Layers,
+  Briefcase,
+  UserCheck,
   Search,
   Loader2,
   Inbox,
   Pin,
   X,
 } from "lucide-react";
-import ResourceTable from "./ResourceTable";
-import AddResourceForm from "./AddResourceForm";
+import MentorTable from "./MentorTable";
+import AddMentorForm from "./AddMentorForm";
 
-const Resources = () => {
-  const [resources, setResources] = useState([]);
+const Mentors = () => {
+  const [mentors, setMentors] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState("all");
+  const [filterExpertise, setFilterExpertise] = useState("all");
 
-  const fetchResources = async () => {
+  // Mock fetch for now - replace with window.electron.invoke('mentors:get-all')
+  const fetchMentors = async () => {
     setLoading(true);
     try {
-      const data = await window.electron.invoke("resources:get-all");
-      setResources(data || []);
+      const data = await window.electron.invoke("mentors:get-all");
+      setMentors(data || []);
     } catch (error) {
       console.error(error);
     }
@@ -34,18 +34,20 @@ const Resources = () => {
   };
 
   useEffect(() => {
-    fetchResources();
+    fetchMentors();
   }, []);
 
-  const handleAddResource = async () => {
+  const handleAddMentor = () => {
     setShowAddForm(false);
-    fetchResources();
+    fetchMentors();
   };
 
-  const filteredResources = resources.filter(
-    (r) =>
-      (filterType === "all" || r.type === filterType) &&
-      r.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredMentors = mentors.filter(
+    (m) =>
+      (filterExpertise === "all" ||
+        (m.expertise &&
+          m.expertise.toLowerCase() === filterExpertise.toLowerCase())) &&
+      m.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -55,13 +57,13 @@ const Resources = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
           <div>
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 flex items-center gap-4">
-              <div className="p-3 md:p-4 bg-orange-100 rounded-2xl text-orange-600 shadow-sm">
-                <Box size={24} />
+              <div className="p-3 md:p-4 bg-purple-100 rounded-2xl text-purple-600 shadow-sm">
+                <UserTie size={24} />
               </div>
-              Resources
+              Mentors
             </h1>
             <p className="text-lg md:text-xl text-gray-500 mt-2 ml-1 font-medium">
-              Manage office spaces, meeting rooms & equipment.
+              Manage experts, assign projects & track activity.
             </p>
           </div>
           <button
@@ -69,34 +71,40 @@ const Resources = () => {
             className="bg-gray-900 hover:bg-black text-white px-8 py-4 rounded-xl font-bold text-lg flex items-center gap-3 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
           >
             <Plus size={24} />
-            Add Resource
+            Add Mentor
           </button>
         </div>
 
-        {/* Stats Section */}
+        {/* Stats Section (Bigger Cards) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           <StatCard
-            title="Total Resources"
-            value={resources.length}
-            icon={Layers}
+            title="Total Mentors"
+            value={mentors.length}
+            icon={UserTie}
             colorClass="bg-blue-50 text-blue-600"
           />
           <StatCard
-            title="Workspaces"
-            value={resources.filter((r) => r.type === "workspace").length}
-            icon={Building}
+            title="Active"
+            value={mentors.filter((m) => m.status === "active").length}
+            icon={UserCheck}
             colorClass="bg-green-50 text-green-600"
           />
           <StatCard
-            title="Meeting Rooms"
-            value={resources.filter((r) => r.type === "meeting_room").length}
-            icon={ChalkboardTeacher}
+            title="Assigned Projects"
+            value={mentors.reduce(
+              (acc, m) => acc + parseInt(m.projects_count || 0),
+              0,
+            )}
+            icon={Briefcase}
             colorClass="bg-orange-50 text-orange-600"
           />
           <StatCard
-            title="Equipment"
-            value={resources.filter((r) => r.type === "equipment").length}
-            icon={Laptop}
+            title="Workshops Led"
+            value={mentors.reduce(
+              (acc, m) => acc + parseInt(m.workshops_count || 0),
+              0,
+            )}
+            icon={ChalkboardTeacher}
             colorClass="bg-purple-50 text-purple-600"
           />
         </div>
@@ -107,23 +115,24 @@ const Resources = () => {
             <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
             <input
               type="text"
-              placeholder="Search resources..."
+              placeholder="Search mentors..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700 placeholder-gray-400 text-lg font-medium transition-all"
+              className="w-full pl-14 pr-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-700 placeholder-gray-400 text-lg font-medium transition-all"
             />
           </div>
 
           <div className="w-full xl:w-auto">
             <select
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
-              className="w-full xl:w-64 px-6 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-700 bg-white cursor-pointer text-lg font-medium"
+              value={filterExpertise}
+              onChange={(e) => setFilterExpertise(e.target.value)}
+              className="w-full xl:w-64 px-6 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-700 bg-white cursor-pointer text-lg font-medium"
             >
-              <option value="all">All Types</option>
-              <option value="workspace">Workspaces</option>
-              <option value="meeting_room">Meeting Rooms</option>
-              <option value="equipment">Equipment</option>
+              <option value="all">All Expertise</option>
+              <option value="technology">Technology</option>
+              <option value="business">Business</option>
+              <option value="marketing">Marketing</option>
+              <option value="design">Design</option>
             </select>
           </div>
         </div>
@@ -131,15 +140,15 @@ const Resources = () => {
         {/* Table Section */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 bg-white rounded-2xl border border-gray-200 border-dashed">
-            <Loader2 className="text-4xl text-orange-600 animate-spin mb-4" />
+            <Loader2 className="text-4xl text-purple-600 animate-spin mb-4" />
             <p className="text-gray-500 text-xl font-medium">
-              Loading resources...
+              Loading mentors...
             </p>
           </div>
-        ) : filteredResources.length > 0 ? (
+        ) : filteredMentors.length > 0 ? (
           <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-            <ResourceTable
-              resources={filteredResources}
+            <MentorTable
+              mentors={filteredMentors}
               loading={false}
               onAddClick={() => setShowAddForm(true)}
             />
@@ -150,31 +159,30 @@ const Resources = () => {
               <Inbox className="text-5xl text-gray-400" />
             </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">
-              No resources found
+              No mentors found
             </h3>
             <p className="text-gray-500 text-lg max-w-md mt-1 mb-8">
-              Start by adding rooms, desks, or equipment to manage your
-              facility.
+              Start by adding expert profiles to help guide your startups.
             </p>
             <button
               onClick={() => setShowAddForm(true)}
               className="bg-gray-900 hover:bg-black text-white px-8 py-4 rounded-xl font-bold text-lg transition-colors shadow-md"
             >
-              Add First Resource
+              Add First Mentor
             </button>
           </div>
         )}
 
-        {/* Add Resource Modal */}
+        {/* Add Mentor Modal */}
         {showAddForm && (
           <div className="fixed inset-0 bg-gray-900/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm transition-opacity">
             <div className="bg-white w-full max-w-2xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200">
               <div className="p-6 md:p-8 border-b border-gray-100 flex items-center justify-between bg-white">
                 <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 flex items-center gap-3">
-                  <div className="p-2 bg-orange-100 rounded-lg text-orange-600">
+                  <div className="p-2 bg-purple-100 rounded-lg text-purple-600">
                     <Pin size={16} />
                   </div>
-                  Add New Resource
+                  Add New Mentor
                 </h2>
                 <button
                   onClick={() => setShowAddForm(false)}
@@ -184,9 +192,9 @@ const Resources = () => {
                 </button>
               </div>
               <div className="overflow-y-auto flex-1 bg-gray-50/50">
-                <AddResourceForm
+                <AddMentorForm
                   onClose={() => setShowAddForm(false)}
-                  onSuccess={handleAddResource}
+                  onSuccess={handleAddMentor}
                 />
               </div>
             </div>
@@ -212,4 +220,4 @@ const StatCard = ({ title, value, icon: Icon, colorClass }) => (
   </div>
 );
 
-export default Resources;
+export default Mentors;

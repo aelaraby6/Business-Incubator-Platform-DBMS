@@ -23,6 +23,12 @@ import {
   updateBookingStatus,
   getResourceStats
 } from './backend/resources/resources.js';
+import {
+  getAllMentors,
+  addMentor,
+  deleteMentor, 
+  assignMentorToWorkshop 
+} from './backend/mentors/mentors.js';
 
 app.on('ready', () => {
   const mainWindow = new BrowserWindow({
@@ -109,6 +115,22 @@ app.on('ready', () => {
 
   ipcMain.handle('resources:get-stats', async () => {
     return await getResourceStats();
+  });
+
+  ipcMain.handle('mentors:get-all', async () => {
+    return await getAllMentors();
+  });
+
+  ipcMain.handle('mentors:add', async (_event, data) => {
+    return await addMentor(data);
+  });
+
+  ipcMain.handle('mentors:delete', async (_event, id) => {
+    return await deleteMentor(id);
+  });
+
+  ipcMain.handle('mentors:assign-workshop', async (_event, { mentorId, workshopId }) => {
+    return await assignMentorToWorkshop(mentorId, workshopId);
   });
   
   handleCloseEvents(mainWindow);

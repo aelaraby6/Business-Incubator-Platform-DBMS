@@ -3,6 +3,7 @@ import Dashboard from "./Dashboard/Dashboard";
 import Sidebar from "./Sidebar";
 import Workshops from "./Workshops/Workshops";
 import Resources from "./Resources/Resources";
+import Mentors from "./Mentors/Mentors.JSX";
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
@@ -15,6 +16,8 @@ const Admin = () => {
         return <Workshops />;
       case "Resources":
         return <Resources />;
+        case "Mentors":
+        return <Mentors />
       default:
         return <Dashboard />;
     }
