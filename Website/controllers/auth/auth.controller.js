@@ -45,6 +45,7 @@ export const profilePage = async (req, res, next) => {
       routes: {
         signupRoute: "/v1/auth/signup",
         loginRoute: "/v1/auth/login",
+        funding: "/v1/funding",
       },
       pageRoute: "/v1/auth/profile",
     });
@@ -86,7 +87,10 @@ export const register = async (req, res, next) => {
     req.flash("success", "Account created successfully! Please login.");
     res.redirect("/v1/auth/login");
   } catch (err) {
-    req.flash("error", "An error occurred during registration. Please try again.");
+    req.flash(
+      "error",
+      "An error occurred during registration. Please try again.",
+    );
     res.redirect("/v1/auth/signup");
   }
 };
@@ -146,7 +150,10 @@ export const updateProfileImage = async (req, res, next) => {
     const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
     if (!allowedTypes.includes(req.file.mimetype)) {
       await fs.unlink(req.file.path);
-      req.flash("error", "Invalid file type. Only JPG, JPEG, and PNG are allowed.");
+      req.flash(
+        "error",
+        "Invalid file type. Only JPG, JPEG, and PNG are allowed.",
+      );
       return res.redirect("/v1/auth/profile");
     }
 
@@ -167,7 +174,7 @@ export const updateProfileImage = async (req, res, next) => {
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
     const processedImageDir = path.join(
       __dirname,
-      "../../public/uploads/profile-images"
+      "../../public/uploads/profile-images",
     );
 
     try {
@@ -192,7 +199,10 @@ export const updateProfileImage = async (req, res, next) => {
         .toFile(processedImagePath);
     } catch (err) {
       await fs.unlink(req.file.path);
-      req.flash("error", "Failed to process image. Please try again with a different image.");
+      req.flash(
+        "error",
+        "Failed to process image. Please try again with a different image.",
+      );
       return res.redirect("/v1/auth/profile");
     }
 
@@ -207,7 +217,7 @@ export const updateProfileImage = async (req, res, next) => {
         const oldImagePath = path.join(
           __dirname,
           "../../public",
-          user.profile_image
+          user.profile_image,
         );
         await fs.unlink(oldImagePath);
       } catch (err) {
@@ -275,7 +285,10 @@ export const changePassword = async (req, res, next) => {
 
     const isSameAsOld = await comparePassword(newPassword, user.password);
     if (isSameAsOld) {
-      req.flash("error", "New password must be different from current password.");
+      req.flash(
+        "error",
+        "New password must be different from current password.",
+      );
       return res.redirect("/v1/auth/profile");
     }
 
