@@ -4,6 +4,7 @@ import Sidebar from "./Sidebar";
 import Workshops from "./Workshops/Workshops";
 import Resources from "./Resources/Resources";
 import Mentors from "./Mentors/Mentors.JSX";
+import Projects from "./projects/projects";
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("Dashboard");
@@ -16,21 +17,25 @@ const Admin = () => {
         return <Workshops />;
       case "Resources":
         return <Resources />;
-        case "Mentors":
+      case "Mentors":
         return <Mentors />
+      case "Projects":
+        return <Projects/>
       default:
         return <Dashboard />;
     }
   };
 
-  return (
+return (
     <>
       <div className="flex h-screen bg-gray-50 overflow-hidden">
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-        {renderContent()}
+        <div className="flex-1 overflow-y-auto pb-16">
+          {renderContent()}
+        </div>
       </div>
     </>
-  );
+);
 };
 
 export default Admin;

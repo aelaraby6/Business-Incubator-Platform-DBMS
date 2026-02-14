@@ -23,12 +23,18 @@ import {
   updateBookingStatus,
   getResourceStats
 } from './backend/resources/resources.js';
+// import {
+//   getAllMentors,
+//   deleteMentor
+// } from './backend/mentors/mentors.js';
 import {
-  getAllMentors,
-  addMentor,
-  deleteMentor, 
-  assignMentorToWorkshop 
-} from './backend/mentors/mentors.js';
+  getAllProjects,
+  getProjectById,
+  updateProjectStatus,
+  getProjectsByStatus,
+  getProjectsStats,
+  toggleProjectApproved
+} from './backend/projects/projects.js';
 
 app.on('ready', () => {
   const mainWindow = new BrowserWindow({
@@ -44,6 +50,7 @@ app.on('ready', () => {
   } else {
     mainWindow.loadFile(getUIPath());
   }
+
   ipcMain.handle('auth:login', async (_event, credentials) => {
     return await loginRequest(credentials);
   });
@@ -97,6 +104,7 @@ app.on('ready', () => {
     return await exportFeedbackReportPDF();
   });
 
+  // Resources IPC Handlers
   ipcMain.handle('resources:get-all', async () => {
     return await getAllResources();
   });
@@ -117,22 +125,41 @@ app.on('ready', () => {
     return await getResourceStats();
   });
 
-  ipcMain.handle('mentors:get-all', async () => {
-    return await getAllMentors();
+  // // Mentors IPC Handlers
+  // ipcMain.handle('mentors:get-all', async () => {
+  //   return await getAllMentors();
+  // });
+
+  // ipcMain.handle('mentors:delete', async (_event, id) => {
+  //   return await deleteMentor(id);
+  // });
+
+
+  // Projects IPC Handlers
+  ipcMain.handle('projects:getAll', async () => {
+    return await getAllProjects();
   });
 
-  ipcMain.handle('mentors:add', async (_event, data) => {
-    return await addMentor(data);
+  ipcMain.handle('projects:getById', async (_event, id) => {
+    return await getProjectById(id);
   });
 
-  ipcMain.handle('mentors:delete', async (_event, id) => {
-    return await deleteMentor(id);
+  ipcMain.handle('projects:updateStatus', async (_event, { id, status }) => {
+    return await updateProjectStatus(id, status);
   });
 
-  ipcMain.handle('mentors:assign-workshop', async (_event, { mentorId, workshopId }) => {
-    return await assignMentorToWorkshop(mentorId, workshopId);
+  ipcMain.handle('projects:getByStatus', async (_event, status) => {
+    return await getProjectsByStatus(status);
   });
-  
+
+  ipcMain.handle('projects:toggleApproved', async (_event, id) => {
+    return await toggleProjectApproved(id);
+  });
+
+  ipcMain.handle('projects:getStats', async () => {
+    return await getProjectsStats();
+  });
+
   handleCloseEvents(mainWindow);
 });
 

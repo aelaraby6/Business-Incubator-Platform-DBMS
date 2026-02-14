@@ -25,7 +25,7 @@ const Dashboard = () => {
             change: '',
             icon: Users,
             bgColor: 'bg-blue-50',
-            iconColor: 'text-blue-600',
+            iconColor: 'text-blue-900',
         },
         {
             id: 2,
@@ -33,8 +33,8 @@ const Dashboard = () => {
             value: '54,320',
             change: '',
             icon: FolderKanban,
-            bgColor: 'bg-green-50',
-            iconColor: 'text-green-600',
+            bgColor: 'bg-blue-50',
+            iconColor: 'text-blue-900',
         },
         {
             id: 3,
@@ -42,8 +42,8 @@ const Dashboard = () => {
             value: '1,852',
             change: '',
             icon: UserCheck,
-            bgColor: 'bg-orange-50',
-            iconColor: 'text-orange-600',
+            bgColor: 'bg-blue-50',
+            iconColor: 'text-blue-900',
         },
         {
             id: 4,
@@ -51,8 +51,8 @@ const Dashboard = () => {
             value: '509',
             change: '',
             icon: Calendar,
-            bgColor: 'bg-cyan-50',
-            iconColor: 'text-cyan-600',
+            bgColor: 'bg-gray-100',
+            iconColor: 'text-gray-700',
         },
     ];
 
@@ -87,7 +87,7 @@ const Dashboard = () => {
         { name: 'Marketing', value: 332 },
     ];
 
-    const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444'];
+    const COLORS = ['#1e3a8a', '#1e40af', '#3b82f6', '#60a5fa'];
 
     // Workshops Status
     const workshopsData = [
@@ -96,14 +96,15 @@ const Dashboard = () => {
         { status: 'Scheduled', count: 82 },
     ];
 
-    const WORKSHOP_COLORS = ['#10b981', '#6366f1', '#f59e0b'];
+    const WORKSHOP_COLORS = ['#1e3a8a', '#3b82f6', '#6b7280'];
 
     return (
         <div className="flex-1 overflow-y-auto bg-gray-50 h-screen">
             <div className="p-4 md:p-6 lg:p-8">
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-                    <p className="text-gray-600 mt-1">Welcome back! Here's what's happening.</p>
+                {/* Header */}
+                <div className="bg-white border-b-4 border-blue-900 mb-8 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 py-6">
+                    <h1 className="text-4xl font-black uppercase text-blue-950">Dashboard</h1>
+                    <p className="text-gray-600 mt-2 font-medium">Welcome back! Here's what's happening</p>
                 </div>
 
                 {/* Stats Cards */}
@@ -114,59 +115,57 @@ const Dashboard = () => {
                         return (
                             <div
                                 key={stat.id}
-                                className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-shadow"
+                                className={`${stat.id === 4 ? 'bg-gray-100 border-gray-600' : 'bg-blue-50 border-blue-900'} border-4 p-6 shadow-[4px_4px_0_0_${stat.id === 4 ? '#4b5563' : '#1e3a8a'}]`}
                             >
-                                <div className="flex items-start justify-between">
-                                    <div>
-                                        <p className="text-gray-600 text-sm font-medium mb-1">
-                                            {stat.title}
-                                        </p>
-                                        <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                                            {stat.value}
-                                        </h3>
-                                    </div>
-                                    <div className={`${stat.bgColor} p-3 rounded-lg`}>
-                                        <Icon className={stat.iconColor} size={24} />
+                                <div className="flex items-start justify-between mb-4">
+                                    <div className={`${stat.bgColor} p-3 border-2 ${stat.id === 4 ? 'border-gray-700' : 'border-blue-950'}`}>
+                                        <Icon className={stat.iconColor} size={24} strokeWidth={2.5} />
                                     </div>
                                 </div>
+                                <p className="text-sm font-bold uppercase text-gray-600 mb-2">
+                                    {stat.title}
+                                </p>
+                                <h3 className="text-4xl font-black text-blue-950">
+                                    {stat.value}
+                                </h3>
                             </div>
                         );
                     })}
                 </div>
 
                 {/* Charts Section */}
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                     {/* Users & Projects Growth */}
-                    <div className="lg:col-span-2 bg-white rounded-xl p-6 border border-gray-200">
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">Users & Projects Growth</h2>
+                    <div className="lg:col-span-2 bg-white border-4 border-gray-900 p-6 shadow-[4px_4px_0_0_#111827]">
+                        <h2 className="text-xl font-black uppercase text-blue-950 mb-4">Users & Projects Growth</h2>
                         <ResponsiveContainer width="100%" height={300}>
                             <LineChart data={growthData}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                                <XAxis dataKey="month" stroke="#6b7280" />
-                                <YAxis stroke="#6b7280" />
+                                <XAxis dataKey="month" stroke="#6b7280" style={{ fontWeight: 'bold' }} />
+                                <YAxis stroke="#6b7280" style={{ fontWeight: 'bold' }} />
                                 <Tooltip
                                     contentStyle={{
                                         backgroundColor: '#fff',
-                                        border: '1px solid #e5e7eb',
-                                        borderRadius: '8px',
+                                        border: '4px solid #111827',
+                                        borderRadius: '0',
+                                        fontWeight: 'bold',
                                     }}
                                 />
-                                <Legend />
+                                <Legend wrapperStyle={{ fontWeight: 'bold' }} />
                                 <Line
                                     type="monotone"
                                     dataKey="users"
-                                    stroke="#6366f1"
-                                    strokeWidth={3}
-                                    dot={{ fill: '#6366f1', r: 4 }}
+                                    stroke="#1e3a8a"
+                                    strokeWidth={4}
+                                    dot={{ fill: '#1e3a8a', r: 5, strokeWidth: 2, stroke: '#fff' }}
                                     name="Users"
                                 />
                                 <Line
                                     type="monotone"
                                     dataKey="projects"
-                                    stroke="#10b981"
-                                    strokeWidth={3}
-                                    dot={{ fill: '#10b981', r: 4 }}
+                                    stroke="#3b82f6"
+                                    strokeWidth={4}
+                                    dot={{ fill: '#3b82f6', r: 5, strokeWidth: 2, stroke: '#fff' }}
                                     name="Projects"
                                 />
                             </LineChart>
@@ -174,28 +173,29 @@ const Dashboard = () => {
                     </div>
 
                     {/* User Growth */}
-                    <div className="bg-white rounded-xl p-6 border border-gray-200">
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">User Growth (Last 7 Days)</h2>
+                    <div className="bg-white border-4 border-gray-900 p-6 shadow-[4px_4px_0_0_#111827]">
+                        <h2 className="text-xl font-black uppercase text-blue-950 mb-4">User Growth (Last 7 Days)</h2>
                         <ResponsiveContainer width="100%" height={300}>
                             <BarChart data={userGrowthData}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                                <XAxis dataKey="day" stroke="#6b7280" />
-                                <YAxis stroke="#6b7280" />
+                                <XAxis dataKey="day" stroke="#6b7280" style={{ fontWeight: 'bold' }} />
+                                <YAxis stroke="#6b7280" style={{ fontWeight: 'bold' }} />
                                 <Tooltip
                                     contentStyle={{
                                         backgroundColor: '#fff',
-                                        border: '1px solid #e5e7eb',
-                                        borderRadius: '8px',
+                                        border: '4px solid #111827',
+                                        borderRadius: '0',
+                                        fontWeight: 'bold',
                                     }}
                                 />
-                                <Bar dataKey="users" fill="#6366f1" radius={[8, 8, 0, 0]} />
+                                <Bar dataKey="users" fill="#1e3a8a" radius={[0, 0, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
 
                     {/* Mentors Distribution */}
-                    <div className="bg-white rounded-xl p-6 border border-gray-200">
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">Mentors by Category</h2>
+                    <div className="bg-white border-4 border-gray-900 p-6 shadow-[4px_4px_0_0_#111827]">
+                        <h2 className="text-xl font-black uppercase text-blue-950 mb-4">Mentors by Category</h2>
                         <ResponsiveContainer width="100%" height={300}>
                             <PieChart>
                                 <Pie
@@ -206,40 +206,51 @@ const Dashboard = () => {
                                     outerRadius={100}
                                     paddingAngle={5}
                                     dataKey="value"
+                                    stroke="#111827"
+                                    strokeWidth={3}
                                 >
                                     {mentorsData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={COLORS[index]} />
                                     ))}
                                 </Pie>
-                                <Tooltip />
-                                <Legend />
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: '#fff',
+                                        border: '4px solid #111827',
+                                        borderRadius: '0',
+                                        fontWeight: 'bold',
+                                    }}
+                                />
+                                <Legend wrapperStyle={{ fontWeight: 'bold' }} />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
 
                     {/* Workshops Status */}
-                    <div className="lg:col-span-2 bg-white rounded-xl p-6 border border-gray-200">
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">Workshops Status</h2>
+                    <div className="lg:col-span-2 bg-white border-4 border-gray-900 p-6 shadow-[4px_4px_0_0_#111827]">
+                        <h2 className="text-xl font-black uppercase text-blue-950 mb-4">Workshops Status</h2>
                         <ResponsiveContainer width="100%" height={300}>
                             <BarChart data={workshopsData} layout="vertical" margin={{ left: 20 }}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                                <XAxis type="number" stroke="#6b7280" />
+                                <XAxis type="number" stroke="#6b7280" style={{ fontWeight: 'bold' }} />
                                 <YAxis
                                     dataKey="status"
                                     type="category"
                                     stroke="#6b7280"
                                     width={100}
+                                    style={{ fontWeight: 'bold' }}
                                 />
                                 <Tooltip
                                     contentStyle={{
                                         backgroundColor: '#fff',
-                                        border: '1px solid #e5e7eb',
-                                        borderRadius: '8px',
+                                        border: '4px solid #111827',
+                                        borderRadius: '0',
+                                        fontWeight: 'bold',
                                     }}
                                 />
-                                <Bar dataKey="count" radius={[0, 8, 8, 0]}>
+                                <Bar dataKey="count" radius={[0, 0, 0, 0]}>
                                     {workshopsData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={WORKSHOP_COLORS[index]} />
+                                        <Cell key={`cell-${index}`} fill={WORKSHOP_COLORS[index]} stroke="#111827" strokeWidth={2} />
                                     ))}
                                 </Bar>
                             </BarChart>

@@ -1,11 +1,11 @@
 import pool from "../config/database.js";
 
-// Get All Projects with Counts
+// Get All Projects
 export const getAllProjects = async () => {
   const res = await pool.query(`
     SELECT p.*
     FROM projects p
-    ORDER BY p.submitted_at DESC
+    ORDER BY p.created_at DESC
   `);
   return res.rows;
 };
@@ -19,10 +19,10 @@ export const getProjectById = async (id) => {
   return res.rows[0];
 };
 
-// Update Project Approval Status
+// Update Project Status
 export const updateProjectStatus = async (id, status) => {
   const res = await pool.query(
-    'UPDATE projects SET approval_status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
+    'UPDATE projects SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
     [status, id]
   );
   return res.rows[0];
@@ -31,11 +31,13 @@ export const updateProjectStatus = async (id, status) => {
 // Get Projects by Status
 export const getProjectsByStatus = async (status) => {
   const res = await pool.query(
-    'SELECT * FROM projects WHERE approval_status = $1 ORDER BY submitted_at DESC',
+    'SELECT * FROM projects WHERE status = $1 ORDER BY created_at DESC',
     [status]
   );
   return res.rows;
 };
+
+// Toggle Project Approved Status
 export const toggleProjectApproved = async (id) => {
   const res = await pool.query(
     `
@@ -51,14 +53,18 @@ export const toggleProjectApproved = async (id) => {
   return res.rows[0];
 };
 
+
 // Get Projects Statistics
 export const getProjectsStats = async () => {
   const res = await pool.query(`
     SELECT 
       COUNT(*) as total,
-      COUNT(*) FILTER (WHERE approval_status = 'pending') as pending,
-      COUNT(*) FILTER (WHERE approval_status = 'approved') as approved,
-      COUNT(*) FILTER (WHERE approval_status = 'rejected') as rejected
+      COUNT(*) FILTER (WHERE status = 'idea') as idea,
+      COUNT(*) FILTER (WHERE status = 'in-progress') as in_progress,
+      COUNT(*) FILTER (WHERE status = 'completed') as completed,
+      COUNT(*) FILTER (WHERE status = 'pending') as pending,
+      COUNT(*) FILTER (WHERE status = 'approved') as approved,
+      COUNT(*) FILTER (WHERE status = 'rejected') as rejected
     FROM projects
   `);
   return res.rows[0];

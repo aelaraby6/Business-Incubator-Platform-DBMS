@@ -24,8 +24,6 @@ const Sidebar = ({ activeTab = 'Dashboard', setActiveTab = () => {} }) => {
         { id: 4, icon: Package, label: 'Workshops', badge: null },
         { id: 5, icon: ShoppingCart, label: 'Resources', badge: null },
         { id: 6, icon: FileText, label: 'Funding', badge: 'New' },
-        { id: 7, icon: FileText, label: 'Notifications', badge: 'New' },
-        // { id: 8, icon: Layers, label: 'Notifications', badge: 'New', hasDropdown: true }
     ];
 
     const handleItemClick = (label) => {
@@ -36,14 +34,14 @@ const Sidebar = ({ activeTab = 'Dashboard', setActiveTab = () => {} }) => {
     };
 
     return (
-        <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col shrink-0">
+        <div className="w-64 h-screen bg-gray-50 border-r-4 border-gray-900 flex flex-col shrink-0">
             {/* Logo */}
-            <div className="p-4 border-b border-gray-200">
+            <div className="p-4 border-b-4 border-gray-900 bg-white">
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">B</span>
+                    <div className="w-10 h-10 bg-gray-900 border-4 border-black flex items-center justify-center shadow-[2px_2px_0_0_#000]">
+                        <span className="text-white font-black text-xl">B</span>
                     </div>
-                    <span className="font-semibold text-xl">Incubator</span>
+                    <span className="font-black text-xl uppercase text-gray-900">Incubator</span>
                 </div>
             </div>
 
@@ -57,25 +55,26 @@ const Sidebar = ({ activeTab = 'Dashboard', setActiveTab = () => {} }) => {
                         <div key={item.id}>
                             <button
                                 onClick={() => handleItemClick(item.label)}
-                                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg mb-1 transition-colors ${isActive
-                                    ? 'bg-indigo-600 text-white'
-                                    : 'text-gray-700 hover:bg-gray-100'
-                                    }`}
+                                className={`w-full flex items-center justify-between px-4 py-3 mb-2 transition-all border-4 font-bold uppercase text-sm ${
+                                    isActive
+                                        ? 'bg-gray-900 text-white border-black shadow-[3px_3px_0_0_#000]'
+                                        : 'bg-white text-gray-700 border-gray-900 hover:bg-gray-100 shadow-[2px_2px_0_0_#111827]'
+                                }`}
                             >
                                 <div className="flex items-center gap-3">
-                                    <Icon size={20} />
-                                    <span className="font-medium">{item.label}</span>
+                                    <Icon size={20} strokeWidth={2.5} />
+                                    <span className="font-black">{item.label}</span>
                                 </div>
 
                                 {/* Badge */}
                                 <div className="flex items-center gap-2">
                                     {item.badge === 'New' && (
-                                        <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full font-medium">
+                                        <span className="bg-gray-900 text-white text-xs px-2 py-1 border-2 border-black font-black uppercase">
                                             New
                                         </span>
                                     )}
                                     {typeof item.badge === 'number' && (
-                                        <span className="bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
+                                        <span className="bg-gray-600 text-white text-xs w-6 h-6 border-2 border-gray-800 flex items-center justify-center font-black">
                                             {item.badge}
                                         </span>
                                     )}
@@ -90,14 +89,14 @@ const Sidebar = ({ activeTab = 'Dashboard', setActiveTab = () => {} }) => {
 
                             {/* Dropdown for Elements */}
                             {item.hasDropdown && isActive && isElementsOpen && (
-                                <div className="ml-6 mt-1 mb-2">
-                                    <div className="text-sm text-gray-600 py-1.5 px-3 hover:bg-gray-50 rounded cursor-pointer">
+                                <div className="ml-4 mb-2 border-l-4 border-gray-900 pl-2">
+                                    <div className="text-sm text-gray-700 py-2 px-3 hover:bg-gray-100 font-bold cursor-pointer border-2 border-transparent hover:border-gray-900 mb-1">
                                         Buttons
                                     </div>
-                                    <div className="text-sm text-gray-600 py-1.5 px-3 hover:bg-gray-50 rounded cursor-pointer">
+                                    <div className="text-sm text-gray-700 py-2 px-3 hover:bg-gray-100 font-bold cursor-pointer border-2 border-transparent hover:border-gray-900 mb-1">
                                         Cards
                                     </div>
-                                    <div className="text-sm text-gray-600 py-1.5 px-3 hover:bg-gray-50 rounded cursor-pointer">
+                                    <div className="text-sm text-gray-700 py-2 px-3 hover:bg-gray-100 font-bold cursor-pointer border-2 border-transparent hover:border-gray-900">
                                         Tables
                                     </div>
                                 </div>
