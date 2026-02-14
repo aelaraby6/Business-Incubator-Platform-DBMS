@@ -1,6 +1,6 @@
 import { get401 } from "../controllers/error/error.controller.js";
 
-export const protect = (req, res, next) => {
+export const isAuth = (req, res, next) => {
   if (!req.session || !req.session.userId) {
     return get401(req, res);
   }

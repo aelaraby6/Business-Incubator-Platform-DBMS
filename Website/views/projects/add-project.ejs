@@ -1,222 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('../partials/head') %> 
+<%- include('../partials/head') %>
 
-<body class="min-h-screen flex flex-col bg-neo-white text-neo-black font-sans">
-    <%- include('../partials/header.ejs') %>
-    
-    <main class="flex-1 px-4 py-12">
-        <div class="w-full max-w-5xl mx-auto">
-            
-            <a href="/v1/projects"
-                class="inline-flex items-center gap-3 mb-10 text-lg font-black uppercase tracking-widest hover:-translate-x-2 transition-transform group font-display">
-                <span class="w-10 h-10 border-4 border-black bg-brand-amber flex items-center justify-center shadow-neo-sm group-hover:shadow-none transition-all">←</span> 
-                Back to Projects
-            </a>
+    <body class="min-h-screen flex flex-col bg-neo-white text-neo-black font-sans">
+        <%- include('../partials/header.ejs') %>
 
-            <div class="mb-16 text-center">
-                <div class="inline-block bg-brand-amber px-6 py-2 border-4 border-black font-black text-xs mb-6 shadow-neo uppercase tracking-widest transform -rotate-1">
-                    NEW VENTURE
-                </div>
-                <h1 class="text-5xl md:text-7xl font-display font-bold text-neo-black mb-6 uppercase tracking-tighter">
-                    Share Your <span class="text-brand-indigo italic">Innovation</span>
-                </h1>
-                <p class="text-xl text-slate-600 max-w-2xl mx-auto font-medium italic border-l-4 border-brand-indigo pl-6">
-                     Showcase your project to the community and find the right technical partners.
-                </p>
-            </div>
+            <main class="flex-1 px-4 py-12">
+                <div class="w-full max-w-5xl mx-auto">
 
-            <form class="space-y-12">
-                
-                <div id="errorMessage" class="hidden bg-red-100 border-4 border-red-600 p-6 shadow-neo">
-                    <div class="flex items-center gap-4">
-                        <span class="text-3xl">⚠️</span>
-                        <div>
-                            <h3 class="text-red-800 font-black uppercase font-display">Submission Error</h3>
-                            <p id="errorText" class="text-red-700 font-medium font-sans"></p>
+                    <a href="/v1/projects"
+                        class="inline-flex items-center gap-3 mb-10 text-lg font-black uppercase tracking-widest hover:-translate-x-2 transition-transform group font-display">
+                        <span
+                            class="w-10 h-10 border-4 border-black bg-brand-amber flex items-center justify-center shadow-neo-sm group-hover:shadow-none transition-all">←</span>
+                        Back to Projects
+                    </a>
+
+                    <div class="mb-16 text-center">
+                        <div
+                            class="inline-block bg-brand-amber px-6 py-2 border-4 border-black font-black text-xs mb-6 shadow-neo uppercase tracking-widest transform -rotate-1">
+                            NEW VENTURE
                         </div>
-                    </div>
-                </div>
-
-                <div id="successMessage" class="hidden bg-green-100 border-4 border-green-600 p-6 shadow-neo">
-                    <div class="flex items-center gap-4">
-                        <span class="text-3xl">🚀</span>
-                        <div>
-                            <h3 class="text-green-800 font-black uppercase font-display">Project Published</h3>
-                            <p id="successText" class="text-green-700 font-medium font-sans italic">Your innovation is now live on the platform!</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white border-4 border-black p-8 md:p-10 shadow-neo relative">
-                    <div class="flex items-center gap-4 mb-10">
-                        <div class="w-14 h-14 bg-brand-indigo text-white border-4 border-black flex items-center justify-center text-2xl font-black shadow-neo-sm">1</div>
-                        <h2 class="text-3xl font-display font-bold uppercase tracking-tight">Basic Information</h2>
+                        <h1
+                            class="text-5xl md:text-7xl font-display font-bold text-neo-black mb-6 uppercase tracking-tighter">
+                            Share Your <span class="text-brand-indigo italic">Innovation</span>
+                        </h1>
+                        <p
+                            class="text-xl text-slate-600 max-w-2xl mx-auto font-medium italic border-l-4 border-brand-indigo pl-6">
+                            Showcase your project to the community and find the right technical partners.
+                        </p>
                     </div>
 
-                    <div class="space-y-8 text-left">
-                        <div>
-                            <label for="title" class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">Project Title <span class="text-brand-indigo">*</span></label>
-                            <input type="text" id="title" name="title" placeholder="E.G., NEURAL FLOW AI" required
-                                class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-xl font-bold uppercase focus:outline-none focus:bg-white transition-all placeholder-slate-300" />
-                        </div>
-
-                        <div>
-                            <label for="shortDescription" class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">Elevator Pitch <span class="text-brand-indigo">*</span></label>
-                            <textarea id="shortDescription" name="shortDescription" placeholder="ONE SENTENCE TO RULE THEM ALL..." rows="2" required
-                                class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-lg font-bold focus:outline-none focus:bg-white transition-all resize-none italic" maxlength="150"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white border-4 border-black p-8 md:p-10 shadow-neo">
-                    <div class="flex items-center gap-4 mb-10">
-                        <div class="w-14 h-14 bg-brand-amber border-4 border-black flex items-center justify-center text-2xl font-black shadow-neo-sm text-black">2</div>
-                        <h2 class="text-3xl font-display font-bold uppercase tracking-tight">The Core Concept</h2>
-                    </div>
-
-                    <div class="space-y-8 text-left">
-                        <div>
-                            <label for="problem" class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">What's Broken? <span class="text-brand-indigo">*</span></label>
-                            <textarea id="problem" name="problem" placeholder="DESCRIBE THE PAIN POINT..." rows="4" required
-                                class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-lg font-medium focus:outline-none focus:bg-white transition-all"></textarea>
-                        </div>
-
-                        <div>
-                            <label for="solution" class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">The Fix <span class="text-brand-indigo">*</span></label>
-                            <textarea id="solution" name="solution" placeholder="EXPLAIN YOUR UNIQUE APPROACH..." rows="4" required
-                                class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-lg font-medium focus:outline-none focus:bg-white transition-all"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-brand-slate text-white border-4 border-black p-8 md:p-10 shadow-neo">
-                    <div class="flex items-center gap-4 mb-10">
-                        <div class="w-14 h-14 bg-brand-indigo border-4 border-black flex items-center justify-center text-2xl font-black shadow-neo-sm">3</div>
-                        <h2 class="text-3xl font-display font-bold uppercase tracking-tight">Technical details</h2>
-                    </div>
-
-                    <div class="space-y-8 text-left">
-                        <div>
-                            <label for="techStack" class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-400">Tech Stack <span class="text-brand-indigo">*</span></label>
-                            <input type="text" id="techStack" name="techStack" placeholder="REACT, NODE, MONGODB..." required
-                                class="w-full bg-black/30 border-4 border-black px-6 py-4 text-xl font-bold uppercase focus:outline-none focus:border-brand-indigo transition-all text-white placeholder-slate-600" />
-                        </div>
-
-                        <div>
-                            <label for="status" class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-400">Current Status <span class="text-brand-indigo">*</span></label>
-                            <select id="status" name="status" required
-                                class="w-full bg-black/30 border-4 border-black px-6 py-4 text-lg font-bold uppercase focus:outline-none focus:border-brand-indigo transition-all text-white cursor-pointer appearance-none">
-                                <option value="" class="bg-brand-slate">SELECT STAGE</option>
-                                <option value="idea" class="bg-brand-slate">💡 CONCEPT ONLY</option>
-                                <option value="in-progress" class="bg-brand-slate">🔨 ACTIVE DEVELOPMENT</option>
-                                <option value="completed" class="bg-brand-slate">🚀 MVP READY / LIVE</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white border-4 border-black p-8 md:p-10 shadow-neo">
-                    <div class="flex items-center gap-4 mb-10">
-                        <div class="w-14 h-14 bg-brand-indigo text-white border-4 border-black flex items-center justify-center text-2xl font-black shadow-neo-sm">4</div>
-                        <h2 class="text-3xl font-display font-bold uppercase tracking-tight">Links & Resources</h2>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                        <div>
-                            <label for="github" class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">GitHub Repo</label>
-                            <input type="url" id="github" name="github" placeholder="HTTPS://GITHUB.COM/..."
-                                class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-base font-bold focus:outline-none focus:bg-white transition-all" />
-                        </div>
-                        <div>
-                            <label for="demo" class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">Live Demo</label>
-                            <input type="url" id="demo" name="demo" placeholder="HTTPS://APP-DEMO.COM"
-                                class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-base font-bold focus:outline-none focus:bg-white transition-all" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white border-4 border-black p-8 md:p-10 shadow-neo">
-                    <div class="flex items-center gap-4 mb-10">
-                        <div class="w-14 h-14 bg-brand-amber border-4 border-black flex items-center justify-center text-2xl font-black shadow-neo-sm text-black">5</div>
-                        <h2 class="text-3xl font-display font-bold uppercase tracking-tight">Team Structure</h2>
-                    </div>
-
-                    <div class="space-y-8 text-left">
-                        <div>
-                            <label for="teamType" class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">Founder Group <span class="text-brand-indigo">*</span></label>
-                            <select id="teamType" name="teamType" required
-                                class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-lg font-black uppercase focus:outline-none focus:bg-white transition-all cursor-pointer">
-                                <option value="">SELECT STRUCTURE</option>
-                                <option value="individual">👤 SOLO FOUNDER</option>
-                                <option value="team">👥 CORE TEAM (2-3)</option>
-                                <option value="large-team">👨‍👩‍👧‍👦 SCALE TEAM (4+)</option>
-                            </select>
-                        </div>
-
-                        <div class="bg-brand-amber/10 border-4 border-black p-6">
+                    <!-- Flash Messages -->
+                    <% if (error) { %>
+                        <div class="bg-red-100 border-4 border-red-600 p-6 shadow-neo mb-8">
                             <div class="flex items-center gap-4">
-                                <input type="checkbox" id="lookingForCoFounders" name="lookingForCoFounders"
-                                    class="w-8 h-8 border-4 border-black bg-white accent-brand-indigo cursor-pointer shadow-neo-sm" />
-                                <label for="lookingForCoFounders" class="text-lg font-black uppercase font-display tracking-tight cursor-pointer">
-                                    🔍 We are seeking technical co-founders
-                                </label>
+                                <span class="text-3xl">⚠️</span>
+                                <div>
+                                    <h3 class="text-red-800 font-black uppercase font-display">Error</h3>
+                                    <p class="text-red-700 font-medium font-sans">
+                                        <%= error %>
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <% } %>
+
+                            <% if (success) { %>
+                                <div class="bg-green-100 border-4 border-green-600 p-6 shadow-neo mb-8">
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-3xl">🚀</span>
+                                        <div>
+                                            <h3 class="text-green-800 font-black uppercase font-display">Success</h3>
+                                            <p class="text-green-700 font-medium font-sans italic">
+                                                <%= success %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+
+                                    <form action="/v1/projects/create" method="POST" class="space-y-12"
+                                        id="projectForm">
+
+                                        <!-- Section 1: Basic Information -->
+                                        <div class="bg-white border-4 border-black p-8 md:p-10 shadow-neo relative">
+                                            <div class="flex items-center gap-4 mb-10">
+                                                <div
+                                                    class="w-14 h-14 bg-brand-indigo text-white border-4 border-black flex items-center justify-center text-2xl font-black shadow-neo-sm">
+                                                    1</div>
+                                                <h2 class="text-3xl font-display font-bold uppercase tracking-tight">
+                                                    Basic Information
+                                                </h2>
+                                            </div>
+
+                                            <div class="space-y-8 text-left">
+                                                <div>
+                                                    <label for="name"
+                                                        class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">Project
+                                                        Name <span class="text-brand-indigo">*</span></label>
+                                                    <input type="text" id="name" name="name"
+                                                        placeholder="E.G., NEURAL FLOW AI" required
+                                                        class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-xl font-bold uppercase focus:outline-none focus:bg-white transition-all placeholder-slate-300" />
+                                                </div>
+
+                                                <div>
+                                                    <label for="short_description"
+                                                        class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">Elevator
+                                                        Pitch <span class="text-brand-indigo">*</span></label>
+                                                    <textarea id="short_description" name="short_description"
+                                                        placeholder="ONE SENTENCE TO RULE THEM ALL..." rows="2" required
+                                                        class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-lg font-bold focus:outline-none focus:bg-white transition-all resize-none italic"
+                                                        maxlength="150"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Section 2: The Core Concept -->
+                                        <div class="bg-white border-4 border-black p-8 md:p-10 shadow-neo">
+                                            <div class="flex items-center gap-4 mb-10">
+                                                <div
+                                                    class="w-14 h-14 bg-brand-amber border-4 border-black flex items-center justify-center text-2xl font-black shadow-neo-sm text-black">
+                                                    2</div>
+                                                <h2 class="text-3xl font-display font-bold uppercase tracking-tight">The
+                                                    Core Concept
+                                                </h2>
+                                            </div>
+
+                                            <div class="space-y-8 text-left">
+                                                <div>
+                                                    <label for="problem"
+                                                        class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">What's
+                                                        Broken? <span class="text-brand-indigo">*</span></label>
+                                                    <textarea id="problem" name="problem"
+                                                        placeholder="DESCRIBE THE PAIN POINT..." rows="4" required
+                                                        class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-lg font-medium focus:outline-none focus:bg-white transition-all"></textarea>
+                                                </div>
+
+                                                <div>
+                                                    <label for="solution"
+                                                        class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">The
+                                                        Fix <span class="text-brand-indigo">*</span></label>
+                                                    <textarea id="solution" name="solution"
+                                                        placeholder="EXPLAIN YOUR UNIQUE APPROACH..." rows="4" required
+                                                        class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-lg font-medium focus:outline-none focus:bg-white transition-all"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Section 3: Technical Details -->
+                                        <div
+                                            class="bg-brand-slate text-white border-4 border-black p-8 md:p-10 shadow-neo">
+                                            <div class="flex items-center gap-4 mb-10">
+                                                <div
+                                                    class="w-14 h-14 bg-brand-indigo border-4 border-black flex items-center justify-center text-2xl font-black shadow-neo-sm">
+                                                    3</div>
+                                                <h2 class="text-3xl font-display font-bold uppercase tracking-tight">
+                                                    Technical Details
+                                                </h2>
+                                            </div>
+
+                                            <div class="space-y-8 text-left">
+                                                <div>
+                                                    <label for="tech_stack"
+                                                        class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-400">Tech
+                                                        Stack <span class="text-brand-indigo">*</span></label>
+                                                    <input type="text" id="tech_stack" name="tech_stack"
+                                                        placeholder="REACT, NODE, MONGODB..." required
+                                                        class="w-full bg-black/30 border-4 border-black px-6 py-4 text-xl font-bold uppercase focus:outline-none focus:border-brand-indigo transition-all text-white placeholder-slate-600" />
+                                                </div>
+
+                                                <div>
+                                                    <label for="stage"
+                                                        class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-400">Development
+                                                        Stage <span class="text-brand-indigo">*</span></label>
+                                                    <select id="stage" name="stage" required
+                                                        class="w-full bg-black/30 border-4 border-black px-6 py-4 text-lg font-bold uppercase focus:outline-none focus:border-brand-indigo transition-all text-white cursor-pointer appearance-none">
+                                                        <option value="" class="bg-brand-slate">SELECT STAGE</option>
+                                                        <option value="idea" class="bg-brand-slate">💡 CONCEPT ONLY
+                                                        </option>
+                                                        <option value="in-progress" class="bg-brand-slate">🔨 ACTIVE
+                                                            DEVELOPMENT
+                                                        </option>
+                                                        <option value="completed" class="bg-brand-slate">🚀 MVP READY /
+                                                            LIVE</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Section 4: Links & Resources -->
+                                        <div class="bg-white border-4 border-black p-8 md:p-10 shadow-neo">
+                                            <div class="flex items-center gap-4 mb-10">
+                                                <div
+                                                    class="w-14 h-14 bg-brand-indigo text-white border-4 border-black flex items-center justify-center text-2xl font-black shadow-neo-sm">
+                                                    4</div>
+                                                <h2 class="text-3xl font-display font-bold uppercase tracking-tight">
+                                                    Links & Resources
+                                                </h2>
+                                            </div>
+
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                                                <div>
+                                                    <label for="github_url"
+                                                        class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">GitHub
+                                                        Repo</label>
+                                                    <input type="url" id="github_url" name="github_url"
+                                                        placeholder="HTTPS://GITHUB.COM/..."
+                                                        class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-base font-bold focus:outline-none focus:bg-white transition-all" />
+                                                </div>
+                                                <div>
+                                                    <label for="demo_url"
+                                                        class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">Live
+                                                        Demo</label>
+                                                    <input type="url" id="demo_url" name="demo_url"
+                                                        placeholder="HTTPS://APP-DEMO.COM"
+                                                        class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-base font-bold focus:outline-none focus:bg-white transition-all" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Section 5: Team Structure -->
+                                        <div class="bg-white border-4 border-black p-8 md:p-10 shadow-neo">
+                                            <div class="flex items-center gap-4 mb-10">
+                                                <div
+                                                    class="w-14 h-14 bg-brand-amber border-4 border-black flex items-center justify-center text-2xl font-black shadow-neo-sm text-black">
+                                                    5</div>
+                                                <h2 class="text-3xl font-display font-bold uppercase tracking-tight">
+                                                    Team Structure</h2>
+                                            </div>
+
+                                            <div class="space-y-8 text-left">
+                                                <div>
+                                                    <label for="team_type"
+                                                        class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">
+                                                        Founder Group <span class="text-brand-indigo">*</span>
+                                                    </label>
+                                                    <select id="team_type" name="team_type" required
+                                                        class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-lg font-black uppercase focus:outline-none focus:bg-white transition-all cursor-pointer">
+                                                        <option value="">SELECT STRUCTURE</option>
+                                                        <option value="individual">👤 SOLO FOUNDER</option>
+                                                        <option value="team">👥 CORE TEAM (2-3)</option>
+                                                        <option value="large-team">👨‍👩‍👧‍👦 SCALE TEAM (4+)</option>
+                                                    </select>
+                                                </div>
+
+                                                <div id="coFoundersSection" class="hidden">
+                                                    <label for="co_founders_codes"
+                                                        class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">
+                                                        Co-Founders User Codes <span class="text-brand-indigo">*</span>
+                                                    </label>
+                                                    <textarea id="co_founders_codes" name="co_founders_codes"
+                                                        placeholder="ENTER USER CODES SEPARATED BY COMMAS (E.G., USER001, USER002, USER003)"
+                                                        rows="3"
+                                                        class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-lg font-bold uppercase focus:outline-none focus:bg-white transition-all"></textarea>
+                                                    <p class="text-xs text-slate-500 mt-2 font-bold">
+                                                        ℹ️ Enter the user codes of your co-founders, separated by commas
+                                                    </p>
+                                                </div>
+
+                                                <div class="bg-brand-amber/10 border-4 border-black p-6">
+                                                    <div class="flex items-center gap-4">
+                                                        <input type="checkbox" id="looking_for_cofounders"
+                                                            name="looking_for_cofounders" value="true"
+                                                            class="w-8 h-8 border-4 border-black bg-white accent-brand-indigo cursor-pointer shadow-neo-sm" />
+                                                        <label for="looking_for_cofounders"
+                                                            class="text-lg font-black uppercase font-display tracking-tight cursor-pointer">
+                                                            🔍 We are seeking technical co-founders
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Section 6: Final Details -->
+                                        <div class="bg-white border-4 border-black p-8 md:p-10 shadow-neo">
+                                            <div class="flex items-center gap-4 mb-10 text-left">
+                                                <div
+                                                    class="w-14 h-14 bg-brand-slate text-white border-4 border-black flex items-center justify-center text-2xl font-black shadow-neo-sm">
+                                                    6</div>
+                                                <h2 class="text-3xl font-display font-bold uppercase tracking-tight">
+                                                    Final Details</h2>
+                                            </div>
+
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left mb-10">
+                                                <div>
+                                                    <label for="funding_stage"
+                                                        class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">Funding
+                                                        Stage</label>
+                                                    <select id="funding_stage" name="funding_stage"
+                                                        class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-lg font-bold uppercase focus:outline-none focus:bg-white transition-all">
+                                                        <option value="">SELECT STAGE</option>
+                                                        <option value="pre-seed">💡 PRE-SEED</option>
+                                                        <option value="seed">🌱 SEED ROUND</option>
+                                                        <option value="bootstrapped">💪 BOOTSTRAPPED</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label for="domain"
+                                                        class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">Industry/Domain
+                                                        <span class="text-brand-indigo">*</span></label>
+                                                    <input type="text" id="domain" name="domain"
+                                                        placeholder="E.G., FINTECH, HEALTHTECH" required
+                                                        class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-xl font-bold uppercase focus:outline-none focus:bg-white transition-all" />
+                                                </div>
+                                            </div>
+
+                                            <div class="bg-neo-white border-4 border-black p-6 text-left">
+                                                <div class="flex items-start gap-4">
+                                                    <input type="checkbox" id="agreeTerms" name="agreeTerms" required
+                                                        class="w-6 h-6 border-4 border-black bg-white accent-brand-indigo mt-1 cursor-pointer" />
+                                                    <label for="agreeTerms"
+                                                        class="text-sm font-bold text-slate-600 uppercase tracking-tight">
+                                                        I confirm the project info is accurate and I have the rights to
+                                                        publish this
+                                                        content. <span class="text-brand-indigo">*</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit Buttons -->
+                                        <div class="flex flex-col md:flex-row gap-6 justify-end pt-10">
+                                            <a href="/v1/projects"
+                                                class="px-12 py-5 bg-white text-neo-black text-xl font-black border-4 border-black shadow-neo hover:translate-y-1 hover:shadow-none transition-all text-center uppercase tracking-widest font-display">
+                                                Cancel
+                                            </a>
+                                            <button type="submit"
+                                                class="px-12 py-5 bg-brand-indigo text-white text-xl font-black border-4 border-black shadow-neo hover:translate-y-1 hover:shadow-none transition-all uppercase tracking-widest font-display">
+                                                Publish Project ⚡
+                                            </button>
+                                        </div>
+                                    </form>
                 </div>
+            </main>
 
-                <div class="bg-white border-4 border-black p-8 md:p-10 shadow-neo">
-                    <div class="flex items-center gap-4 mb-10 text-left">
-                        <div class="w-14 h-14 bg-brand-slate text-white border-4 border-black flex items-center justify-center text-2xl font-black shadow-neo-sm">6</div>
-                        <h2 class="text-3xl font-display font-bold uppercase tracking-tight">Final Details</h2>
-                    </div>
+            <%- include('../partials/footer.ejs') %>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left mb-10">
-                        <div>
-                            <label for="fundingStage" class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">Stage</label>
-                            <select id="fundingStage" name="fundingStage"
-                                class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-lg font-bold uppercase focus:outline-none focus:bg-white transition-all">
-                                <option value="">SELECT STAGE</option>
-                                <option value="pre-seed">💡 PRE-SEED</option>
-                                <option value="seed">🌱 SEED ROUND</option>
-                                <option value="bootstrapped">💪 BOOTSTRAPPED</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="targetMarket" class="block text-xs font-black uppercase mb-3 tracking-widest text-slate-500">Industry</label>
-                            <input type="text" id="targetMarket" name="targetMarket" placeholder="E.G., FINTECH"
-                                class="w-full bg-slate-50 border-4 border-black px-6 py-4 text-xl font-bold uppercase focus:outline-none focus:bg-white transition-all" />
-                        </div>
-                    </div>
 
-                    <div class="bg-neo-white border-4 border-black p-6 text-left">
-                        <div class="flex items-start gap-4">
-                            <input type="checkbox" id="agreeTerms" name="agreeTerms" required
-                                class="w-6 h-6 border-4 border-black bg-white accent-brand-indigo mt-1 cursor-pointer" />
-                            <label for="agreeTerms" class="text-sm font-bold text-slate-600 uppercase tracking-tight">
-                                I confirm the project info is accurate and I have the rights to publish this content. <span class="text-brand-indigo">*</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
+                <script src="/js/add-project.js"></script>
+    </body>
 
-                <div class="flex flex-col md:flex-row gap-6 justify-end pt-10">
-                    <a href="/projects"
-                        class="px-12 py-5 bg-white text-neo-black text-xl font-black border-4 border-black shadow-neo hover:translate-y-1 hover:shadow-none transition-all text-center uppercase tracking-widest font-display">
-                        Cancel
-                    </a>
-                    <button type="submit"
-                        class="px-12 py-5 bg-brand-indigo text-white text-xl font-black border-4 border-black shadow-neo hover:translate-y-1 hover:shadow-none transition-all uppercase tracking-widest font-display">
-                        Publish Project ⚡
-                    </button>
-                </div>
-            </form>
-        </div>
-    </main>
-
-    <%- include('../partials/footer.ejs') %>
-
-    <script src="/js/add-project.js"></script>
-</body>
 </html>

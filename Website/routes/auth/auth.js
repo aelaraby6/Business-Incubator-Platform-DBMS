@@ -10,14 +10,8 @@ import {
   updateProfileImage,
   changePassword,
 } from "../../controllers/auth/auth.controller.js";
-import {
-  registerSchema,
-  loginSchema,
-  updatePasswordSchema,
-} from "../../validations/auth/auth.validation.js";
-import { validateBody } from "../../utils/validate.js";
 import upload from "../../config/multer.js";
-import { protect } from "../../middleware/auth.middlware.js";
+import { isAuth} from "../../middleware/auth.middlware.js";
 
 const router = Router();
 
@@ -40,27 +34,26 @@ const uploadProfileImage = (req, res, next) => {
 // Pages
 router.get("/signup", signupPage);
 router.get("/login", loginPage);
-router.get("/profile", protect, profilePage);
+router.get("/profile", isAuth, profilePage);
 
 // Pages Logic
 router.post("/register", register);
 router.post("/login", login);
-router.post("/logout", protect, logout);
+router.post("/logout", isAuth, logout);
 
 router.post(
   "/profile/upload-picture",
-  protect,
+  isAuth,
   uploadProfileImage,
   updateProfileImage
 );
 
 router.post(
   "/profile/update-password",
-  protect,
-  // validateBody(updatePasswordSchema),
+  isAuth,
   changePassword
 );
 
-router.get("/me", protect, getBasicUserData);
+router.get("/me", isAuth, getBasicUserData);
 
 export { router as AuthRouter };

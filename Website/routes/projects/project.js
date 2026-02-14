@@ -1,4 +1,9 @@
 import { Router } from "express";
+import { 
+  createProjectController,
+  newProjectPage 
+} from "../../controllers/project/project.controller.js";
+import { isAuth } from "../../middleware/auth.middlware.js";
 
 const router = Router();
 
@@ -108,9 +113,7 @@ router.get("/", (req, res) => {
   res.render("projects/projects", { projects });
 });
 
-router.get("/new", (req, res) => {
-  res.render("projects/add-project");
-});
+router.get("/new", newProjectPage);
 
 router.get("/:id", (req, res) => {
   const projectId = parseInt(req.params.id);
@@ -118,11 +121,14 @@ router.get("/:id", (req, res) => {
 
   if (!project) {
     return res.status(404).render("error/error", {
+      title: "Not Found",
       error: { message: "Project not found", status: 404 },
     });
   }
 
   res.render("projects/project-detail", { project });
 });
+
+router.post("/create", isAuth, createProjectController);
 
 export default router;

@@ -9,7 +9,7 @@ import {
 export const getAllWorkshops = async (req, res, next) => {
   try {
     const workshops = await getAllWorkshopsQuery();
-    
+
     res.json({
       status: "success",
       results: workshops.length,
@@ -39,7 +39,7 @@ export const getOneWorkshop = async (req, res, next) => {
   }
 };
 
-// 3. Attend (Join)
+// 3. Attend 
 export const attendWorkshop = async (req, res, next) => {
   try {
     const workshopId = req.params.id;
@@ -67,11 +67,11 @@ export const attendWorkshop = async (req, res, next) => {
   }
 };
 
-// 4. Cancel Attendance (Leave)
+// 4. Cancel Attendance 
 export const cancelAttendance = async (req, res, next) => {
   try {
     const workshopId = req.params.id;
-    const userId = req.user.id; 
+    const userId = req.user.id;
 
     const result = await leaveWorkshopQuery(workshopId, userId);
 
