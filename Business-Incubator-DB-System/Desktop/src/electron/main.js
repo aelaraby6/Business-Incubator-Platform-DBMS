@@ -1,7 +1,7 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
-import { isDevelopmentMode } from './util.js';
-import { getPreloadPath, getUIPath } from './pathResolver.js';
-import loginRequest from './backend/auth/login.js';
+import { app, BrowserWindow, ipcMain } from "electron";
+import { isDevelopmentMode } from "./util.js";
+import { getPreloadPath, getUIPath } from "./pathResolver.js";
+import loginRequest from "./backend/auth/login.js";
 import {
   getAllWorkshops,
   getWorkshop,
@@ -15,14 +15,14 @@ import {
   getFeedbackReport,
   exportAttendanceReportPDF,
   exportFeedbackReportPDF,
-} from './backend/workshop/workshops.js';
+} from "./backend/workshop/workshops.js";
 import {
   getAllResources,
   addResource,
   getPendingBookings,
   updateBookingStatus,
-  getResourceStats
-} from './backend/resources/resources.js';
+  getResourceStats,
+} from "./backend/resources/resources.js";
 // import {
 //   getAllMentors,
 //   deleteMentor
@@ -33,10 +33,18 @@ import {
   updateProjectStatus,
   getProjectsByStatus,
   getProjectsStats,
-  toggleProjectApproved
-} from './backend/projects/projects.js';
+  toggleProjectApproved,
+} from "./backend/projects/projects.js";
+import {
+  getAllFundingRequests,
+  getFundingDashboard,
+  getFundingByStage,
+  getFundingRequestById,
+  updateFundingRequestStatus,
+  deleteFundingRequest,
+} from "./backend/funding/funding.js";
 
-app.on('ready', () => {
+app.on("ready", () => {
   const mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -46,82 +54,85 @@ app.on('ready', () => {
     frame: true,
   });
   if (isDevelopmentMode()) {
-    mainWindow.loadURL('http://localhost:5173');
+    mainWindow.loadURL("http://localhost:5173");
   } else {
     mainWindow.loadFile(getUIPath());
   }
 
-  ipcMain.handle('auth:login', async (_event, credentials) => {
+  ipcMain.handle("auth:login", async (_event, credentials) => {
     return await loginRequest(credentials);
   });
 
   // Workshop IPC Handlers
-  ipcMain.handle('get-workshops', async () => {
+  ipcMain.handle("get-workshops", async () => {
     return await getAllWorkshops();
   });
 
-  ipcMain.handle('get-workshop', async (_event, id) => {
+  ipcMain.handle("get-workshop", async (_event, id) => {
     return await getWorkshop(id);
   });
 
-  ipcMain.handle('create-workshop', async (_event, workshopData) => {
+  ipcMain.handle("create-workshop", async (_event, workshopData) => {
     return await createWorkshop(workshopData);
   });
 
-  ipcMain.handle('update-workshop', async (_event, id, workshopData) => {
+  ipcMain.handle("update-workshop", async (_event, id, workshopData) => {
     return await updateWorkshop(id, workshopData);
   });
 
-  ipcMain.handle('delete-workshop', async (_event, id) => {
+  ipcMain.handle("delete-workshop", async (_event, id) => {
     return await deleteWorkshop(id);
   });
 
-  ipcMain.handle('track-attendance', async (_event, enrollmentId, attended) => {
+  ipcMain.handle("track-attendance", async (_event, enrollmentId, attended) => {
     return await trackAttendance(enrollmentId, attended);
   });
 
-  ipcMain.handle('submit-feedback', async (_event, enrollmentId, feedbackData) => {
-    return await submitFeedback(enrollmentId, feedbackData);
-  });
+  ipcMain.handle(
+    "submit-feedback",
+    async (_event, enrollmentId, feedbackData) => {
+      return await submitFeedback(enrollmentId, feedbackData);
+    },
+  );
 
-  ipcMain.handle('get-workshop-enrollments', async (_event, workshopId) => {
+  ipcMain.handle("get-workshop-enrollments", async (_event, workshopId) => {
     return await getWorkshopEnrollments(workshopId);
   });
 
-  ipcMain.handle('get-attendance-report', async () => {
+  ipcMain.handle("get-attendance-report", async () => {
     return await getAttendanceReport();
   });
 
-  ipcMain.handle('get-feedback-report', async () => {
+  ipcMain.handle("get-feedback-report", async () => {
     return await getFeedbackReport();
   });
 
-  ipcMain.handle('export-attendance-report', async () => {
+  ipcMain.handle("export-attendance-report", async () => {
     return await exportAttendanceReportPDF();
   });
 
-  ipcMain.handle('export-feedback-report', async () => {
+  ipcMain.handle("export-feedback-report", async () => {
     return await exportFeedbackReportPDF();
   });
 
   // Resources IPC Handlers
-  ipcMain.handle('resources:get-all', async () => {
+  ipcMain.handle("resources:get-all", async () => {
     return await getAllResources();
   });
 
-  ipcMain.handle('resources:add', async (_event, data) => {
+  ipcMain.handle("resources:add", async (_event, data) => {
     return await addResource(data);
   });
 
-  ipcMain.handle('bookings:get-pending', async () => {
+  ipcMain.handle("bookings:get-pending", async () => {
     return await getPendingBookings();
   });
 
-  ipcMain.handle('bookings:update-status', async (_event, data) => {
+  ipcMain.handle("bookings:update-status", async (_event, data) => {
     return await updateBookingStatus(data);
   });
 
-  ipcMain.handle('resources:get-stats', async () => {
+  ipcMain.handle("resources:get-stats", async () => {
     return await getResourceStats();
   });
 
@@ -134,30 +145,57 @@ app.on('ready', () => {
   //   return await deleteMentor(id);
   // });
 
-
   // Projects IPC Handlers
-  ipcMain.handle('projects:getAll', async () => {
+  ipcMain.handle("projects:getAll", async () => {
     return await getAllProjects();
   });
 
-  ipcMain.handle('projects:getById', async (_event, id) => {
+  ipcMain.handle("projects:getById", async (_event, id) => {
     return await getProjectById(id);
   });
 
-  ipcMain.handle('projects:updateStatus', async (_event, { id, status }) => {
+  ipcMain.handle("projects:updateStatus", async (_event, { id, status }) => {
     return await updateProjectStatus(id, status);
   });
 
-  ipcMain.handle('projects:getByStatus', async (_event, status) => {
+  ipcMain.handle("projects:getByStatus", async (_event, status) => {
     return await getProjectsByStatus(status);
   });
 
-  ipcMain.handle('projects:toggleApproved', async (_event, id) => {
+  ipcMain.handle("projects:toggleApproved", async (_event, id) => {
     return await toggleProjectApproved(id);
   });
 
-  ipcMain.handle('projects:getStats', async () => {
+  ipcMain.handle("projects:getStats", async () => {
     return await getProjectsStats();
+  });
+
+  // Funding IPC Handlers
+  ipcMain.handle("funding:getAll", async (_event, query = "") => {
+    return await getAllFundingRequests(query);
+  });
+
+  ipcMain.handle("funding:getDashboard", async () => {
+    return await getFundingDashboard();
+  });
+
+  ipcMain.handle("funding:getByStage", async () => {
+    return await getFundingByStage();
+  });
+
+  ipcMain.handle("funding:getById", async (_event, id) => {
+    return await getFundingRequestById(id);
+  });
+
+  ipcMain.handle(
+    "funding:updateStatus",
+    async (_event, { id, status, notes }) => {
+      return await updateFundingRequestStatus(id, status, notes);
+    },
+  );
+
+  ipcMain.handle("funding:delete", async (_event, id) => {
+    return await deleteFundingRequest(id);
   });
 
   handleCloseEvents(mainWindow);
@@ -165,7 +203,7 @@ app.on('ready', () => {
 
 function handleCloseEvents(mainWindow) {
   let willClose = false;
-  mainWindow.on('close', (e) => {
+  mainWindow.on("close", (e) => {
     if (willClose) {
       return;
     }
@@ -176,11 +214,11 @@ function handleCloseEvents(mainWindow) {
     }
   });
 
-  app.on('before-quit', () => {
+  app.on("before-quit", () => {
     willClose = true;
   });
 
-  mainWindow.on('show', () => {
+  mainWindow.on("show", () => {
     willClose = false;
   });
 }
