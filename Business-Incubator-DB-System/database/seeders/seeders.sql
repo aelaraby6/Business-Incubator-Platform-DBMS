@@ -167,7 +167,50 @@ INSERT INTO "projects" (
  'Platform matching candidates with jobs based on skills assessment rather than CVs. Includes micro-internship opportunities.',
  'React, Python Django, PostgreSQL, OpenAI API',
  'completed', 'completed', 'https://github.com/skillmatch/platform', 'https://skillmatch.eg', 
- 'team', false, 'seed', true);
+ 'team', false, 'seed', true),
+
+-- Additional Idea Stage Projects
+('WaterTrack', 'Environment', 'Smart water usage monitoring for households', 
+ 'Egyptians waste water through outdated infrastructure and lack of awareness about consumption patterns.',
+ 'IoT sensors that monitor water usage in real-time with mobile app alerts and conservation tips personalized by machine learning.',
+ 'IoT, Python, React, Firebase, Arduino',
+ 'idea', 'in-progress', NULL, NULL, 
+ 'individual', true, 'bootstrapped', false),
+
+('EduConnect', 'Education', 'Online tutor matching platform', 
+ 'Students in Egypt struggle to find qualified tutors. Tutors lack centralized platforms to reach students.',
+ 'Marketplace connecting students with vetted tutors. Includes video lessons, progress tracking, and automated billing.',
+ 'Next.js, Node.js, PostgreSQL, Stripe, Zoom API',
+ 'idea', 'in-progress', NULL, NULL, 
+ 'team', true, 'pre-seed', false),
+
+('FoodieMaps', 'Food & Beverage', 'Local restaurant discovery and ordering platform', 
+ 'Small local restaurants in Egypt cannot compete with delivery apps. Limited discoverability for authentic cuisine.',
+ 'Mobile app focusing on small, authentic local restaurants with direct ordering and loyalty rewards.',
+ 'React Native, Node.js, MongoDB, Firebase, Google Maps',
+ 'idea', 'in-progress', NULL, NULL, 
+ 'individual', true, 'bootstrapped', false),
+
+('HealthyAI', 'Healthcare', 'AI-powered fitness and nutrition coaching', 
+ 'Egyptians lack personalized fitness and nutrition guidance. Generic programs don''t work for individual needs.',
+ 'App combining AI-powered workout plans, nutrition tracking, and virtual coaching based on individual health data.',
+ 'React, Python, TensorFlow, Firebase, Stripe',
+ 'idea', 'in-progress', NULL, NULL, 
+ 'team', true, 'pre-seed', false),
+
+('SmartJobs', 'HR Tech', 'Remote work platform for Egyptian freelancers', 
+ 'Egyptian freelancers struggle to find international clients. Language and credibility are barriers.',
+ 'Platform specifically for Egyptian and Arab freelancers to connect with global clients with built-in translation.',
+ 'Vue.js, Laravel, MySQL, Stripe, Twilio',
+ 'idea', 'in-progress', NULL, NULL, 
+ 'individual', true, 'bootstrapped', false),
+
+('EcoPackage', 'Environment', 'Eco-friendly packaging solutions for e-commerce', 
+ 'E-commerce in Egypt generates massive packaging waste. No sustainable packaging options available locally.',
+ 'Biodegradable packaging materials manufactured locally with API integration for e-commerce platforms.',
+ 'React, Node.js, MongoDB, Shopify API',
+ 'idea', 'in-progress', NULL, NULL, 
+ 'team', true, 'pre-seed', false);
 
 -- ============================================
 -- PROJECT_ENTREPRENEURS TABLE (30+ records)
@@ -237,7 +280,28 @@ INSERT INTO "project_entrepreneurs" ("project_id", "user_id", "role_in_project")
 
 -- SkillMatch (Team)
 (15, 6, 'founder'),
-(15, 7, 'co-founder');
+(15, 7, 'co-founder'),
+
+-- WaterTrack (Individual)
+(16, 8, 'founder'),
+
+-- EduConnect (Team)
+(17, 9, 'founder'),
+(17, 10, 'co-founder'),
+
+-- FoodieMaps (Individual)
+(18, 1, 'founder'),
+
+-- HealthyAI (Team)
+(19, 2, 'founder'),
+(19, 3, 'co-founder'),
+
+-- SmartJobs (Individual)
+(20, 4, 'founder'),
+
+-- EcoPackage (Team)
+(21, 5, 'founder'),
+(21, 6, 'co-founder');
 
 -- ============================================
 -- WORKSHOPS TABLE (15 records)
@@ -335,7 +399,64 @@ INSERT INTO "workshops" (
  'CAC, LTV, churn rate, NPS, and other critical KPIs. Learn what investors want to see.',
  11, 'Dr. Amr Mostafa', 'Meeting Room 4', 
  '2026-04-22', '2026-04-22', '10:00:00', '14:00:00', 25, 
- 7, 'scheduled', '2026-04-22 10:00:00');
+ 7, 'scheduled', '2026-04-22 10:00:00'),
+
+-- Additional Workshops - Completed
+('Product Launch Strategy', 
+ 'Go-to-market planning, launch timeline, announcement strategy, and post-launch metrics.',
+ 12, 'Eng. Heba Nabil', 'Conference Room 1', 
+ '2026-02-01', '2026-02-01', '10:00:00', '13:00:00', 30, 
+ 24, 'completed', '2026-02-01 10:00:00'),
+
+('Market Research Fundamentals', 
+ 'How to conduct effective market research, competitor analysis, and customer interviews.',
+ 13, 'Prof. Tarek Zaki', 'Workshop Hall A', 
+ '2026-02-05', '2026-02-05', '09:00:00', '12:00:00', 25, 
+ 19, 'completed', '2026-02-05 09:00:00'),
+
+('Team Building for Startups', 
+ 'Recruiting, onboarding, culture building, and managing early-stage teams.',
+ 11, 'Dr. Amr Mostafa', 'Innovation Lab - Building A', 
+ '2026-02-10', '2026-02-11', '09:00:00', '17:00:00', 20, 
+ 18, 'completed', '2026-02-10 09:00:00'),
+
+-- Active Workshops (Recently Started)
+('Advanced Growth Hacking Techniques', 
+ 'Deep dive into growth hacking: viral loops, referral programs, retention strategies.',
+ 13, 'Prof. Tarek Zaki', 'Workshop Hall B', 
+ '2026-02-15', '2026-02-15', '14:00:00', '17:00:00', 30, 
+ 28, 'active', '2026-02-15 14:00:00'),
+
+('Data Analytics for Startups', 
+ 'Google Analytics, Mixpanel, data visualization, and actionable insights from data.',
+ 12, 'Eng. Heba Nabil', 'Meeting Room 2', 
+ '2026-02-16', '2026-02-16', '10:00:00', '13:00:00', 25, 
+ 20, 'active', '2026-02-16 10:00:00'),
+
+-- Upcoming Workshops
+('Scaling Your Business Model', 
+ 'From startup to scale-up: organizational structure, processes, and team scaling.',
+ 11, 'Dr. Amr Mostafa', 'Conference Room 2', 
+ '2026-02-20', '2026-02-20', '09:00:00', '13:00:00', 25, 
+ 12, 'scheduled', '2026-02-20 09:00:00'),
+
+('International Market Entry', 
+ 'Expanding Egyptian startups to international markets: regulations, localization, partnerships.',
+ 13, 'Prof. Tarek Zaki', 'Innovation Lab - Building A', 
+ '2026-02-25', '2026-02-25', '10:00:00', '14:00:00', 20, 
+ 11, 'scheduled', '2026-02-25 10:00:00'),
+
+('Customer Success & Retention', 
+ 'Building customer loyalty, reducing churn, and maximizing customer lifetime value.',
+ 12, 'Eng. Heba Nabil', 'Workshop Hall A', 
+ '2026-03-02', '2026-03-02', '13:00:00', '16:00:00', 30, 
+ 14, 'scheduled', '2026-03-02 13:00:00'),
+
+('Advanced Financial Planning', 
+ 'Multi-year financial projections, scenario planning, and capital efficiency.',
+ 11, 'Dr. Amr Mostafa', 'Meeting Room 3', 
+ '2026-03-08', '2026-03-08', '14:00:00', '17:00:00', 20, 
+ 9, 'scheduled', '2026-03-08 14:00:00');
 
 -- ============================================
 -- MENTORS TABLE (12 records)
@@ -471,6 +592,124 @@ INSERT INTO "workshop_enrollments" ("workshop_id", "entrepreneur_id", "entrepren
 (3, 1, 'Ahmed Hassan', 'ahmed.hassan@startup.eg', false, NULL, NULL),
 (3, 2, 'Sara Mohamed', 'sara.mohamed@startup.eg', false, NULL, NULL);
 
+-- Workshop 4-15+ (Additional enrollments for new workshops)
+-- Workshop 16 - Product Launch (Completed)
+INSERT INTO "workshop_enrollments" ("workshop_id", "entrepreneur_id", "entrepreneur_name", "entrepreneur_email", "attended", "feedback_rating", "feedback_comment") VALUES
+(16, 1, 'Ahmed Hassan', 'ahmed.hassan@startup.eg', true, 5, 'Excellent launch strategy framework!'),
+(16, 2, 'Sara Mohamed', 'sara.mohamed@startup.eg', true, 5, 'Very practical and actionable tips.'),
+(16, 3, 'Omar Khaled', 'omar.khaled@startup.eg', true, 4, 'Good content, well delivered.'),
+(16, 4, 'Nour Abdallah', 'nour.abdallah@startup.eg', true, 5, 'Helped us plan our launch perfectly.'),
+(16, 5, 'Youssef Ali', 'youssef.ali@startup.eg', true, 4, 'Great real-world examples provided.'),
+(16, 6, 'Maha Ibrahim', 'maha.ibrahim@startup.eg', true, 5, 'Best workshop for launch planning.'),
+(16, 7, 'Karim Yasser', 'karim.yasser@startup.eg', true, 4, 'Solid framework and execution guide.'),
+(16, 8, 'Layla Mahmoud', 'layla.mahmoud@startup.eg', true, 5, 'Perfect timing for our product launch.'),
+(16, 9, 'Hassan Farouk', 'hassan.farouk@startup.eg', true, 5, 'Exceeded expectations!'),
+(16, 10, 'Dina Salah', 'dina.salah@startup.eg', true, 4, 'Learned critical launch strategies.'),
+(16, 1, 'Ahmed Hassan', 'ahmed.hassan@startup.eg', true, 5, 'Would attend again if offered.'),
+(16, 2, 'Sara Mohamed', 'sara.mohamed@startup.eg', true, 5, 'Outstanding instructor.'),
+(16, 3, 'Omar Khaled', 'omar.khaled@startup.eg', true, 4, 'Very well structured workshop.'),
+(16, 4, 'Nour Abdallah', 'nour.abdallah@startup.eg', true, 5, 'Critical knowledge for founders.'),
+(16, 5, 'Youssef Ali', 'youssef.ali@startup.eg', true, 5, 'Recommended to all my peers.'),
+(16, 6, 'Maha Ibrahim', 'maha.ibrahim@startup.eg', true, 4, 'Great networking opportunity too.'),
+(16, 7, 'Karim Yasser', 'karim.yasser@startup.eg', true, 5, 'Essential workshop content.'),
+(16, 8, 'Layla Mahmoud', 'layla.mahmoud@startup.eg', true, 4, 'Practical and insightful.'),
+(16, 9, 'Hassan Farouk', 'hassan.farouk@startup.eg', true, 5, 'Changed our launch approach.'),
+(16, 10, 'Dina Salah', 'dina.salah@startup.eg', true, 5, 'Invaluable for product teams.'),
+(16, 1, 'Ahmed Hassan', 'ahmed.hassan@startup.eg', true, 5, 'Worth every minute!'),
+(16, 2, 'Sara Mohamed', 'sara.mohamed@startup.eg', true, 4, 'High quality content.'),
+(16, 3, 'Omar Khaled', 'omar.khaled@startup.eg', false, NULL, NULL),
+(16, 4, 'Nour Abdallah', 'nour.abdallah@startup.eg', true, 5, 'Amazing instructor expertise.'),
+
+-- Workshop 17 - Market Research (Completed)
+(17, 1, 'Ahmed Hassan', 'ahmed.hassan@startup.eg', true, 5, 'Comprehensive market research guide.'),
+(17, 2, 'Sara Mohamed', 'sara.mohamed@startup.eg', true, 4, 'Excellent competitor analysis tools.'),
+(17, 3, 'Omar Khaled', 'omar.khaled@startup.eg', true, 5, 'Prof. Tarek is outstanding!'),
+(17, 5, 'Youssef Ali', 'youssef.ali@startup.eg', true, 5, 'Changed how we validate assumptions.'),
+(17, 6, 'Maha Ibrahim', 'maha.ibrahim@startup.eg', true, 4, 'Very practical methodologies.'),
+(17, 7, 'Karim Yasser', 'karim.yasser@startup.eg', true, 5, 'Most useful research workshop ever.'),
+(17, 8, 'Layla Mahmoud', 'layla.mahmoud@startup.eg', true, 4, 'Great frameworks provided.'),
+(17, 9, 'Hassan Farouk', 'hassan.farouk@startup.eg', true, 5, 'Helped us identify market gaps.'),
+(17, 10, 'Dina Salah', 'dina.salah@startup.eg', true, 5, 'Excellent content and delivery.'),
+(17, 1, 'Ahmed Hassan', 'ahmed.hassan@startup.eg', true, 4, 'Would recommend to others.'),
+(17, 2, 'Sara Mohamed', 'sara.mohamed@startup.eg', true, 5, 'Perfect for early-stage startups.'),
+(17, 3, 'Omar Khaled', 'omar.khaled@startup.eg', true, 5, 'Actionable insights throughout.'),
+(17, 5, 'Youssef Ali', 'youssef.ali@startup.eg', true, 4, 'Great case studies used.'),
+(17, 6, 'Maha Ibrahim', 'maha.ibrahim@startup.eg', true, 5, 'Essential for any founder.'),
+(17, 7, 'Karim Yasser', 'karim.yasser@startup.eg', false, NULL, NULL),
+(17, 8, 'Layla Mahmoud', 'layla.mahmoud@startup.eg', true, 5, 'Transformed our market approach.'),
+(17, 9, 'Hassan Farouk', 'hassan.farouk@startup.eg', true, 4, 'Solid research methodologies.'),
+(17, 10, 'Dina Salah', 'dina.salah@startup.eg', true, 5, 'Best market research workshop.'),
+
+-- Workshop 18 - Team Building (Completed - 2 day event)
+(18, 1, 'Ahmed Hassan', 'ahmed.hassan@startup.eg', true, 5, 'Excellent team dynamics content.'),
+(18, 2, 'Sara Mohamed', 'sara.mohamed@startup.eg', true, 5, 'Dr. Amr covered everything perfectly.'),
+(18, 3, 'Omar Khaled', 'omar.khaled@startup.eg', true, 5, 'Best team building workshop!'),
+(18, 4, 'Nour Abdallah', 'nour.abdallah@startup.eg', true, 4, 'Great HR strategies taught.'),
+(18, 5, 'Youssef Ali', 'youssef.ali@startup.eg', true, 5, 'Helped us structure our team.'),
+(18, 6, 'Maha Ibrahim', 'maha.ibrahim@startup.eg', true, 5, 'Invaluable for team scaling.'),
+(18, 7, 'Karim Yasser', 'karim.yasser@startup.eg', true, 4, 'Practical recruitment advice.'),
+(18, 8, 'Layla Mahmoud', 'layla.mahmoud@startup.eg', true, 5, 'Changed our hiring process.'),
+(18, 9, 'Hassan Farouk', 'hassan.farouk@startup.eg', true, 5, 'Outstanding content delivery!'),
+(18, 10, 'Dina Salah', 'dina.salah@startup.eg', true, 4, 'Very comprehensive workshop.'),
+(18, 1, 'Ahmed Hassan', 'ahmed.hassan@startup.eg', true, 5, 'Worth the 2-day commitment.'),
+(18, 2, 'Sara Mohamed', 'sara.mohamed@startup.eg', true, 5, 'Implemented strategies immediately.'),
+(18, 3, 'Omar Khaled', 'omar.khaled@startup.eg', true, 4, 'Great networking opportunities.'),
+(18, 4, 'Nour Abdallah', 'nour.abdallah@startup.eg', true, 5, 'Critical for scaling startups.'),
+(18, 5, 'Youssef Ali', 'youssef.ali@startup.eg', true, 5, 'Transformed our team culture.'),
+(18, 6, 'Maha Ibrahim', 'maha.ibrahim@startup.eg', false, NULL, NULL),
+(18, 7, 'Karim Yasser', 'karim.yasser@startup.eg', true, 5, 'Best workshop ever attended.'),
+(18, 8, 'Layla Mahmoud', 'layla.mahmoud@startup.eg', true, 5, 'Excellent instruction quality.'),
+
+-- Workshop 19 - Advanced Growth Hacking (Active)
+(19, 1, 'Ahmed Hassan', 'ahmed.hassan@startup.eg', true, 5, 'Cutting-edge growth techniques!'),
+(19, 2, 'Sara Mohamed', 'sara.mohamed@startup.eg', true, 5, 'Amazing content so far.'),
+(19, 3, 'Omar Khaled', 'omar.khaled@startup.eg', true, 5, 'Prof. Tarek is brilliant.'),
+(19, 4, 'Nour Abdallah', 'nour.abdallah@startup.eg', true, 4, 'Already applying techniques.'),
+(19, 5, 'Youssef Ali', 'youssef.ali@startup.eg', true, 5, 'Viral loops explained perfectly.'),
+(19, 6, 'Maha Ibrahim', 'maha.ibrahim@startup.eg', true, 5, 'Best part so far!'),
+(19, 7, 'Karim Yasser', 'karim.yasser@startup.eg', true, 4, 'Very practical sessions.'),
+(19, 8, 'Layla Mahmoud', 'layla.mahmoud@startup.eg', true, 5, 'Implementing today!'),
+(19, 9, 'Hassan Farouk', 'hassan.farouk@startup.eg', true, 5, 'Fantastic workshop!'),
+(19, 10, 'Dina Salah', 'dina.salah@startup.eg', true, 4, 'Learning so much.'),
+(19, 1, 'Ahmed Hassan', 'ahmed.hassan@startup.eg', true, 5, 'Will change our growth strategy.'),
+(19, 2, 'Sara Mohamed', 'sara.mohamed@startup.eg', true, 5, 'Excellent presentation.'),
+(19, 3, 'Omar Khaled', 'omar.khaled@startup.eg', true, 5, 'Taking detailed notes!'),
+(19, 5, 'Youssef Ali', 'youssef.ali@startup.eg', true, 4, 'Great case studies used.'),
+(19, 6, 'Maha Ibrahim', 'maha.ibrahim@startup.eg', true, 5, 'Love the interactive format.'),
+(19, 7, 'Karim Yasser', 'karim.yasser@startup.eg', true, 5, 'Must-attend workshop.'),
+(19, 8, 'Layla Mahmoud', 'layla.mahmoud@startup.eg', true, 4, 'Already seeing results.'),
+(19, 9, 'Hassan Farouk', 'hassan.farouk@startup.eg', true, 5, 'Outstanding!'),
+(19, 10, 'Dina Salah', 'dina.salah@startup.eg', true, 5, 'Best growth workshop ever.'),
+(19, 1, 'Ahmed Hassan', 'ahmed.hassan@startup.eg', true, 5, 'Game-changing content!'),
+(19, 2, 'Sara Mohamed', 'sara.mohamed@startup.eg', true, 4, 'Definitely implementing this.'),
+(19, 3, 'Omar Khaled', 'omar.khaled@startup.eg', true, 5, 'Perfect timing for our growth.'),
+(19, 4, 'Nour Abdallah', 'nour.abdallah@startup.eg', true, 5, 'Exceeded expectations!'),
+(19, 5, 'Youssef Ali', 'youssef.ali@startup.eg', true, 5, 'Phenomenal insights shared.'),
+(19, 6, 'Maha Ibrahim', 'maha.ibrahim@startup.eg', true, 5, 'Will recommend to all founders.'),
+(19, 7, 'Karim Yasser', 'karim.yasser@startup.eg', true, 4, 'Great strategies and tactics.'),
+(19, 8, 'Layla Mahmoud', 'layla.mahmoud@startup.eg', true, 5, 'Implementing immediately.'),
+
+-- Workshop 20 - Data Analytics (Active)
+(20, 1, 'Ahmed Hassan', 'ahmed.hassan@startup.eg', true, 4, 'Great analytics frameworks.'),
+(20, 2, 'Sara Mohamed', 'sara.mohamed@startup.eg', true, 5, 'Heba makes analytics simple.'),
+(20, 3, 'Omar Khaled', 'omar.khaled@startup.eg', true, 5, 'Excellent practical examples.'),
+(20, 4, 'Nour Abdallah', 'nour.abdallah@startup.eg', true, 4, 'Learning a lot about tracking.'),
+(20, 5, 'Youssef Ali', 'youssef.ali@startup.eg', true, 5, 'Analytics made simple.'),
+(20, 6, 'Maha Ibrahim', 'maha.ibrahim@startup.eg', true, 5, 'Actionable insights throughout.'),
+(20, 7, 'Karim Yasser', 'karim.yasser@startup.eg', true, 4, 'Great tools recommendations.'),
+(20, 8, 'Layla Mahmoud', 'layla.mahmoud@startup.eg', true, 5, 'Implementing tracking today.'),
+(20, 9, 'Hassan Farouk', 'hassan.farouk@startup.eg', true, 5, 'Essential workshop!'),
+(20, 10, 'Dina Salah', 'dina.salah@startup.eg', true, 5, 'Perfect for data-driven teams.'),
+(20, 1, 'Ahmed Hassan', 'ahmed.hassan@startup.eg', true, 4, 'Good refresher on metrics.'),
+(20, 2, 'Sara Mohamed', 'sara.mohamed@startup.eg', true, 5, 'Already applying knowledge.'),
+(20, 3, 'Omar Khaled', 'omar.khaled@startup.eg', true, 4, 'Very professional delivery.'),
+(20, 5, 'Youssef Ali', 'youssef.ali@startup.eg', true, 5, 'Best analytics workshop.'),
+(20, 6, 'Maha Ibrahim', 'maha.ibrahim@startup.eg', true, 5, 'Love the hands-on approach.'),
+(20, 7, 'Karim Yasser', 'karim.yasser@startup.eg', true, 4, 'Great for beginners.'),
+(20, 8, 'Layla Mahmoud', 'layla.mahmoud@startup.eg', true, 5, 'Life-changing knowledge.'),
+(20, 9, 'Hassan Farouk', 'hassan.farouk@startup.eg', true, 5, 'Outstanding content delivery!'),
+(20, 10, 'Dina Salah', 'dina.salah@startup.eg', true, 5, 'Will recommend to metrics teams.');
+
 -- ============================================
 -- RESOURCES TABLE (12 records)
 -- ============================================
@@ -486,7 +725,13 @@ INSERT INTO "resources" ("name", "type", "description") VALUES
 ('Legal Consultation Package', 'consultation', '10 hours of legal consultation covering incorporation, contracts, IP protection, and compliance.'),
 ('Accounting & Tax Services', 'consultation', 'Monthly bookkeeping and quarterly tax filing services for startups in their first year.'),
 ('Marketing Budget Grant', 'grant', 'EGP 20,000 grant for digital marketing expenses including ads, content creation, and SEO tools.'),
-('Mentorship Program', 'mentorship', 'Access to 1-on-1 mentorship sessions with industry experts. 2 sessions per month for 6 months.');
+('Mentorship Program', 'mentorship', 'Access to 1-on-1 mentorship sessions with industry experts. 2 sessions per month for 6 months.'),
+
+-- Meeting Rooms
+('Meeting Room 1', 'meeting_room', 'Intimate meeting room for 4-6 people. Equipped with large monitor, whiteboard, and video conferencing setup.'),
+('Meeting Room 2', 'meeting_room', 'Medium meeting room for 8-10 people. Professional setup with projector, conference table, and soundproofing.'),
+('Meeting Room 3', 'meeting_room', 'Large boardroom for 15-20 people. Full AV setup with screens on multiple walls, recording capability.'),
+('Meeting Room 4', 'meeting_room', 'Executive meeting room with premium furnishings for investor presentations. 10-12 capacity.');
 
 -- ============================================
 -- PROJECT_RESOURCES TABLE (25 records)
@@ -670,8 +915,126 @@ INSERT INTO "workshop_attendance" ("workshop_id", "user_id", "feedback") VALUES
 (5, 6, 'Essential for understanding unit economics');
 
 -- ============================================
--- VERIFICATION QUERIES
+-- MENTOR_PROJECT_ASSIGNMENTS TABLE
 -- ============================================
+INSERT INTO "mentor_project_assignments" ("mentor_id", "project_id", "assigned_at") VALUES
+-- Mentor 1: Dr. Amr Mostafa - Tech expert
+(1, 1, '2026-01-15'),  -- HealthHub
+(1, 3, '2026-01-20'),  -- SkillBridge
+(1, 5, '2026-02-01'),  -- FlexPay
+(1, 8, '2026-01-25'),  -- AgroAI
+(1, 14, '2026-02-05'), -- TourGuideAI
+
+-- Mentor 2: Eng. Heba Nabil - Business expert
+(2, 2, '2026-01-18'),  -- PharmaNow
+(2, 6, '2026-01-22'),  -- SaveSmart
+(2, 9, '2026-02-03'),  -- LocalCraft
+(2, 15, '2026-02-10'), -- SkillMatch
+
+-- Mentor 3: Prof. Tarek Zaki - Marketing expert
+(3, 4, '2026-01-16'),  -- ArabicSTEM
+(3, 7, '2026-01-28'),  -- FarmLink
+(3, 12, '2026-02-08'), -- RecycleHub
+
+-- Mentor 4: Sherif Investments - Finance expert
+(4, 1, '2026-02-10'),  -- HealthHub
+(4, 5, '2026-02-01'),  -- FlexPay
+
+-- Mentor 5: Cairo Angels Fund - Finance expert
+(5, 2, '2026-02-08'),  -- PharmaNow
+(5, 7, '2026-02-01');  -- FarmLink
+
+-- ============================================
+-- MENTOR_WORKSHOP_ASSIGNMENTS TABLE
+-- ============================================
+INSERT INTO "mentor_workshop_assignments" ("mentor_id", "workshop_id", "assigned_at") VALUES
+-- Mentor 1: Dr. Amr Mostafa - Leading 5 workshops
+(1, 1, '2026-02-01'),   -- MVP Development Workshop
+(1, 3, '2026-02-01'),   -- Customer Discovery & Validation
+(1, 6, '2026-02-02'),   -- Legal Basics for Egyptian Startups
+(1, 9, '2026-02-02'),   -- Fundraising Strategy Workshop
+(1, 21, '2026-02-15'),  -- Scaling Your Business Model
+
+-- Mentor 2: Eng. Heba Nabil - Leading 5 workshops
+(2, 2, '2026-02-01'),   -- Pitch Deck Masterclass
+(2, 5, '2026-02-01'),   -- Financial Modeling for Startups
+(2, 8, '2026-02-03'),   -- Digital Marketing on a Budget
+(2, 20, '2026-02-16'),  -- Data Analytics for Startups
+(2, 23, '2026-02-18'),  -- Customer Success & Retention
+
+-- Mentor 3: Prof. Tarek Zaki - Leading 5 workshops
+(3, 4, '2026-02-01'),   -- Growth Hacking Bootcamp
+(3, 7, '2026-02-02'),   -- UI/UX Design Sprint
+(3, 10, '2026-02-03'),  -- Product Management Essentials
+(3, 22, '2026-02-25'),  -- International Market Entry
+(3, 19, '2026-02-15');  -- Advanced Growth Hacking Techniques
+
+-- ============================================
+-- UPDATE WORKSHOP ENROLLED COUNTS
+-- ============================================
+UPDATE "workshops" SET "enrolled_count" = (
+  SELECT COUNT(*) FROM "workshop_enrollments" WHERE "workshop_id" = 1
+) WHERE id = 1;
+
+UPDATE "workshops" SET "enrolled_count" = (
+  SELECT COUNT(*) FROM "workshop_enrollments" WHERE "workshop_id" = 2
+) WHERE id = 2;
+
+UPDATE "workshops" SET "enrolled_count" = (
+  SELECT COUNT(*) FROM "workshop_enrollments" WHERE "workshop_id" = 3
+) WHERE id = 3;
+
+UPDATE "workshops" SET "enrolled_count" = (
+  SELECT COUNT(*) FROM "workshop_enrollments" WHERE "workshop_id" = 16
+) WHERE id = 16;
+
+UPDATE "workshops" SET "enrolled_count" = (
+  SELECT COUNT(*) FROM "workshop_enrollments" WHERE "workshop_id" = 17
+) WHERE id = 17;
+
+UPDATE "workshops" SET "enrolled_count" = (
+  SELECT COUNT(*) FROM "workshop_enrollments" WHERE "workshop_id" = 18
+) WHERE id = 18;
+
+UPDATE "workshops" SET "enrolled_count" = (
+  SELECT COUNT(*) FROM "workshop_enrollments" WHERE "workshop_id" = 19
+) WHERE id = 19;
+
+UPDATE "workshops" SET "enrolled_count" = (
+  SELECT COUNT(*) FROM "workshop_enrollments" WHERE "workshop_id" = 20
+) WHERE id = 20;
+
+-- ============================================
+-- VERIFY IDEA STAGE PROJECTS
+-- ============================================
+SELECT 'Idea Stage Projects:' as section;
+SELECT id, name, domain, stage, status, looking_for_cofounders FROM projects WHERE stage = 'idea' ORDER BY id;
+
+-- ============================================
+-- VERIFY MENTOR ASSIGNMENTS
+-- ============================================
+SELECT 'Mentor Project Assignments:' as section;
+SELECT m.id, m.name, m.expertise, COUNT(mpa.project_id) as assigned_projects
+FROM mentors m
+LEFT JOIN mentor_project_assignments mpa ON m.id = mpa.mentor_id
+GROUP BY m.id, m.name, m.expertise
+ORDER BY m.id;
+
+SELECT 'Mentor Workshop Led:' as section;
+SELECT m.id, m.name, m.expertise, COUNT(mwa.workshop_id) as workshops_led
+FROM mentors m
+LEFT JOIN mentor_workshop_assignments mwa ON m.id = mwa.mentor_id
+GROUP BY m.id, m.name, m.expertise
+ORDER BY m.id;
+
+-- ============================================
+-- VERIFY ACTIVE & COMPLETED WORKSHOPS
+-- ============================================
+SELECT 'Active Workshops:' as section;
+SELECT id, title, status, enrolled_count, capacity FROM workshops WHERE status IN ('active', 'completed') ORDER BY id;
+
+-- ============================================
+
 
 -- Check record counts
 SELECT 
