@@ -14,6 +14,7 @@ import {
   get500,
   get429,
 } from "./controllers/error/error.controller.js";
+import { initWorkshopJobs } from "./utils/jobs.js";
 
 const app = express();
 const pgSession = connectPgSimpleImport(session);
@@ -86,5 +87,7 @@ app.use("/v1", GlobalRouter);
 
 app.use(get404);
 app.use(get500);
+
+initWorkshopJobs();
 
 export default app;

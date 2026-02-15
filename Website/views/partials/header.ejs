@@ -1,4 +1,4 @@
-<header class="py-4 shadow bg-black text-white" x-data="{ open: false }">
+<header class="py-4 shadow bg-black text-white" x-data="{ open: false, isLoggedIn: localStorage.getItem('isLoggedIn') === 'true' }">
   <div
     class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4 gap-4 md:gap-0 overflow-auto whitespace-nowrap"
   >
@@ -13,11 +13,9 @@
             decoding="async"
           />
         </a>
-        <a
-          href="/"
-          class="text-base xs:text-lg sm:text-xl md:text-2xl font-bold text-center md:text-left whitespace-nowrap leading-tight"
-          >Business Incubator Platform</a
-        >
+        <a href="/" class="text-base xs:text-lg sm:text-xl md:text-2xl font-bold text-center md:text-left whitespace-nowrap leading-tight">
+          Business Incubator Platform
+        </a>
       </div>
 
       <!-- Hamburger button -->
@@ -42,6 +40,7 @@
         </svg>
       </button>
     </div>
+
     <!-- Menu: hidden on md+, shown on mobile/tablet when open -->
     <div
       :class="open ? 'flex' : 'hidden'"
@@ -54,59 +53,89 @@
           class="flex flex-col md:flex-row w-full md:w-auto items-center md:space-x-8 space-y-2 md:space-y-0 whitespace-nowrap"
         >
           <li>
-            <a
-              href="<%= routes.projects %>"
-              class="hover:underline whitespace-nowrap"
-              >Projects & Ideas</a
-            >
+            <a href="/v1/projects" class="hover:underline whitespace-nowrap" @click="open = false">
+              Projects & Ideas
+            </a>
           </li>
           <li>
-            <a
-              href="<%= routes.mentors %>"
-              class="hover:underline whitespace-nowrap"
-              >Mentors</a
-            >
+            <a href="/v1/mentors" class="hover:underline whitespace-nowrap" @click="open = false">
+              Mentors
+            </a>
           </li>
           <li>
-            <a
-              href="<%= routes.workshops %>"
-              class="hover:underline whitespace-nowrap"
-              >Workshops</a
-            >
+            <a href="/v1/workshop" class="hover:underline whitespace-nowrap" @click="open = false">
+              Workshops
+            </a>
           </li>
           <li>
-            <a
-              href="<%= routes.about %>"
-              class="bg-white text-black px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition whitespace-nowrap"
-              >About</a
-            >
+            <a href="/v1/about" class="bg-white text-black px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition whitespace-nowrap" @click="open = false">
+              About
+            </a>
           </li>
         </ul>
       </nav>
+      
+      <!-- Auth buttons: Show Login/Signup if NOT logged in -->
       <div
+        x-show="!isLoggedIn"
         class="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto justify-center md:justify-end mt-2 md:mt-0 whitespace-nowrap"
       >
-        <a
-          href="<%= routes.loginRoute %>"
-          class="px-4 py-2 hover:underline whitespace-nowrap"
-          >Log in</a
+        <a href="/v1/auth/login" class="px-4 py-2 hover:underline whitespace-nowrap" @click="open = false">
+          Log in
+        </a>
+        <a href="/v1/auth/signup" class="px-4 py-2 rounded w-full md:w-auto text-center whitespace-nowrap" style="font-weight: 600;" @click="open = false">
+          Sign up
+        </a>
+      </div>
+
+      <!-- Logout button: Show if logged in -->
+      <div
+        x-show="isLoggedIn"
+        x-cloak
+        class="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto justify-center md:justify-end mt-2 md:mt-0 whitespace-nowrap"
+      >
+        <a href="/v1/auth/profile" class="px-4 py-2 hover:underline whitespace-nowrap" @click="open = false">
+          Profile
+        </a>
+        <button
+          @click="handleLogout()"
+          class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded w-full md:w-auto text-center whitespace-nowrap transition"
+          style="font-weight: 600;"
         >
-        <a
-          href="<%= routes.signupRoute %>"
-          class="px-4 py-2 rounded w-full md:w-auto text-center whitespace-nowrap"
-          style="
-            font-weight: 600;
-          "
-         
-        >
-         Sign up
-         </a>
+          Logout
+        </button>
       </div>
     </div>
   </div>
+  
   <!-- CDN for menu toggle -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-    defer
-  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  
+  <style>
+    [x-cloak] { display: none !important; }
+  </style>
+  
+  <script>
+    async function handleLogout() {
+      try {
+        const response = await fetch('/v1/auth/logout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include'
+        });
+
+        if (response.ok) {
+          localStorage.setItem('isLoggedIn', 'false');
+          window.location.href = '/v1/auth/login';
+        } else {
+          alert('Failed to logout. Please try again.');
+        }
+      } catch (error) {
+        console.error('Logout error:', error);
+        alert('An error occurred during logout.');
+      }
+    }
+  </script>
 </header>

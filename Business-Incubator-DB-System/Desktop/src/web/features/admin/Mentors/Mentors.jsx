@@ -13,22 +13,23 @@ import {
 import MentorTable from "./MentorTable";
 import AddMentorForm from "./AddMentorForm";
 
+
 const Mentors = () => {
   const [mentors, setMentors] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterExpertise, setFilterExpertise] = useState("all");
 
   const fetchMentors = async () => {
-    setLoading(true);
     try {
       const data = await window.electron.invoke("mentors:get-all");
       setMentors(data || []);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -39,7 +40,6 @@ const Mentors = () => {
     setShowAddForm(false);
     fetchMentors();
   };
-
   const filteredMentors = mentors.filter(
     (m) =>
       (filterExpertise === "all" ||
@@ -221,6 +221,7 @@ const Mentors = () => {
 };
 
 // Reusable Stat Card Component (Matched to Dashboard Style)
+// eslint-disable-next-line no-unused-vars
 const StatCard = ({ title, value, icon: Icon }) => (
   <div className="bg-blue-50 border-4 border-blue-900 p-6 shadow-[4px_4px_0_0_#1e3a8a] hover:-translate-y-1 transition-transform">
     <div className="flex items-start justify-between mb-4">
