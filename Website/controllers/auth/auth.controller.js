@@ -119,7 +119,12 @@ export const login = async (req, res, next) => {
     req.session.userId = user.id;
     req.session.userRole = user.role;
 
-    res.redirect("/v1/auth/profile");
+    res.send(`
+      <script>
+        localStorage.setItem('isLoggedIn', 'true');
+        window.location.href = '/v1/auth/profile';
+      </script>
+    `);
   } catch (err) {
     req.flash("error", "An error occurred during login. Please try again.");
     res.redirect("/v1/auth/login");
@@ -133,7 +138,13 @@ export const logout = (req, res, next) => {
         return next(err);
       }
       res.clearCookie("repodoctor.sid");
-      res.json({ message: "User logged out successfully!" });
+
+      res.send(`
+        <script>
+          localStorage.setItem('isLoggedIn', 'false');
+          window.location.href = '/v1/auth/login';
+        </script>
+      `);
     });
   } catch (err) {
     next(err);
@@ -209,7 +220,7 @@ export const updateProfileImage = async (req, res, next) => {
     try {
       await fs.unlink(req.file.path);
     } catch (err) {
-      console.warn("⚠️ Could not delete original file:", err.message);
+      console.warn("Could not delete original file:", err.message);
     }
 
     if (user.profile_image) {
@@ -221,7 +232,7 @@ export const updateProfileImage = async (req, res, next) => {
         );
         await fs.unlink(oldImagePath);
       } catch (err) {
-        console.warn("⚠️ Could not delete old profile image:", err.message);
+        console.warn("Could not delete old profile image:", err.message);
       }
     }
 
@@ -234,7 +245,7 @@ export const updateProfileImage = async (req, res, next) => {
       try {
         await fs.unlink(processedImagePath);
       } catch (e) {
-        console.warn("⚠️ Could not delete processed image:", e.message);
+        console.warn("Could not delete processed image:", e.message);
       }
       req.flash("error", "Failed to update profile picture in database.");
       return res.redirect("/v1/auth/profile");
@@ -244,7 +255,7 @@ export const updateProfileImage = async (req, res, next) => {
       try {
         await fs.unlink(req.file.path);
       } catch (e) {
-        console.warn("⚠️ Could not delete uploaded file:", e.message);
+        console.warn("Could not delete uploaded file:", e.message);
       }
     }
     req.flash("error", "An unexpected error occurred. Please try again.");
