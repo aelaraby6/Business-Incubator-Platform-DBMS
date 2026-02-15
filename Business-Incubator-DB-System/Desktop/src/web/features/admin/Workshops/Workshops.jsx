@@ -63,9 +63,16 @@ const Workshops = () => {
     }
   };
 
-  const handleViewDetails = (workshop) => {
-    setSelectedWorkshop(workshop);
-    setShowDetailsModal(true);
+  const handleViewDetails = async (workshop) => {
+    try {
+      // Fetch full workshop details including enrollments
+      const fullWorkshop = await workshopService.getWorkshop(workshop.id);
+      setSelectedWorkshop(fullWorkshop);
+      setShowDetailsModal(true);
+    } catch (error) {
+      console.error("Error fetching workshop details:", error);
+      alert("❌ Error fetching workshop details. Please try again.");
+    }
   };
 
   const handleExportReport = async (type) => {
@@ -170,7 +177,10 @@ const Workshops = () => {
         <div className="bg-white border-4 border-gray-900 p-6 shadow-[4px_4px_0_0_#111827] mb-8">
           <div className="flex flex-col xl:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                size={20}
+              />
               <input
                 type="text"
                 placeholder="Search workshops..."
@@ -214,7 +224,11 @@ const Workshops = () => {
         {/* Table Section */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 bg-white border-4 border-gray-900 shadow-[4px_4px_0_0_#111827]">
-            <Loader2 className="text-blue-900 animate-spin mb-4" size={48} strokeWidth={3} />
+            <Loader2
+              className="text-blue-900 animate-spin mb-4"
+              size={48}
+              strokeWidth={3}
+            />
             <p className="text-gray-700 text-xl font-bold uppercase">
               Loading workshops...
             </p>
