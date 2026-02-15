@@ -1,4 +1,4 @@
-import pool from "../config/database.js";
+import pool from "../config/database.cjs";
 
 const VALID_RESOURCE_TYPES = ["workspace", "meeting_room", "equipment"];
 const VALID_BOOKING_STATUSES = ["pending", "approved", "rejected"];
