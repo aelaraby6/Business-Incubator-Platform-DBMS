@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { login } from "../../services/authService.js";
 
-
-
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +17,6 @@ export default function LoginPage() {
       const response = await login({ email, password });
 
       if (response?.success) {
-
         setSuccess("Login successful! Welcome back.");
         setEmail("");
         setPassword("");
@@ -27,10 +24,9 @@ export default function LoginPage() {
         sessionStorage.setItem("isLoggedIn", "true");
         sessionStorage.setItem("user", JSON.stringify(response.user));
         sessionStorage.setItem("loginTime", new Date().toISOString());
-        // Redirect to dashboard after a short delay
-        // setTimeout(() => {
-        //   window.location.href = "/dashboard"; // Adjust this path as needed
-        // }, 1500);
+
+        // Trigger auth change event for App.jsx to pick up
+        window.dispatchEvent(new Event("auth-change"));
       } else {
         setError(response?.message || "Login failed. Please try again.");
       }
@@ -40,7 +36,6 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
-
 
   return (
     <div className="bg-white h-screen w-screen flex flex-col relative overflow-hidden">
