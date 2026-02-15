@@ -1,4 +1,4 @@
-import pkg from "pg";
+const pkg = require("pg");
 const { Pool } = pkg;
 const pool = new Pool({
   user: "incubator_user",
@@ -8,4 +8,5 @@ const pool = new Pool({
   port: 5432,
 });
 console.log("Database connection pool created successfully");
-export default pool;
+
+module.exports = pool;
