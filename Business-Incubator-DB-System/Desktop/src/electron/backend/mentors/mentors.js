@@ -1,8 +1,8 @@
-import pool from "../config/database.js";
+import pool from "../config/database.cjs";
 
 const VALID_STATUSES = ["active", "inactive"];
 
-// 1. Get All Mentors 
+// 1. Get All Mentors
 export const getAllMentors = async () => {
   try {
     const res = await pool.query(`
@@ -28,7 +28,7 @@ export const getAllMentors = async () => {
   }
 };
 
-// 2. Add New Mentor 
+// 2. Add New Mentor
 export const addMentor = async (data) => {
   const {
     name,
@@ -86,7 +86,7 @@ export const addMentor = async (data) => {
   }
 };
 
-// 3. Delete Mentor 
+// 3. Delete Mentor
 export const deleteMentor = async (id) => {
   const client = await pool.connect();
   try {
@@ -121,7 +121,7 @@ export const deleteMentor = async (id) => {
   }
 };
 
-// 4. Update Mentor 
+// 4. Update Mentor
 export const updateMentor = async (id, data) => {
   const { name, email, phone, expertise, status } = data;
 
