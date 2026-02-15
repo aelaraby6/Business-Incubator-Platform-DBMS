@@ -1,8 +1,8 @@
-import db from '../config/database.js';
-import PDFDocument from 'pdfkit';
-import fs from 'fs';
-import path from 'path';
-import { app } from 'electron';
+import db from "../config/database.cjs";
+import PDFDocument from "pdfkit";
+import fs from "fs";
+import path from "path";
+import { app } from "electron";
 
 // Get all workshops
 export const getAllWorkshops = async () => {
@@ -26,12 +26,12 @@ export const getAllWorkshops = async () => {
       GROUP BY w.id
       ORDER BY w.created_at DESC
     `;
-    
+
     const result = await db.query(query);
-    console.log('Database returned workshops:', result.rows);
+    console.log("Database returned workshops:", result.rows);
     return result.rows;
   } catch (error) {
-    console.error('Error fetching workshops:', error);
+    console.error("Error fetching workshops:", error);
     throw error;
   }
 };
@@ -56,13 +56,33 @@ export const getWorkshop = async (id) => {
       FROM workshops w
       LEFT JOIN workshop_enrollments we ON w.id = we.workshop_id
       WHERE w.id = $1
-      GROUP BY w.id
+      GROUP BY w.id, w.title, w.description, w.mentor_name, w.location, w.start_date, w.end_date, w.start_time, w.end_time, w.capacity, w.status, w.created_at
     `;
-    
+
     const workshop = await db.query(workshopQuery, [id]);
-    
+
     if (workshop.rows.length === 0) {
-      throw new Error('Workshop not found');
+      throw new Error("Workshop not found");
+    }
+
+    console.log(`Workshop ${id} data:`, workshop.rows[0]);
+
+    // Diagnostic: Check raw data in workshop_enrollments
+    const diagnosticQuery = `
+      SELECT * FROM workshop_enrollments WHERE workshop_id = $1
+    `;
+    const diagnosticResult = await db.query(diagnosticQuery, [id]);
+    console.log(
+      `Diagnostic - Raw enrollments for workshop ${id}:`,
+      diagnosticResult.rows,
+    );
+
+    // Log column names
+    if (diagnosticResult.rows.length > 0) {
+      console.log(
+        `Column names in enrollments:`,
+        Object.keys(diagnosticResult.rows[0]),
+      );
     }
 
     // Get enrollments details
@@ -72,22 +92,28 @@ export const getWorkshop = async (id) => {
              we.entrepreneur_email as "entrepreneurEmail", 
              we.enrollment_date as "enrollmentDate", 
              we.attended,
-             wf.rating as "feedbackRating",
-             wf.comment as "feedbackComment"
+             we.feedback_rating as "feedbackRating",
+             we.feedback_comment as "feedbackComment"
       FROM workshop_enrollments we
-      LEFT JOIN workshop_feedback wf ON we.id = wf.enrollment_id
       WHERE we.workshop_id = $1
       ORDER BY we.enrollment_date DESC
     `;
-    
+
+    console.log(`Querying enrollments for workshop ${id}`);
     const enrollments = await db.query(enrollmentsQuery, [id]);
-    
+
+    console.log(`Workshop ${id} enrollments count:`, enrollments.rows.length);
+    console.log(
+      `Workshop ${id} enrollments JSON:`,
+      JSON.stringify(enrollments.rows, null, 2),
+    );
+
     return {
       ...workshop.rows[0],
-      enrollments: enrollments.rows,
+      enrollments: enrollments.rows || [],
     };
   } catch (error) {
-    console.error('Error fetching workshop:', error);
+    console.error("Error fetching workshop:", error);
     throw error;
   }
 };
@@ -105,11 +131,11 @@ export const createWorkshop = async (workshopData) => {
       endTime,
       capacity,
       location,
-      status = 'scheduled',
+      status = "scheduled",
     } = workshopData;
 
     if (!title || !description || !mentor || !capacity || !location) {
-      throw new Error('All required fields must be provided');
+      throw new Error("All required fields must be provided");
     }
 
     const query = `
@@ -134,7 +160,7 @@ export const createWorkshop = async (workshopData) => {
 
     return result.rows[0];
   } catch (error) {
-    console.error('Error creating workshop:', error);
+    console.error("Error creating workshop:", error);
     throw error;
   }
 };
@@ -189,7 +215,7 @@ export const updateWorkshop = async (id, workshopData) => {
 
     return result.rows[0];
   } catch (error) {
-    console.error('Error updating workshop:', error);
+    console.error("Error updating workshop:", error);
     throw error;
   }
 };
@@ -199,9 +225,9 @@ export const deleteWorkshop = async (id) => {
   try {
     const query = `DELETE FROM workshops WHERE id = $1 RETURNING *`;
     await db.query(query, [id]);
-    return { success: true, message: 'Workshop deleted successfully' };
+    return { success: true, message: "Workshop deleted successfully" };
   } catch (error) {
-    console.error('Error deleting workshop:', error);
+    console.error("Error deleting workshop:", error);
     throw error;
   }
 };
@@ -216,9 +242,9 @@ export const trackAttendance = async (enrollmentId, attended) => {
       RETURNING *
     `;
     await db.query(query, [attended, enrollmentId]);
-    return { success: true, message: 'Attendance recorded' };
+    return { success: true, message: "Attendance recorded" };
   } catch (error) {
-    console.error('Error tracking attendance:', error);
+    console.error("Error tracking attendance:", error);
     throw error;
   }
 };
@@ -245,9 +271,17 @@ export const submitFeedback = async (enrollmentId, feedbackData) => {
         RETURNING *
       `;
 
-      const result = await db.query(updateQuery, [rating, comment, enrollmentId]);
+      const result = await db.query(updateQuery, [
+        rating,
+        comment,
+        enrollmentId,
+      ]);
 
-      return { success: true, message: 'Feedback updated', data: result.rows[0] };
+      return {
+        success: true,
+        message: "Feedback updated",
+        data: result.rows[0],
+      };
     }
 
     // Insert new feedback
@@ -266,9 +300,13 @@ export const submitFeedback = async (enrollmentId, feedbackData) => {
       comment,
     ]);
 
-    return { success: true, message: 'Feedback submitted', data: result.rows[0] };
+    return {
+      success: true,
+      message: "Feedback submitted",
+      data: result.rows[0],
+    };
   } catch (error) {
-    console.error('Error submitting feedback:', error);
+    console.error("Error submitting feedback:", error);
     throw error;
   }
 };
@@ -294,7 +332,7 @@ export const getWorkshopEnrollments = async (workshopId) => {
 
     return result.rows;
   } catch (error) {
-    console.error('Error fetching enrollments:', error);
+    console.error("Error fetching enrollments:", error);
     throw error;
   }
 };
@@ -319,7 +357,7 @@ export const getAttendanceReport = async () => {
 
     return result.rows;
   } catch (error) {
-    console.error('Error fetching attendance report:', error);
+    console.error("Error fetching attendance report:", error);
     throw error;
   }
 };
@@ -345,7 +383,7 @@ export const getFeedbackReport = async () => {
 
     return result.rows;
   } catch (error) {
-    console.error('Error fetching feedback report:', error);
+    console.error("Error fetching feedback report:", error);
     throw error;
   }
 };
@@ -370,21 +408,24 @@ export const exportAttendanceReportPDF = async () => {
     // Create PDF
     const doc = new PDFDocument();
 
-    const downloadsPath = app.getPath('downloads');
-    const fileName = `attendance-report-${new Date().toISOString().split('T')[0]}.pdf`;
+    const downloadsPath = app.getPath("downloads");
+    const fileName = `attendance-report-${new Date().toISOString().split("T")[0]}.pdf`;
     const filePath = path.join(downloadsPath, fileName);
 
     const writeStream = fs.createWriteStream(filePath);
     doc.pipe(writeStream);
 
     // Title
-    doc.fontSize(24).font('Helvetica-Bold').text('Workshop Attendance Report', {
-      align: 'center',
+    doc.fontSize(24).font("Helvetica-Bold").text("Workshop Attendance Report", {
+      align: "center",
     });
 
-    doc.fontSize(12).font('Helvetica').text(`Generated: ${new Date().toLocaleDateString()}`, {
-      align: 'center',
-    });
+    doc
+      .fontSize(12)
+      .font("Helvetica")
+      .text(`Generated: ${new Date().toLocaleDateString()}`, {
+        align: "center",
+      });
 
     doc.moveDown(1);
 
@@ -396,16 +437,19 @@ export const exportAttendanceReportPDF = async () => {
     const col4X = 350;
     const col5X = 450;
 
-    doc.font('Helvetica-Bold').fontSize(10);
-    doc.text('Workshop', col1X, tableTop);
-    doc.text('Mentor', col2X, tableTop);
-    doc.text('Enrolled', col3X, tableTop);
-    doc.text('Attended', col4X, tableTop);
-    doc.text('Rate %', col5X, tableTop);
+    doc.font("Helvetica-Bold").fontSize(10);
+    doc.text("Workshop", col1X, tableTop);
+    doc.text("Mentor", col2X, tableTop);
+    doc.text("Enrolled", col3X, tableTop);
+    doc.text("Attended", col4X, tableTop);
+    doc.text("Rate %", col5X, tableTop);
 
-    doc.moveTo(50, tableTop + 15).lineTo(550, tableTop + 15).stroke();
+    doc
+      .moveTo(50, tableTop + 15)
+      .lineTo(550, tableTop + 15)
+      .stroke();
 
-    doc.font('Helvetica').fontSize(9);
+    doc.font("Helvetica").fontSize(9);
     let currentY = tableTop + 20;
 
     data.rows.forEach((row) => {
@@ -414,25 +458,25 @@ export const exportAttendanceReportPDF = async () => {
         currentY = 50;
       }
 
-      doc.text((row.title || '').substring(0, 15), col1X, currentY);
-      doc.text((row.mentor_name || '-').substring(0, 12), col2X, currentY);
+      doc.text((row.title || "").substring(0, 15), col1X, currentY);
+      doc.text((row.mentor_name || "-").substring(0, 12), col2X, currentY);
       doc.text(row.totalEnrolled.toString(), col3X, currentY);
       doc.text(row.totalAttended.toString(), col4X, currentY);
-      doc.text((row.attendanceRate || 0).toString() + '%', col5X, currentY);
+      doc.text((row.attendanceRate || 0).toString() + "%", col5X, currentY);
 
       currentY += 15;
     });
 
     // Wait for PDF to finish writing
     await new Promise((resolve, reject) => {
-      writeStream.on('finish', resolve);
-      writeStream.on('error', reject);
+      writeStream.on("finish", resolve);
+      writeStream.on("error", reject);
       doc.end();
     });
 
     return filePath;
   } catch (error) {
-    console.error('Error exporting attendance report:', error);
+    console.error("Error exporting attendance report:", error);
     throw error;
   }
 };
@@ -459,21 +503,24 @@ export const exportFeedbackReportPDF = async () => {
     // Create PDF
     const doc = new PDFDocument();
 
-    const downloadsPath = app.getPath('downloads');
-    const fileName = `feedback-report-${new Date().toISOString().split('T')[0]}.pdf`;
+    const downloadsPath = app.getPath("downloads");
+    const fileName = `feedback-report-${new Date().toISOString().split("T")[0]}.pdf`;
     const filePath = path.join(downloadsPath, fileName);
 
     const writeStream = fs.createWriteStream(filePath);
     doc.pipe(writeStream);
 
     // Title
-    doc.fontSize(24).font('Helvetica-Bold').text('Workshop Feedback Report', {
-      align: 'center',
+    doc.fontSize(24).font("Helvetica-Bold").text("Workshop Feedback Report", {
+      align: "center",
     });
 
-    doc.fontSize(12).font('Helvetica').text(`Generated: ${new Date().toLocaleDateString()}`, {
-      align: 'center',
-    });
+    doc
+      .fontSize(12)
+      .font("Helvetica")
+      .text(`Generated: ${new Date().toLocaleDateString()}`, {
+        align: "center",
+      });
 
     doc.moveDown(1);
 
@@ -485,16 +532,19 @@ export const exportFeedbackReportPDF = async () => {
     const col4X = 350;
     const col5X = 450;
 
-    doc.font('Helvetica-Bold').fontSize(10);
-    doc.text('Workshop', col1X, tableTop);
-    doc.text('Mentor', col2X, tableTop);
-    doc.text('Feedback Count', col3X, tableTop);
-    doc.text('Avg Rating', col4X, tableTop);
-    doc.text('Positive', col5X, tableTop);
+    doc.font("Helvetica-Bold").fontSize(10);
+    doc.text("Workshop", col1X, tableTop);
+    doc.text("Mentor", col2X, tableTop);
+    doc.text("Feedback Count", col3X, tableTop);
+    doc.text("Avg Rating", col4X, tableTop);
+    doc.text("Positive", col5X, tableTop);
 
-    doc.moveTo(50, tableTop + 15).lineTo(550, tableTop + 15).stroke();
+    doc
+      .moveTo(50, tableTop + 15)
+      .lineTo(550, tableTop + 15)
+      .stroke();
 
-    doc.font('Helvetica').fontSize(9);
+    doc.font("Helvetica").fontSize(9);
     let currentY = tableTop + 20;
 
     data.rows.forEach((row) => {
@@ -503,10 +553,10 @@ export const exportFeedbackReportPDF = async () => {
         currentY = 50;
       }
 
-      doc.text((row.title || '').substring(0, 15), col1X, currentY);
-      doc.text((row.mentor_name || '-').substring(0, 12), col2X, currentY);
+      doc.text((row.title || "").substring(0, 15), col1X, currentY);
+      doc.text((row.mentor_name || "-").substring(0, 12), col2X, currentY);
       doc.text(row.totalFeedback.toString(), col3X, currentY);
-      doc.text(row.averageRating.toString() + '⭐', col4X, currentY);
+      doc.text(row.averageRating.toString() + "⭐", col4X, currentY);
       doc.text(row.positiveFeedback.toString(), col5X, currentY);
 
       currentY += 15;
@@ -514,14 +564,14 @@ export const exportFeedbackReportPDF = async () => {
 
     // Wait for PDF to finish writing
     await new Promise((resolve, reject) => {
-      writeStream.on('finish', resolve);
-      writeStream.on('error', reject);
+      writeStream.on("finish", resolve);
+      writeStream.on("error", reject);
       doc.end();
     });
 
     return filePath;
   } catch (error) {
-    console.error('Error exporting feedback report:', error);
+    console.error("Error exporting feedback report:", error);
     throw error;
   }
 };
