@@ -80,213 +80,209 @@ const AddWorkshopForm = ({ onSubmit, onCancel }) => {
     }
   };
 
-  // Helper for input classes
-  const inputClass = (error) => `
-        w-full pl-11 pr-4 py-3 border rounded-xl outline-none transition-all font-medium text-gray-700 bg-white
-        ${error ? "border-red-300 focus:ring-2 focus:ring-red-200" : "border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"}
-    `;
+  // Shared Styles
+  const labelClasses =
+    "block text-xs font-black uppercase text-gray-700 mb-1 ml-1 tracking-widest";
+  const inputContainerClasses = (hasError) =>
+    `flex border-2 ${hasError ? "border-red-600" : "border-black"} bg-white transition-colors focus-within:bg-blue-50`;
+  const iconBoxClasses =
+    "w-12 bg-gray-100 border-r-2 border-black flex items-center justify-center flex-shrink-0";
+  const inputFieldClasses =
+    "w-full px-4 py-3 bg-transparent font-bold text-gray-900 placeholder-gray-500 outline-none uppercase disabled:bg-gray-100";
 
   return (
     <form onSubmit={handleSubmit} className="h-full flex flex-col bg-white">
       {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
-        {/* Title & Description */}
-        <div className="space-y-5">
+      <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
+        {/* Section 1: Basic Info */}
+        <div className="space-y-6">
+          <h3 className="text-lg font-black text-blue-950 uppercase border-b-4 border-blue-950 pb-2 inline-block">
+            Workshop Details
+          </h3>
+
+          {/* Title */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-              Workshop Title
-            </label>
-            <div className="relative">
-              <Type
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
+            <label className={labelClasses}>Workshop Title</label>
+            <div className={inputContainerClasses(errors.title)}>
+              <div className={iconBoxClasses}>
+                <Type size={20} strokeWidth={2.5} />
+              </div>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                placeholder="e.g., Advanced React Patterns"
-                className={inputClass(errors.title)}
+                placeholder="E.G., ADVANCED REACT PATTERNS"
+                className={inputFieldClasses}
               />
             </div>
             {errors.title && (
-              <p className="text-red-500 text-xs mt-1 ml-1">{errors.title}</p>
+              <p className="text-red-600 text-xs font-bold mt-1 uppercase">
+                {errors.title}
+              </p>
             )}
           </div>
 
+          {/* Description */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-              Description
-            </label>
-            <div className="relative">
-              <FileText
-                className="absolute left-4 top-4 text-gray-400"
-                size={18}
-              />
+            <label className={labelClasses}>Description</label>
+            <div className={inputContainerClasses(errors.description)}>
+              <div className={`${iconBoxClasses} h-auto`}>
+                <FileText size={20} strokeWidth={2.5} />
+              </div>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                placeholder="Describe the workshop content..."
+                placeholder="DESCRIBE THE WORKSHOP CONTENT..."
                 rows="3"
-                className={`${inputClass(errors.description)} pt-3 pl-11 resize-none`}
+                className={`${inputFieldClasses} resize-none`}
               />
             </div>
             {errors.description && (
-              <p className="text-red-500 text-xs mt-1 ml-1">
+              <p className="text-red-600 text-xs font-bold mt-1 uppercase">
                 {errors.description}
               </p>
             )}
           </div>
         </div>
 
-        {/* Mentor & Location */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-              Assigned Mentor
-            </label>
-            <div className="relative">
-              <User
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
-              <input
-                type="text"
-                name="mentor"
-                value={formData.mentor}
-                onChange={handleChange}
-                placeholder="e.g., John Doe"
-                className={inputClass(errors.mentor)}
-              />
-            </div>
-            {errors.mentor && (
-              <p className="text-red-500 text-xs mt-1 ml-1">{errors.mentor}</p>
-            )}
-          </div>
+        {/* Section 2: Logistics */}
+        <div className="space-y-6">
+          <h3 className="text-lg font-black text-blue-950 uppercase border-b-4 border-blue-950 pb-2 inline-block">
+            Logistics
+          </h3>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-              Location
-            </label>
-            <div className="relative">
-              <MapPin
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                placeholder="e.g., Room A"
-                className={inputClass(errors.location)}
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Mentor */}
+            <div>
+              <label className={labelClasses}>Assigned Mentor</label>
+              <div className={inputContainerClasses(errors.mentor)}>
+                <div className={iconBoxClasses}>
+                  <User size={20} strokeWidth={2.5} />
+                </div>
+                <input
+                  type="text"
+                  name="mentor"
+                  value={formData.mentor}
+                  onChange={handleChange}
+                  placeholder="E.G., JOHN DOE"
+                  className={inputFieldClasses}
+                />
+              </div>
+              {errors.mentor && (
+                <p className="text-red-600 text-xs font-bold mt-1 uppercase">
+                  {errors.mentor}
+                </p>
+              )}
             </div>
-            {errors.location && (
-              <p className="text-red-500 text-xs mt-1 ml-1">
-                {errors.location}
-              </p>
-            )}
+
+            {/* Location */}
+            <div>
+              <label className={labelClasses}>Location</label>
+              <div className={inputContainerClasses(errors.location)}>
+                <div className={iconBoxClasses}>
+                  <MapPin size={20} strokeWidth={2.5} />
+                </div>
+                <input
+                  type="text"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  placeholder="E.G., ROOM A"
+                  className={inputFieldClasses}
+                />
+              </div>
+              {errors.location && (
+                <p className="text-red-600 text-xs font-bold mt-1 uppercase">
+                  {errors.location}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Date & Time Grid */}
-        <div className="p-5 bg-gray-50 rounded-xl border border-gray-100">
-          <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">
-            Schedule
+        {/* Section 3: Schedule (Boxed) */}
+        <div className="border-4 border-black p-6 bg-blue-50 shadow-[4px_4px_0_0_#1e3a8a]">
+          <h3 className="text-sm font-black text-blue-900 uppercase mb-4 flex items-center gap-2">
+            <Calendar size={20} strokeWidth={2.5} /> Schedule Configuration
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Dates */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-                Start Date
-              </label>
-              <div className="relative">
-                <Calendar
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                  size={18}
-                />
+              <label className={labelClasses}>Start Date</label>
+              <div className={inputContainerClasses(errors.startDate)}>
+                <div className={iconBoxClasses}>
+                  <Calendar size={20} strokeWidth={2.5} />
+                </div>
                 <input
                   type="date"
                   name="startDate"
                   value={formData.startDate}
                   onChange={handleChange}
-                  className={inputClass(errors.startDate)}
+                  className={inputFieldClasses}
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-                End Date
-              </label>
-              <div className="relative">
-                <Calendar
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                  size={18}
-                />
+              <label className={labelClasses}>End Date</label>
+              <div className={inputContainerClasses(errors.endDate)}>
+                <div className={iconBoxClasses}>
+                  <Calendar size={20} strokeWidth={2.5} />
+                </div>
                 <input
                   type="date"
                   name="endDate"
                   value={formData.endDate}
                   onChange={handleChange}
-                  className={inputClass(errors.endDate)}
+                  className={inputFieldClasses}
                 />
               </div>
             </div>
 
             {/* Times */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-                Start Time
-              </label>
-              <div className="relative">
-                <Clock
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                  size={18}
-                />
+              <label className={labelClasses}>Start Time</label>
+              <div className={inputContainerClasses(errors.startTime)}>
+                <div className={iconBoxClasses}>
+                  <Clock size={20} strokeWidth={2.5} />
+                </div>
                 <input
                   type="time"
                   name="startTime"
                   value={formData.startTime}
                   onChange={handleChange}
-                  className={inputClass(errors.startTime)}
+                  className={inputFieldClasses}
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-                End Time
-              </label>
-              <div className="relative">
-                <Clock
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                  size={18}
-                />
+              <label className={labelClasses}>End Time</label>
+              <div className={inputContainerClasses(errors.endTime)}>
+                <div className={iconBoxClasses}>
+                  <Clock size={20} strokeWidth={2.5} />
+                </div>
                 <input
                   type="time"
                   name="endTime"
                   value={formData.endTime}
                   onChange={handleChange}
-                  className={inputClass(errors.endTime)}
+                  className={inputFieldClasses}
                 />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Capacity & Status */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Section 4: Settings */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-              Capacity
-            </label>
-            <div className="relative">
-              <Users
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
+            <label className={labelClasses}>Capacity</label>
+            <div className={inputContainerClasses(errors.capacity)}>
+              <div className={iconBoxClasses}>
+                <Users size={20} strokeWidth={2.5} />
+              </div>
               <input
                 type="number"
                 name="capacity"
@@ -294,29 +290,31 @@ const AddWorkshopForm = ({ onSubmit, onCancel }) => {
                 onChange={handleChange}
                 placeholder="50"
                 min="1"
-                className={inputClass(errors.capacity)}
+                className={inputFieldClasses}
               />
             </div>
+            {errors.capacity && (
+              <p className="text-red-600 text-xs font-bold mt-1 uppercase">
+                {errors.capacity}
+              </p>
+            )}
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-              Status
-            </label>
-            <div className="relative">
-              <Activity
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
+            <label className={labelClasses}>Status</label>
+            <div className={inputContainerClasses(null)}>
+              <div className={iconBoxClasses}>
+                <Activity size={20} strokeWidth={2.5} />
+              </div>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className={inputClass(null)}
+                className={`${inputFieldClasses} cursor-pointer`}
               >
-                <option value="scheduled">Scheduled</option>
-                <option value="ongoing">Ongoing</option>
-                <option value="completed">Completed</option>
+                <option value="scheduled">SCHEDULED</option>
+                <option value="ongoing">ONGOING</option>
+                <option value="completed">COMPLETED</option>
               </select>
             </div>
           </div>
@@ -324,19 +322,19 @@ const AddWorkshopForm = ({ onSubmit, onCancel }) => {
       </div>
 
       {/* Footer Actions */}
-      <div className="p-6 border-t border-gray-100 bg-white flex gap-3">
+      <div className="p-6 border-t-4 border-black bg-gray-50 flex gap-4">
         <button
           type="button"
           onClick={onCancel}
-          className="flex-1 py-3.5 px-6 border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+          className="flex-1 py-4 px-6 border-2 border-black text-black font-black uppercase hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
         >
-          <X size={20} /> Cancel
+          <X size={20} strokeWidth={3} /> Cancel
         </button>
         <button
           type="submit"
-          className="flex-[2] py-3.5 px-6 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all flex items-center justify-center gap-2"
+          className="flex-[2] py-4 px-6 bg-blue-950 text-white border-2 border-black font-black uppercase shadow-[4px_4px_0_0_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center justify-center gap-2"
         >
-          <Check size={20} /> Create Workshop
+          <Check size={20} strokeWidth={3} /> Create Workshop
         </button>
       </div>
     </form>

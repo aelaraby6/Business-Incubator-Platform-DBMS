@@ -21,12 +21,15 @@ import {
   addResource,
   getPendingBookings,
   updateBookingStatus,
+  deleteResource,
   getResourceStats,
 } from "./backend/resources/resources.js";
-// import {
-//   getAllMentors,
-//   deleteMentor
-// } from './backend/mentors/mentors.js';
+import {
+  getAllMentors,
+  addMentor,
+  deleteMentor,
+  updateMentor,
+} from "./backend/mentors/mentors.js";
 import {
   getAllProjects,
   getProjectById,
@@ -115,35 +118,39 @@ app.on("ready", () => {
     return await exportFeedbackReportPDF();
   });
 
-  // Resources IPC Handlers
-  ipcMain.handle("resources:get-all", async () => {
-    return await getAllResources();
+  //  Resources Handlers 
+  ipcMain.handle("resources:get-all", async () => await getAllResources());
+
+  ipcMain.handle(
+    "resources:add",
+    async (_event, data) => await addResource(data),
+  );
+
+  ipcMain.handle("resources:delete", async (_, id) => await deleteResource(id));
+
+  ipcMain.handle("resources:get-stats", async () => await getResourceStats());
+
+  ipcMain.handle(
+    "bookings:get-pending",
+    async () => await getPendingBookings(),
+  );
+
+  ipcMain.handle("bookings:update-status", async (_event, { id, status }) => {
+    return await updateBookingStatus(id, status);
   });
 
-  ipcMain.handle("resources:add", async (_event, data) => {
-    return await addResource(data);
-  });
 
-  ipcMain.handle("bookings:get-pending", async () => {
-    return await getPendingBookings();
-  });
+  //  Mentors Handlers 
+  ipcMain.handle("mentors:get-all", async () => await getAllMentors());
 
-  ipcMain.handle("bookings:update-status", async (_event, data) => {
-    return await updateBookingStatus(data);
-  });
+  ipcMain.handle("mentors:add", async (_, data) => await addMentor(data));
 
-  ipcMain.handle("resources:get-stats", async () => {
-    return await getResourceStats();
-  });
+  ipcMain.handle("mentors:delete", async (_, id) => await deleteMentor(id));
 
-  // // Mentors IPC Handlers
-  // ipcMain.handle('mentors:get-all', async () => {
-  //   return await getAllMentors();
-  // });
-
-  // ipcMain.handle('mentors:delete', async (_event, id) => {
-  //   return await deleteMentor(id);
-  // });
+  ipcMain.handle(
+    "mentors:update",
+    async (_, { id, data }) => await updateMentor(id, data),
+  );
 
   // Projects IPC Handlers
   ipcMain.handle("projects:getAll", async () => {

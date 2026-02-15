@@ -8,6 +8,8 @@ import {
   LayoutGrid,
   Monitor,
   Armchair,
+  AlertCircle,
+  Loader2,
 } from "lucide-react";
 
 const AddResourceForm = ({ onClose, onSuccess }) => {
@@ -18,94 +20,116 @@ const AddResourceForm = ({ onClose, onSuccess }) => {
     location: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const payload = {
+      ...formData,
+      capacity: Number(formData.capacity),
+    };
+
     try {
-      await window.electron.invoke("resources:add", formData);
+      await window.electron.invoke("resources:add", payload);
       onSuccess();
-    } catch (error) {
-      console.error("Failed to add resource", error);
+    } catch (err) {
+      console.error("Failed to add resource", err);
+      setError("Failed to add resource. Please check your inputs.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
-    <div className="bg-white w-full max-w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200">
+  // Shared Styles
+  const inputClasses =
+    "w-full pl-4 pr-4 py-3 border-2 border-black bg-white focus:outline-none focus:bg-blue-50 font-bold text-gray-900 placeholder-gray-500 transition-all uppercase disabled:bg-gray-200";
+  const labelClasses =
+    "block text-xs font-black uppercase text-gray-700 mb-1 ml-1 tracking-widest";
+  const iconContainerClasses =
+    "flex items-center justify-center border-r-2 border-black bg-gray-100 w-12";
 
-      {/* Form Body */}
+  return (
+    <div className="bg-white w-full h-full flex flex-col">
       <form
         onSubmit={handleSubmit}
-        className="p-6 md:p-8 space-y-6 overflow-y-auto bg-gray-50/50"
+        className="flex-1 p-6 space-y-8 overflow-y-auto"
       >
-        {/* Resource Name */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-            Resource Name
-          </label>
-          <div className="relative">
-            <Box
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-              size={18}
-            />
-            <input
-              required
-              className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all font-medium text-gray-700 bg-white"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              placeholder="e.g. Conference Room A"
-            />
+        {error && (
+          <div className="bg-red-100 border-2 border-red-600 text-red-900 p-4 flex items-center gap-3 font-bold uppercase shadow-[4px_4px_0_0_#dc2626]">
+            <AlertCircle size={24} />
+            <span>{error}</span>
           </div>
-        </div>
+        )}
 
-        {/* Type Selection */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-            Resource Type
-          </label>
-          <div className="grid grid-cols-3 gap-3">
-            <button
-              type="button"
-              onClick={() => setFormData({ ...formData, type: "workspace" })}
-              className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all ${formData.type === "workspace" ? "bg-orange-50 border-orange-200 text-orange-700" : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50"}`}
-            >
-              <LayoutGrid size={24} className="mb-2" />
-              <span className="text-xs font-bold">Workspace</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setFormData({ ...formData, type: "meeting_room" })}
-              className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all ${formData.type === "meeting_room" ? "bg-orange-50 border-orange-200 text-orange-700" : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50"}`}
-            >
-              <Armchair size={24} className="mb-2" />
-              <span className="text-xs font-bold">Meeting Room</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setFormData({ ...formData, type: "equipment" })}
-              className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all ${formData.type === "equipment" ? "bg-orange-50 border-orange-200 text-orange-700" : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50"}`}
-            >
-              <Monitor size={24} className="mb-2" />
-              <span className="text-xs font-bold">Equipment</span>
-            </button>
-          </div>
-        </div>
+        <div className="space-y-5">
+          <h3 className="text-lg font-black text-blue-950 uppercase border-b-4 border-blue-950 pb-2 inline-block">
+            Resource Details
+          </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* Capacity */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-              Capacity (Persons)
-            </label>
-            <div className="relative">
-              <Users
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
+            <label className={labelClasses}>Resource Name</label>
+            <div className="flex border-2 border-black">
+              <div className={iconContainerClasses}>
+                <Box className="text-black" size={20} strokeWidth={2.5} />
+              </div>
+              <input
+                required
+                disabled={loading}
+                className={inputClasses}
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                placeholder="E.G. CONFERENCE ROOM A"
               />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label className={labelClasses}>Resource Type</label>
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              { id: "workspace", icon: LayoutGrid, label: "Workspace" },
+              { id: "meeting_room", icon: Armchair, label: "Room" },
+              { id: "equipment", icon: Monitor, label: "Equipment" },
+            ].map((type) => (
+              <button
+                key={type.id}
+                type="button"
+                disabled={loading}
+                onClick={() => setFormData({ ...formData, type: type.id })}
+                className={`flex flex-col items-center justify-center p-4 border-2 border-black transition-all ${
+                  formData.type === type.id
+                    ? "bg-blue-950 text-white shadow-[4px_4px_0_0_black] translate-x-[-2px] translate-y-[-2px]"
+                    : "bg-white text-gray-900 hover:bg-gray-100"
+                }`}
+              >
+                <type.icon size={28} strokeWidth={2.5} className="mb-2" />
+                <span className="text-xs font-black uppercase tracking-wider">
+                  {type.label}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className={labelClasses}>Capacity (Persons)</label>
+            <div className="flex border-2 border-black">
+              <div className={iconContainerClasses}>
+                <Users className="text-black" size={20} strokeWidth={2.5} />
+              </div>
               <input
                 type="number"
                 min="1"
-                className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all font-medium text-gray-700 bg-white"
+                disabled={loading}
+                className={inputClasses}
                 value={formData.capacity}
                 onChange={(e) =>
                   setFormData({ ...formData, capacity: e.target.value })
@@ -114,38 +138,49 @@ const AddResourceForm = ({ onClose, onSuccess }) => {
             </div>
           </div>
 
-          {/* Location */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">
-              Location
-            </label>
-            <div className="relative">
-              <MapPin
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
+            <label className={labelClasses}>Location</label>
+            <div className="flex border-2 border-black">
+              <div className={iconContainerClasses}>
+                <MapPin className="text-black" size={20} strokeWidth={2.5} />
+              </div>
               <input
                 required
-                className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all font-medium text-gray-700 bg-white"
+                disabled={loading}
+                className={inputClasses}
                 value={formData.location}
                 onChange={(e) =>
                   setFormData({ ...formData, location: e.target.value })
                 }
-                placeholder="e.g. Floor 2"
+                placeholder="E.G. FLOOR 2"
               />
             </div>
           </div>
         </div>
       </form>
 
-      {/* Footer / Actions */}
-      <div className="p-6 border-t border-gray-100 bg-white">
+      <div className="p-6 border-t-4 border-black bg-gray-50 flex gap-4">
         <button
-          onClick={handleSubmit}
-          className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-orange-200 transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5"
+          type="button"
+          onClick={onClose}
+          disabled={loading}
+          className="flex-1 bg-white hover:bg-gray-100 text-black font-black uppercase text-lg py-4 border-2 border-black transition-all"
         >
-          <Save size={20} />
-          Save Resource
+          Cancel
+        </button>
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          disabled={loading}
+          className={`flex-[2] text-white font-black uppercase text-lg py-4 border-2 border-black shadow-[4px_4px_0_0_black] flex items-center justify-center gap-3 transition-all
+                        ${loading ? "bg-gray-400 cursor-not-allowed shadow-none translate-x-[2px] translate-y-[2px]" : "bg-blue-950 hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]"}`}
+        >
+          {loading ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            <Save size={24} strokeWidth={3} />
+          )}
+          {loading ? "Saving..." : "Save Resource"}
         </button>
       </div>
     </div>
