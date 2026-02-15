@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+<body class="bg-[#FFFDF5] flex flex-col min-h-screen">
+    <%- include('../partials/header.ejs') %>
+    <main class="flex-grow">
+        <div class="container mx-auto px-4 py-16">
+            <a href="/v1/workshop" class="text-indigo-700 font-bold hover:underline mb-6 inline-flex items-center gap-2">
+                <i class="fas fa-arrow-left"></i> Back to Workshops
+            </a>
+            <!-- Workshop Header -->
+            <div class="bg-white border-4 border-black rounded-xl shadow-neo p-8 mb-8">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h1 class="text-5xl font-black text-black mb-2 font-display"><%= workshop.title %></h1>
+                        <div class="flex gap-4 items-center flex-wrap">
+                            <span class="bg-indigo-700 text-white font-bold px-4 py-2 uppercase tracking-wider text-sm"><%= workshop.status || 'General' %></span>
+                            <span class="text-lg font-bold text-gray-700">
+                                <i class="fas fa-users text-indigo-700 mr-2"></i><%= workshop.enrolled_count || 0 %>/<%= workshop.capacity || 30 %> Enrolled
+                            </span>
+                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold
+                                <%= workshop.status === 'active' ? 'bg-green-100 border-2 border-green-800 text-green-800' : 
+                                    workshop.status === 'completed' ? 'bg-gray-100 border-2 border-gray-800 text-gray-800' : 
+                                    'bg-blue-100 border-2 border-blue-800 text-blue-800' %>">
+                                <span class="w-2 h-2 rounded-full <%= workshop.status === 'active' ? 'bg-green-600' : 'bg-gray-600' %> <%= workshop.status === 'active' ? 'animate-pulse' : '' %>"></span>
+                                <%= workshop.status.charAt(0).toUpperCase() + workshop.status.slice(1) %>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Enroll Button -->
+                    <% if (user) { %>
+                        <% if (isEnrolled) { %>
+                            <button id="enrollBtn" class="bg-red-600 hover:bg-red-700 text-white font-black px-8 py-3 rounded-lg transition duration-200 flex items-center gap-2 shadow-neo border-2 border-red-800">
+                                <i class="fas fa-times-circle"></i> Unenroll
+                            </button>
+                        <% } else { %>
+                            <button id="enrollBtn" class="bg-green-600 hover:bg-green-700 text-white font-black px-8 py-3 rounded-lg transition duration-200 flex items-center gap-2 shadow-neo border-2 border-green-800">
+                                <i class="fas fa-check-circle"></i> Enroll Now
+                            </button>
+                        <% } %>
+                    <% } else { %>
+                        <a href="/auth/login" class="bg-indigo-700 hover:bg-indigo-800 text-white font-black px-8 py-3 rounded-lg transition duration-200 flex items-center gap-2 shadow-neo border-2 border-indigo-900">
+                            <i class="fas fa-sign-in-alt"></i> Login to Enroll
+                        </a>
+                    <% } %>
+                </div>
+
+                <p class="text-xl text-gray-700 mb-6 font-medium leading-relaxed"><%= workshop.description %></p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">Instructor</h3>
+                        <p class="text-xl font-bold text-black"><%= workshop.mentor_name %></p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">Location</h3>
+                        <p class="text-xl font-bold text-black"><i class="fas fa-map-marker-alt text-red-600 mr-2"></i><%= workshop.location %></p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">Date</h3>
+                        <p class="text-xl font-bold text-black"><i class="fas fa-calendar text-indigo-700 mr-2"></i>
+                            <% if (workshop.start_date && workshop.end_date) { %>
+                                <%= new Date(workshop.start_date).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'}) %> 
+                                to <%= new Date(workshop.end_date).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'}) %>
+                            <% } else { %>
+                                TBD
+                            <% } %>
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">Time</h3>
+                        <p class="text-xl font-bold text-black"><i class="fas fa-clock text-amber-600 mr-2"></i>
+                            <% if (workshop.start_time && workshop.end_time) { %>
+                                <%= workshop.start_time %> - <%= workshop.end_time %>
+                            <% } else { %>
+                                TBD
+                            <% } %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <%- include('../partials/footer.ejs') %>
+    
+    <script>
+        // Enrollment functionality
+        document.getElementById('enrollBtn')?.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            const workshopId = '<%= workshop.id %>';
+            const endpoint = isCurrentlyEnrolled ? 'DELETE' : 'POST';
+            const method = isCurrentlyEnrolled ? 'DELETE' : 'POST';
+            
+            try {
+                // Show loading state
+                const btn = this;
+                const originalText = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                };
+                
+                const response = await fetch(`/v1/workshop/${workshopId}/attend`, options);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Show success message
+                    alert(data.message || 'Success!');
+                    // Reload the page to update the enrollment status
+                    window.location.reload();
+                } else {
+                    alert(data.message || 'Something went wrong. Please try again.');
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+                location.reload();
+            }
+        });
+    </script>
+</body>
+</html>
