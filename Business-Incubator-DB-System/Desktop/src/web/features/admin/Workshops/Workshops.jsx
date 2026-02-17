@@ -31,10 +31,24 @@ const Workshops = () => {
   const fetchWorkshops = async () => {
     setLoading(true);
     try {
+      console.log("📡 Fetching workshops...");
       const data = await window.electron.invoke("workshops:get-all");
-      setWorkshops(data || []);
+      console.log("📦 Received data:", data);
+      console.log("📦 Data type:", typeof data);
+      console.log("📦 Data is array:", Array.isArray(data));
+      console.log("📦 Data length:", Array.isArray(data) ? data.length : 0);
+
+      if (!Array.isArray(data)) {
+        console.warn("⚠️ Data is not an array, converting...");
+      }
+
+      setWorkshops(Array.isArray(data) ? data : data || []);
+      console.log("✅ Workshops set successfully");
     } catch (error) {
-      console.error("Error fetching workshops:", error);
+      console.error("❌ Error fetching workshops:", error);
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
+      setWorkshops([]);
     } finally {
       setLoading(false);
     }
