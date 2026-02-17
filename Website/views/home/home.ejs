@@ -7,7 +7,7 @@
     <main class="flex-grow">
         <section
             id="hero-container"
-            class="relative flex flex-col items-center justify-center pt-20 pb-16 px-4 md:pt-28 md:pb-24 text-center bg-brand-slate text-white border-b-4 border-black min-h-[90vh] md:min-h-[95vh]"
+            class="relative flex flex-col items-center justify-center pt-20 pb-16 px-4 md:pt-28 md:pb-24 text-center bg-neo-white text-black border-b-4 border-black min-h-[90vh] md:min-h-[95vh]"
         >
             <div class="parallax-element absolute top-10 left-5 md:left-20 md:flex pointer-events-none z-0 opacity-80" data-speed="3">
                 <div class="w-16 h-16 md:w-20 md:h-20 bg-brand-indigo border-4 border-black rounded-full flex items-center justify-center text-3xl md:text-4xl shadow-neo transform -rotate-12">💰</div>
@@ -25,18 +25,18 @@
             <div class="relative z-10 w-full max-w-5xl mx-auto">
                 <h1 class="font-display text-5xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-center mb-6 md:mb-8 leading-tight tracking-tighter">
                     From Napkin to <br />
-                    <span class="bg-white text-brand-slate px-4 border-4 border-brand-indigo shadow-neo inline-block mt-2 md:mt-0 transform -rotate-1">
+                    <span class="bg-brand-slate text-white px-4 border-4 border-brand-indigo shadow-neo inline-block mt-2 md:mt-0 transform -rotate-1">
                         NASDAQ
                     </span>
                 </h1>
 
-                <p class="text-lg sm:text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto mb-10 md:mb-12 font-medium font-sans leading-relaxed px-2 border-l-4 border-brand-indigo pl-6 italic">
+                <p class="text-lg sm:text-xl md:text-2xl text-slate-700 max-w-3xl mx-auto mb-10 md:mb-12 font-medium font-sans leading-relaxed px-2 border-l-4 border-brand-indigo pl-6 italic">
                     The university incubator that actually gets you funded. <br class="hidden md:block" />
                     Stop dreaming, start building.
                 </p>
 
                 <div class="flex flex-col md:flex-row gap-4 md:gap-6 mb-16 md:mb-24 w-full justify-center items-center px-2">
-                    <a href="<%= routes.signupRoute %>" class="w-full md:w-auto bg-white text-black text-lg md:text-xl font-bold py-4 md:py-5 px-8 md:px-12 border-4 border-black shadow-neo hover:-translate-y-1 hover:shadow-none transition-all text-center">
+                    <a href="<%= routes.signupRoute %>" class="w-full md:w-auto bg-brand-indigo text-white text-lg md:text-xl font-bold py-4 md:py-5 px-8 md:px-12 border-4 border-black shadow-neo hover:-translate-y-1 hover:shadow-none transition-all text-center">
                         Launch Your Startup 🚀
                     </a>
                     <div class="relative group w-full md:w-auto max-w-md text-black text-left">
@@ -137,29 +137,42 @@
         </section>
 
         <section class="py-24 px-4 bg-neo-white border-t-4 border-black">
-            <div class="max-w-6xl mx-auto text-black">
+            <div class="max-w-7xl mx-auto text-black">
                 <h2 class="text-5xl md:text-7xl font-display font-bold text-center mb-20 uppercase tracking-tighter">
                     Hall of <span class="text-brand-indigo underline decoration-brand-indigo decoration-8 underline-offset-8">Fame</span>
                 </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div class="flex flex-col md:flex-row bg-white border-4 border-black overflow-hidden shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
-                        <div class="w-full md:w-1/3 bg-slate-200 flex items-center justify-center text-6xl border-b-4 md:border-b-0 md:border-r-4 border-black min-h-[200px]">👨‍💻</div>
-                        <div class="p-8 w-full md:w-2/3">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <div class="flex flex-col bg-white border-4 border-black overflow-hidden shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
+                        <div class="w-full bg-slate-200 flex items-center justify-center text-6xl border-b-4 border-black min-h-[180px]">👨‍💻</div>
+                        <div class="p-8 w-full flex flex-col flex-grow">
                             <h4 class="text-2xl font-bold font-display mb-2 uppercase">CodeMasters</h4>
-                            <span class="bg-brand-amber px-3 py-1 text-xs font-black border-2 border-black uppercase">Graduated 2024</span>
-                            <p class="mt-4 text-slate-700 italic border-l-4 border-brand-indigo pl-4">"The incubator helped us pivot from a service agency to a SaaS. We raised 2M EGP!"</p>
+                            <div><span class="bg-brand-amber px-3 py-1 text-xs font-black border-2 border-black uppercase">Graduated 2024</span></div>
+                            <p class="mt-4 text-slate-700 italic border-l-4 border-brand-indigo pl-4 flex-grow">"The incubator helped us pivot from a service agency to a SaaS. We raised 2M EGP!"</p>
                             <p class="mt-4 font-bold text-brand-indigo">- Abdelrahman Elaraby, Co-Founder</p>
                         </div>
                     </div>
-                    <div class="flex flex-col md:flex-row bg-white border-4 border-black overflow-hidden shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
-                        <div class="w-full md:w-1/3 bg-slate-100 flex items-center justify-center text-6xl border-b-4 md:border-b-0 md:border-r-4 border-black min-h-[200px]">🎨</div>
-                        <div class="p-8 w-full md:w-2/3">
+
+                    <div class="flex flex-col bg-white border-4 border-black overflow-hidden shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
+                        <div class="w-full bg-slate-100 flex items-center justify-center text-6xl border-b-4 border-black min-h-[180px]">🎨</div>
+                        <div class="p-8 w-full flex flex-col flex-grow">
                             <h4 class="text-2xl font-bold font-display mb-2 uppercase">PixelPerfect</h4>
-                            <span class="bg-brand-indigo text-white px-3 py-1 text-xs font-black border-2 border-black uppercase">Graduated 2024</span>
-                            <p class="mt-4 text-slate-700 italic border-l-4 border-brand-indigo pl-4">"Turning a freelance hustle into a studio wasn't easy, but mentorship made it possible."</p>
+                            <div><span class="bg-brand-indigo text-white px-3 py-1 text-xs font-black border-2 border-black uppercase">Graduated 2024</span></div>
+                            <p class="mt-4 text-slate-700 italic border-l-4 border-brand-indigo pl-4 flex-grow">"Turning a freelance hustle into a studio wasn't easy, but mentorship made it possible."</p>
                             <p class="mt-4 font-bold text-brand-indigo">- Ahmed Naguib, Co-Founder</p>
                         </div>
                     </div>
+
+                    <div class="flex flex-col bg-white border-4 border-black overflow-hidden shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all">
+                        <div class="w-full bg-brand-amber/20 flex items-center justify-center text-6xl border-b-4 border-black min-h-[180px]">🦄</div>
+                        <div class="p-8 w-full flex flex-col flex-grow">
+                            <h4 class="text-2xl font-bold font-display mb-2 uppercase">NextGen Tech</h4>
+                            <div><span class="bg-black text-white px-3 py-1 text-xs font-black border-2 border-black uppercase">Graduated 2025</span></div>
+                            <p class="mt-4 text-slate-700 italic border-l-4 border-brand-indigo pl-4 flex-grow">"From zero to hero. The network here is unmatched in the local ecosystem."</p>
+                            <p class="mt-4 font-bold text-brand-indigo">- Abderahman Selim, Co-Founder</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -188,19 +201,19 @@
                     <div class="bg-white border-4 border-black p-6 shadow-neo cursor-pointer hover:translate-x-2 transition-transform">
                         <details class="group">
                             <summary class="flex justify-between items-center font-bold text-xl list-none">
-                                <span>Aree Great People?</span> <span class="transition group-open:rotate-180">▼</span>
+                                <span>Are we Great People?</span> <span class="transition group-open:rotate-180">▼</span>
                             </summary>
-                            <p class="text-slate-700 mt-4 text-lg font-medium">Yes, 100% we are
+                            <p class="text-slate-700 mt-4 text-lg font-medium">Yes, 100% we are</p>
                         </details>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="py-32 px-4 bg-brand-slate text-white border-t-4 border-black text-center">
+        <section class="py-32 px-4 bg-white text-black border-t-4 border-black text-center">
             <h2 class="text-6xl md:text-8xl font-display font-bold mb-8 uppercase tracking-tighter">Ready to <span class="text-brand-indigo">Build?</span></h2>
-            <p class="text-2xl text-slate-400 mb-12 max-w-2xl mx-auto font-sans italic">Stop overthinking. Start shipping. Applications for Batch 04 close soon.</p>
-            <a href="<%= routes.signupRoute %>" class="inline-block bg-white text-black text-2xl font-bold py-6 px-16 border-4 border-black shadow-neo hover:translate-y-1 hover:shadow-none transition-all">
+            <p class="text-2xl text-slate-600 mb-12 max-w-2xl mx-auto font-sans italic">Stop overthinking. Start shipping. Applications for Batch 04 close soon.</p>
+            <a href="<%= routes.signupRoute %>" class="inline-block bg-brand-indigo text-white text-2xl font-bold py-6 px-16 border-4 border-black shadow-neo hover:translate-y-1 hover:shadow-none transition-all">
                 APPLY NOW ⚡
             </a>
         </section>
