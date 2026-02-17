@@ -13,7 +13,6 @@ import {
 import MentorTable from "./MentorTable";
 import AddMentorForm from "./AddMentorForm";
 
-
 const Mentors = () => {
   const [mentors, setMentors] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -191,7 +190,7 @@ const Mentors = () => {
         {/* Add Mentor Modal */}
         {showAddForm && (
           <div className="fixed inset-0 bg-blue-900/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-            <div className="bg-white w-full max-w-lg max-h-[90vh] border-4 border-black shadow-[8px_8px_0_0_black] flex flex-col animate-in fade-in zoom-in duration-200">
+            <div className="bg-white w-full max-w-2xl max-h-[90vh] border-4 border-black shadow-[8px_8px_0_0_black] flex flex-col animate-in fade-in zoom-in duration-200">
               <div className="p-6 border-b-4 border-black flex items-center justify-between bg-blue-50">
                 <h2 className="text-2xl font-black text-blue-950 uppercase flex items-center gap-3">
                   <div className="p-2 border-2 border-black bg-white">
