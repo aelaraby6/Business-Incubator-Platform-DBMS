@@ -1,22 +1,23 @@
-import { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState, useEffect, useCallback } from "react";
 import {
-  faEye,
-  faSearch,
-  faDollarSign,
-  faSpinner,
-  faCheckCircle,
-  faClock,
-  faXmarkCircle,
-  faFilter,
-} from "@fortawesome/free-solid-svg-icons";
+  Eye,
+  Search,
+  DollarSign,
+  Loader2,
+  CheckCircle,
+  Clock,
+  XCircle,
+  Filter,
+  Briefcase,
+  Layers,
+} from "lucide-react";
 import FundingDetails from "./FundingDetails";
+import StatCard from "../../../components/StatCard";
 
 const electron = window.electron || {};
 const invoke =
   electron.invoke ||
   (async () => {
-    console.error("Electron IPC not available");
     return [];
   });
 
@@ -36,8 +37,26 @@ export default function Funding() {
     totalAmount: 0,
   });
 
-  // Fetch all funding requests
-  const fetchFundingRequests = async () => {
+  const calculateStats = useCallback((requests) => {
+    const newStats = {
+      total: requests.length,
+      pending: 0,
+      approved: 0,
+      rejected: 0,
+      totalAmount: 0,
+    };
+
+    requests.forEach((req) => {
+      newStats.totalAmount += parseFloat(req.amount || 0);
+      if (req.status.toLowerCase() === "pending") newStats.pending++;
+      else if (req.status.toLowerCase() === "approved") newStats.approved++;
+      else if (req.status.toLowerCase() === "rejected") newStats.rejected++;
+    });
+
+    setStats(newStats);
+  }, []);
+
+  const fetchFundingRequests = useCallback(async () => {
     setLoading(true);
     try {
       const queryParams = [];
@@ -47,53 +66,30 @@ export default function Funding() {
 
       const query = queryParams.length > 0 ? "?" + queryParams.join("&") : "";
       const data = await invoke("funding:getAll", query);
-      setFundingRequests(data?.data || []);
+      const requests = data?.data || [];
 
-      // Calculate stats
-      calculateStats(data?.data || []);
+      setFundingRequests(requests);
+      calculateStats(requests);
     } catch (error) {
-      console.error("Error fetching funding requests:", error);
+      console.error("Error fetching funding:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  }, [filterStatus, filterStage, calculateStats]);
 
-  // Calculate statistics
-  const calculateStats = (requests) => {
-    const stats = {
-      total: requests.length,
-      pending: 0,
-      approved: 0,
-      rejected: 0,
-      totalAmount: 0,
-    };
-
-    requests.forEach((req) => {
-      stats.totalAmount += parseFloat(req.amount || 0);
-      if (req.status.toLowerCase() === "pending") stats.pending++;
-      else if (req.status.toLowerCase() === "approved") stats.approved++;
-      else if (req.status.toLowerCase() === "rejected") stats.rejected++;
-    });
-
-    setStats(stats);
-  };
-
-  // Fetch dashboard data
-  const fetchDashboard = async () => {
+  const fetchDashboard = useCallback(async () => {
     try {
       await invoke("funding:getDashboard");
-      // Use this for dashboard stats
     } catch (error) {
       console.error("Error fetching dashboard:", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchFundingRequests();
     fetchDashboard();
-  }, [filterStatus, filterStage]);
+  }, [fetchFundingRequests, fetchDashboard]);
 
-  // Filter and search funding requests
   const filteredRequests = fundingRequests.filter((request) => {
     const matchesSearch =
       request.project?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -113,330 +109,288 @@ export default function Funding() {
     return matchesSearch && matchesStatus && matchesStage;
   });
 
-  const getStatusColor = (status) => {
+  const getStatusBadgeStyles = (status) => {
     const statusLower = status?.toLowerCase() || "";
-    if (statusLower === "approved")
-      return "bg-green-100 text-green-800 border-green-300";
-    if (statusLower === "pending")
-      return "bg-yellow-100 text-yellow-800 border-yellow-300";
-    if (statusLower === "rejected")
-      return "bg-red-100 text-red-800 border-red-300";
-    return "bg-gray-100 text-gray-800 border-gray-300";
-  };
+    const base =
+      "inline-flex items-center gap-2 px-3 py-1 text-xs font-black border-2 border-black uppercase shadow-[2px_2px_0_0_black]";
 
-  const getStatusIcon = (status) => {
-    const statusLower = status?.toLowerCase() || "";
-    if (statusLower === "approved")
-      return <FontAwesomeIcon icon={faCheckCircle} size="sm" />;
-    if (statusLower === "pending")
-      return <FontAwesomeIcon icon={faClock} size="sm" />;
-    if (statusLower === "rejected")
-      return <FontAwesomeIcon icon={faXmarkCircle} size="sm" />;
-    return null;
+    if (statusLower === "approved") return `${base} bg-green-400 text-black`;
+    if (statusLower === "pending") return `${base} bg-yellow-400 text-black`;
+    if (statusLower === "rejected") return `${base} bg-red-400 text-black`;
+    return `${base} bg-gray-200 text-gray-600`;
   };
 
   return (
-    <>
+    <div className="flex-1 overflow-y-auto bg-[#FFFDF5] h-screen font-sans">
       {showDetails ? (
         <FundingDetails
           request={selectedRequest}
           onBack={() => {
             setShowDetails(false);
             setSelectedRequest(null);
-            fetchFundingRequests();
+            fetchFundingRequests(); 
           }}
         />
       ) : (
-        <div className="p-6">
+        <div className="p-6 lg:p-10 max-w-[1920px] mx-auto">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-black text-gray-900 uppercase mb-2">
-              Funding Requests
+          <div className="mb-12">
+            <span className="bg-black text-white px-3 py-1 font-bold text-sm uppercase tracking-wider mb-2 inline-block transform -rotate-1">
+              Financial Overview
+            </span>
+            <h1 className="text-5xl md:text-6xl font-black text-black mb-2 uppercase tracking-tighter">
+              Funding{" "}
+              <span className="bg-[#0d9488] text-white px-2 border-4 border-black shadow-[4px_4px_0px_0px_#000] italic inline-block transform rotate-1">
+                Requests
+              </span>
             </h1>
-            <p className="text-gray-600">
-              Review and manage funding requests from projects
+            <p className="text-xl text-slate-600 font-medium border-l-4 border-[#0d9488] pl-4 italic mt-4">
+              Review investments and manage capital allocation.
             </p>
           </div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-            <div className="bg-white border-4 border-gray-900 p-4 shadow-[4px_4px_0_0_#000000]">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-bold text-gray-600 uppercase mb-1">
-                    Total Requests
-                  </p>
-                  <p className="text-3xl font-black text-gray-900">
-                    {stats.total}
-                  </p>
-                </div>
-                <FontAwesomeIcon
-                  icon={faDollarSign}
-                  size="lg"
-                  className="text-gray-400"
-                />
-              </div>
-            </div>
-
-            <div className="bg-white border-4 border-yellow-500 p-4 shadow-[4px_4px_0_0_#EAB308]">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-bold text-yellow-700 uppercase mb-1">
-                    Pending
-                  </p>
-                  <p className="text-3xl font-black text-gray-900">
-                    {stats.pending}
-                  </p>
-                </div>
-                <FontAwesomeIcon
-                  icon={faClock}
-                  size="lg"
-                  className="text-yellow-500"
-                />
-              </div>
-            </div>
-
-            <div className="bg-white border-4 border-green-500 p-4 shadow-[4px_4px_0_0_#22C55E]">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-bold text-green-700 uppercase mb-1">
-                    Approved
-                  </p>
-                  <p className="text-3xl font-black text-gray-900">
-                    {stats.approved}
-                  </p>
-                </div>
-                <FontAwesomeIcon
-                  icon={faCheckCircle}
-                  size="lg"
-                  className="text-green-500"
-                />
-              </div>
-            </div>
-
-            <div className="bg-white border-4 border-red-500 p-4 shadow-[4px_4px_0_0_#EF4444]">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-bold text-red-700 uppercase mb-1">
-                    Rejected
-                  </p>
-                  <p className="text-3xl font-black text-gray-900">
-                    {stats.rejected}
-                  </p>
-                </div>
-                <FontAwesomeIcon
-                  icon={faXmarkCircle}
-                  size="lg"
-                  className="text-red-500"
-                />
-              </div>
-            </div>
-
-            <div className="bg-white border-4 border-blue-500 p-4 shadow-[4px_4px_0_0_#3B82F6]">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-bold text-blue-700 uppercase mb-1">
-                    Total Amount
-                  </p>
-                  <p className="text-2xl font-black text-gray-900">
-                    $
-                    {(stats.totalAmount || 0).toLocaleString("en-US", {
-                      maximumFractionDigits: 0,
-                    })}
-                  </p>
-                </div>
-                <FontAwesomeIcon
-                  icon={faDollarSign}
-                  size="lg"
-                  className="text-blue-500"
-                />
-              </div>
-            </div>
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
+            <StatCard
+              title="Total Requests"
+              value={stats.total}
+              icon={Layers}
+              bgClass="bg-[#4f46e5]"
+              textClass="text-white"
+            />
+            <StatCard
+              title="Pending"
+              value={stats.pending}
+              icon={Clock}
+              bgClass="bg-[#f59e0b]"
+              textClass="text-black"
+            />
+            <StatCard
+              title="Approved"
+              value={stats.approved}
+              icon={CheckCircle}
+              bgClass="bg-[#0d9488]"
+              textClass="text-white"
+            />
+            <StatCard
+              title="Rejected"
+              value={stats.rejected}
+              icon={XCircle}
+              bgClass="bg-[#ef4444]"
+              textClass="text-white"
+            />
+            <StatCard
+              title="Total Volume"
+              value={`$${(stats.totalAmount || 0).toLocaleString("en-US", {
+                maximumFractionDigits: 0,
+              })}`}
+              icon={DollarSign}
+              bgClass="bg-[#0f172a]"
+              textClass="text-white"
+            />
           </div>
 
-          {/* Filters and Search */}
-          <div className="bg-white border-4 border-gray-900 p-4 mb-6 shadow-[4px_4px_0_0_#000000]">
-            <div className="flex flex-col md:flex-row gap-4">
-              {/* Search */}
-              <div className="flex-1 relative">
-                <FontAwesomeIcon
-                  icon={faSearch}
-                  className="absolute left-3 top-3 text-gray-400"
-                />
-                <input
-                  type="text"
-                  placeholder="Search by project or founder..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border-2 border-gray-300 focus:border-gray-900 focus:outline-none font-medium"
-                />
-              </div>
+          {/* Filters & Search */}
+          <div className="bg-white p-6 border-4 border-black shadow-[6px_6px_0px_0px_#000] mb-8 flex flex-col xl:flex-row gap-6 items-center justify-between">
+            <div className="relative flex-1 w-full xl:w-auto">
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                size={20}
+                strokeWidth={2.5}
+              />
+              <input
+                type="text"
+                placeholder="SEARCH PROJECT OR FOUNDER..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border-2 border-black bg-[#FFFDF5] focus:outline-none focus:ring-0 focus:bg-white font-bold text-black placeholder-gray-500 transition-all uppercase"
+              />
+            </div>
 
-              {/* Status Filter */}
-              <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faFilter} className="text-gray-600" />
+            <div className="flex flex-col sm:flex-row gap-4 w-full xl:w-auto">
+              <div className="relative w-full sm:w-auto">
+                <Filter
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                  size={18}
+                  strokeWidth={2.5}
+                />
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
-                  className="px-3 py-2 border-2 border-gray-300 focus:border-gray-900 focus:outline-none font-medium"
+                  className="w-full sm:w-48 pl-10 pr-8 py-3 border-2 border-black bg-white text-black font-bold uppercase outline-none focus:bg-blue-50 cursor-pointer shadow-[2px_2px_0_0_black]"
                 >
-                  <option value="all">All Status</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Approved">Approved</option>
-                  <option value="Rejected">Rejected</option>
-                  <option value="Under Review">Under Review</option>
+                  <option value="all">ALL STATUS</option>
+                  <option value="Pending">PENDING</option>
+                  <option value="Approved">APPROVED</option>
+                  <option value="Rejected">REJECTED</option>
+                  <option value="Under Review">UNDER REVIEW</option>
                 </select>
               </div>
 
-              {/* Stage Filter */}
-              <div className="flex items-center gap-2">
+              <div className="relative w-full sm:w-auto">
+                <Briefcase
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                  size={18}
+                  strokeWidth={2.5}
+                />
                 <select
                   value={filterStage}
                   onChange={(e) => setFilterStage(e.target.value)}
-                  className="px-3 py-2 border-2 border-gray-300 focus:border-gray-900 focus:outline-none font-medium"
+                  className="w-full sm:w-48 pl-10 pr-8 py-3 border-2 border-black bg-white text-black font-bold uppercase outline-none focus:bg-blue-50 cursor-pointer shadow-[2px_2px_0_0_black]"
                 >
-                  <option value="all">All Stages</option>
-                  <option value="Idea">Idea</option>
+                  <option value="all">ALL STAGES</option>
+                  <option value="Idea">IDEA</option>
                   <option value="MVP">MVP</option>
-                  <option value="Growth">Growth</option>
-                  <option value="Scale">Scale</option>
+                  <option value="Growth">GROWTH</option>
+                  <option value="Scale">SCALE</option>
                 </select>
               </div>
             </div>
           </div>
 
-          {/* Funding Requests Table */}
+          {/* Table Content */}
           {loading ? (
-            <div className="bg-white border-4 border-gray-900 p-8 text-center shadow-[4px_4px_0_0_#000000]">
-              <FontAwesomeIcon
-                icon={faSpinner}
-                className="animate-spin mx-auto text-gray-400 mb-4 text-4xl"
+            <div className="flex flex-col items-center justify-center py-24 bg-white border-4 border-black border-dashed">
+              <Loader2
+                className="text-black animate-spin mb-4"
+                size={40}
+                strokeWidth={2}
               />
-              <p className="text-gray-600 font-medium">
-                Loading funding requests...
+              <p className="text-black font-black text-xl uppercase">
+                Loading requests...
               </p>
             </div>
           ) : filteredRequests.length > 0 ? (
-            <div className="bg-white border-4 border-gray-900 overflow-hidden shadow-[4px_4px_0_0_#000000]">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-gray-900 text-white border-b-4 border-gray-900">
-                    <th className="px-6 py-4 text-left font-black uppercase text-sm">
-                      Project
-                    </th>
-                    <th className="px-6 py-4 text-left font-black uppercase text-sm">
-                      Founder
-                    </th>
-                    <th className="px-6 py-4 text-left font-black uppercase text-sm">
-                      Amount
-                    </th>
-                    <th className="px-6 py-4 text-left font-black uppercase text-sm">
-                      Stage
-                    </th>
-                    <th className="px-6 py-4 text-left font-black uppercase text-sm">
-                      Status
-                    </th>
-                    <th className="px-6 py-4 text-left font-black uppercase text-sm">
-                      Date
-                    </th>
-                    <th className="px-6 py-4 text-center font-black uppercase text-sm">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredRequests.map((request, index) => (
-                    <tr
-                      key={request.id}
-                      className={`border-b-2 border-gray-200 hover:bg-gray-50 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}
-                    >
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="font-bold text-gray-900">
-                            {request.project?.name}
-                          </p>
-                          <p className="text-sm text-gray-600">
-                            {request.project?.domain}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div>
-                          {request.founders && request.founders.length > 0 ? (
-                            <>
-                              <p className="font-bold text-gray-900">
-                                {request.founders[0]?.name}
-                              </p>
-                              <p className="text-sm text-gray-600">
-                                {request.founders[0]?.email}
-                              </p>
-                            </>
-                          ) : (
-                            <p className="text-gray-500">-</p>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <p className="font-black text-gray-900">
-                          $
-                          {parseFloat(request.amount || 0).toLocaleString(
-                            "en-US",
-                            { maximumFractionDigits: 2 },
-                          )}
-                        </p>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="inline-block px-3 py-1 bg-gray-200 text-gray-900 text-sm font-bold border-2 border-gray-400 uppercase">
-                          {request.project?.stage || request.funding_stage}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div
-                          className={`inline-flex items-center gap-2 px-3 py-1 border-2 font-bold text-sm uppercase ${getStatusColor(request.status)}`}
-                        >
-                          {getStatusIcon(request.status)}
-                          {request.status}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-gray-600 text-sm">
-                        {new Date(request.requested_at).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          },
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <button
-                          onClick={() => {
-                            setSelectedRequest(request);
-                            setShowDetails(true);
-                          }}
-                          className="inline-flex items-center justify-center w-10 h-10 bg-gray-900 text-white border-2 border-black hover:bg-gray-700 font-bold transition-all"
-                        >
-                          <FontAwesomeIcon icon={faEye} />
-                        </button>
-                      </td>
+            <div className="bg-white border-4 border-black shadow-[8px_8px_0px_0px_#000] overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[1000px]">
+                  <thead>
+                    <tr className="bg-[#0f172a] border-b-4 border-black text-white">
+                      <th className="px-6 py-5 font-black uppercase text-sm border-r-2 border-white/20">
+                        Project
+                      </th>
+                      <th className="px-6 py-5 font-black uppercase text-sm border-r-2 border-white/20">
+                        Founder
+                      </th>
+                      <th className="px-6 py-5 font-black uppercase text-sm border-r-2 border-white/20">
+                        Amount
+                      </th>
+                      <th className="px-6 py-5 font-black uppercase text-sm border-r-2 border-white/20">
+                        Stage
+                      </th>
+                      <th className="px-6 py-5 font-black uppercase text-sm border-r-2 border-white/20">
+                        Status
+                      </th>
+                      <th className="px-6 py-5 font-black uppercase text-sm border-r-2 border-white/20">
+                        Date
+                      </th>
+                      <th className="px-6 py-5 text-center font-black uppercase text-sm">
+                        Action
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y-2 divide-black">
+                    {filteredRequests.map((request) => (
+                      <tr
+                        key={request.id}
+                        className="hover:bg-blue-50 transition-colors group"
+                      >
+                        <td className="px-6 py-5 border-r-2 border-black">
+                          <div>
+                            <p className="font-black text-black text-lg uppercase">
+                              {request.project?.name}
+                            </p>
+                            <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                              {request.project?.domain}
+                            </p>
+                          </div>
+                        </td>
+                        <td className="px-6 py-5 border-r-2 border-black">
+                          <div>
+                            {request.founders && request.founders.length > 0 ? (
+                              <>
+                                <p className="font-bold text-black uppercase">
+                                  {request.founders[0]?.name}
+                                </p>
+                                <p className="text-xs font-bold text-gray-500 lowercase">
+                                  {request.founders[0]?.email}
+                                </p>
+                              </>
+                            ) : (
+                              <p className="text-gray-400 font-bold">-</p>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-6 py-5 border-r-2 border-black">
+                          <p className="font-black text-black text-xl">
+                            $
+                            {parseFloat(request.amount || 0).toLocaleString(
+                              "en-US",
+                              { maximumFractionDigits: 2 },
+                            )}
+                          </p>
+                        </td>
+                        <td className="px-6 py-5 border-r-2 border-black">
+                          <span className="inline-block px-3 py-1 bg-gray-100 text-black text-xs font-black border-2 border-black uppercase shadow-[2px_2px_0_0_black]">
+                            {request.project?.stage || request.funding_stage}
+                          </span>
+                        </td>
+                        <td className="px-6 py-5 border-r-2 border-black">
+                          <div className={getStatusBadgeStyles(request.status)}>
+                            {request.status?.toLowerCase() === "approved" && (
+                              <CheckCircle size={14} strokeWidth={3} />
+                            )}
+                            {request.status?.toLowerCase() === "pending" && (
+                              <Clock size={14} strokeWidth={3} />
+                            )}
+                            {request.status?.toLowerCase() === "rejected" && (
+                              <XCircle size={14} strokeWidth={3} />
+                            )}
+                            {request.status}
+                          </div>
+                        </td>
+                        <td className="px-6 py-5 border-r-2 border-black text-black font-bold text-sm uppercase">
+                          {new Date(request.requested_at).toLocaleDateString(
+                            "en-US",
+                            { year: "numeric", month: "short", day: "numeric" },
+                          )}
+                        </td>
+                        <td className="px-6 py-5 text-center">
+                          <button
+                            onClick={() => {
+                              setSelectedRequest(request);
+                              setShowDetails(true);
+                            }}
+                            className="inline-flex items-center justify-center w-10 h-10 bg-black text-white border-2 border-black hover:bg-white hover:text-black hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none shadow-[4px_4px_0_0_black] transition-all"
+                          >
+                            <Eye size={20} strokeWidth={2.5} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           ) : (
-            <div className="bg-white border-4 border-gray-900 p-8 text-center shadow-[4px_4px_0_0_#000000]">
-              <FontAwesomeIcon
-                icon={faDollarSign}
-                className="mx-auto text-gray-300 mb-4 text-5xl"
-              />
-              <p className="text-gray-600 font-medium">
-                No funding requests found
+            <div className="flex flex-col items-center justify-center py-24 bg-white border-4 border-black border-dashed text-center">
+              <div className="p-6 bg-gray-100 border-2 border-black rounded-full mb-6">
+                <DollarSign
+                  className="text-black"
+                  size={48}
+                  strokeWidth={1.5}
+                />
+              </div>
+              <h2 className="text-2xl font-black text-black uppercase mb-2">
+                No requests found
+              </h2>
+              <p className="text-gray-600 text-lg font-medium max-w-sm mb-8">
+                There are no funding requests matching your criteria.
               </p>
             </div>
           )}
         </div>
       )}
-    </>
+    </div>
   );
 }

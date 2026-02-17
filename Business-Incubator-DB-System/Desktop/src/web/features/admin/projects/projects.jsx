@@ -1,379 +1,405 @@
-import { useState, useEffect } from 'react';
-import { Eye, Search, FolderOpen, Loader2, PlayCircle, CheckCircle, Check, X } from 'lucide-react';
-import ProjectDetails from './project-detailes';
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  Eye,
+  Search,
+  FolderOpen,
+  Loader2,
+  PlayCircle,
+  CheckCircle,
+  Check,
+  X,
+  Layers,
+  Lightbulb,
+  Activity,
+  Archive,
+} from "lucide-react";
+import ProjectDetails from "./project-detailes";
+import StatCard from "../../../components/StatCard";
 
 const electron = window.electron || {};
-const invoke = electron.invoke || (async () => {
-    console.error('Electron IPC not available');
+const invoke =
+  electron.invoke ||
+  (async () => {
+    console.error("Electron IPC not available");
     return [];
-});
+  });
 
 export default function Projects() {
-    const [filter, setFilter] = useState('all');
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedProject, setSelectedProject] = useState(null);
-    const [showDetails, setShowDetails] = useState(false);
-    const [projects, setProjects] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [stats, setStats] = useState({
-        total: 0,
-        idea: 0,
-        in_progress: 0,
-        completed: 0
-    });
+  const [filter, setFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [showDetails, setShowDetails] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [stats, setStats] = useState({
+    total: 0,
+    idea: 0,
+    in_progress: 0,
+    completed: 0,
+  });
 
-    // Fetch all projects
-    const fetchProjects = async () => {
-        setLoading(true);
-        try {
-            const data = await invoke('projects:getAll');
-            setProjects(data || []);
-        } catch (error) {
-            console.error('Error fetching projects:', error);
+  const fetchProjects = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await invoke("projects:getAll");
+      setProjects(data || []);
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchStats = useCallback(async () => {
+    try {
+      const data = await invoke("projects:getStats");
+      setStats({
+        total: parseInt(data?.total) || 0,
+        idea: parseInt(data?.idea) || 0,
+        in_progress: parseInt(data?.in_progress) || 0,
+        completed: parseInt(data?.completed) || 0,
+      });
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchProjects();
+    fetchStats();
+  }, [fetchProjects, fetchStats]);
+
+  const handleUpdateStatus = async (projectId, newStatus) => {
+    try {
+      await invoke("projects:updateStatus", {
+        id: projectId,
+        status: newStatus,
+      });
+      await fetchProjects();
+      await fetchStats();
+
+      if (selectedProject && selectedProject.id === projectId) {
+        const updatedProject = await invoke("projects:getById", projectId);
+        setSelectedProject(updatedProject);
+      }
+    } catch (error) {
+      console.error("Error updating project status:", error);
+    }
+  };
+
+  const handleToggleApproved = async (projectId) => {
+    try {
+      await invoke("projects:toggleApproved", projectId);
+      await fetchProjects();
+      await fetchStats();
+
+      if (selectedProject && selectedProject.id === projectId) {
+        const updatedProject = await invoke("projects:getById", projectId);
+        setSelectedProject(updatedProject);
+      }
+    } catch (error) {
+      console.error("Error toggling approved status:", error);
+    }
+  };
+
+  const filteredProjects = projects.filter((project) => {
+    const matchesFilter = filter === "all" || project.stage === filter;
+    const matchesSearch =
+      project.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.domain?.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
+
+  const handleViewProject = async (project) => {
+    try {
+      const fullProject = await invoke("projects:getById", project.id);
+      setSelectedProject(fullProject);
+      setShowDetails(true);
+    } catch (error) {
+      console.error("Error fetching project details:", error);
+    }
+  };
+
+  const handleCloseDetails = () => {
+    setShowDetails(false);
+    setSelectedProject(null);
+  };
+
+  return (
+    <div className="flex-1 overflow-y-auto bg-[#FFFDF5] h-screen font-sans scrollbar-hide">
+      <style jsx global>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
         }
-        setLoading(false);
-    };
-
-    // Fetch stats
-    const fetchStats = async () => {
-        try {
-            const data = await invoke('projects:getStats');
-            setStats({
-                total: parseInt(data?.total) || 0,
-                idea: parseInt(data?.idea) || 0,
-                in_progress: parseInt(data?.in_progress) || 0,
-                completed: parseInt(data?.completed) || 0
-            });
-        } catch (error) {
-            console.error('Error fetching stats:', error);
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
-    };
+      `}</style>
 
-    useEffect(() => {
-        let isMounted = true;
-
-        const loadData = async () => {
-            if (isMounted) {
-                await fetchProjects();
-                await fetchStats();
-            }
-        };
-
-        loadData();
-
-        return () => {
-            isMounted = false;
-        };
-    }, []);
-
-    // Update project status
-    const handleUpdateStatus = async (projectId, newStatus) => {
-        try {
-            await invoke('projects:updateStatus', { id: projectId, status: newStatus });
-
-            // Refresh projects and stats
-            await fetchProjects();
-            await fetchStats();
-
-            // Update selected project if it's open
-            if (selectedProject && selectedProject.id === projectId) {
-                const updatedProject = await invoke('projects:getById', projectId);
-                setSelectedProject(updatedProject);
-            }
-        } catch (error) {
-            console.error('Error updating project status:', error);
-            alert('Failed to update project status');
-        }
-    };
-
-    // Toggle approved status
-    // eslint-disable-next-line no-unused-vars
-    const handleToggleApproved = async (projectId, currentApproved) => {
-        try {
-            await invoke('projects:toggleApproved', projectId);
-
-            await fetchProjects();
-            await fetchStats();
-
-            if (selectedProject && selectedProject.id === projectId) {
-                const updatedProject = await invoke('projects:getById', projectId);
-                setSelectedProject(updatedProject);
-            }
-        } catch (error) {
-            console.error('Error toggling approved status:', error);
-            alert('Failed to update approval status');
-        }
-    };
-
-    const filteredProjects = projects.filter(project => {
-        const matchesFilter = filter === 'all' || project.stage === filter;
-        const matchesSearch = project.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            project.domain?.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesFilter && matchesSearch;
-    });
-
-    const handleViewProject = async (project) => {
-        try {
-            const fullProject = await invoke('projects:getById', project.id);
-            setSelectedProject(fullProject);
-            setShowDetails(true);
-        } catch (error) {
-            console.error('Error fetching project details:', error);
-        }
-    };
-
-    const handleCloseDetails = () => {
-        setShowDetails(false);
-        setSelectedProject(null);
-    };
-
-    return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Header */}
-            <div className="bg-white border-b-4 border-blue-900">
-                <div className="max-w-7xl mx-auto px-6 py-8">
-                    <h1 className="text-4xl font-black uppercase tracking-tight mb-2 text-blue-950">
-                        Projects Management
-                    </h1>
-                    <p className="text-gray-600 font-medium">
-                        Manage and track all projects
-                    </p>
-                </div>
-            </div>
-
-            <div className="max-w-7xl mx-auto px-6 py-8">
-                {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <div className="bg-white border-4 border-gray-900 p-6 shadow-[4px_4px_0_0_#111827]">
-                        <div className="text-sm font-bold uppercase text-gray-500 mb-2">Total Projects</div>
-                        <div className="text-4xl font-black text-blue-950">{stats.total}</div>
-                    </div>
-
-                    <div className="bg-blue-50 border-4 border-blue-900 p-6 shadow-[4px_4px_0_0_#1e3a8a]">
-                        <div className="text-sm font-bold uppercase text-blue-900 mb-2">Idea Stage</div>
-                        <div className="text-4xl font-black text-blue-800">{stats.idea}</div>
-                    </div>
-
-                    <div className="bg-blue-50 border-4 border-blue-900 p-6 shadow-[4px_4px_0_0_#1e3a8a]">
-                        <div className="text-sm font-bold uppercase text-blue-900 mb-2">In Progress</div>
-                        <div className="text-4xl font-black text-blue-800">{stats.in_progress}</div>
-                    </div>
-
-                    <div className="bg-gray-100 border-4 border-gray-600 p-6 shadow-[4px_4px_0_0_#4b5563]">
-                        <div className="text-sm font-bold uppercase text-gray-600 mb-2">Completed</div>
-                        <div className="text-4xl font-black text-gray-700">{stats.completed}</div>
-                    </div>
-                </div>
-
-                {/* Filters */}
-                <div className="bg-white border-4 border-gray-900 p-6 mb-8 shadow-[4px_4px_0_0_#111827]">
-                    <div className="flex flex-col md:flex-row gap-4">
-                        <div className="flex-1 relative">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
-                            <input
-                                type="text"
-                                placeholder="Search projects..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full border-4 border-gray-900 px-4 py-3 pl-12 font-semibold focus:outline-none focus:ring-4 focus:ring-blue-300"
-                            />
-                        </div>
-
-                        <div className="flex gap-2">
-                            <button
-                                onClick={() => setFilter('all')}
-                                className={`px-6 py-3 font-bold uppercase border-4 transition-all ${filter === 'all'
-                                        ? 'bg-blue-900 text-white border-blue-950'
-                                        : 'bg-white text-gray-700 border-gray-900 hover:bg-gray-50'
-                                    }`}
-                            >
-                                All
-                            </button>
-                            <button
-                                onClick={() => setFilter('idea')}
-                                className={`px-6 py-3 font-bold uppercase border-4 transition-all ${filter === 'idea'
-                                        ? 'bg-blue-900 text-white border-blue-950'
-                                        : 'bg-white text-gray-700 border-gray-900 hover:bg-gray-50'
-                                    }`}
-                            >
-                                Idea
-                            </button>
-                            <button
-                                onClick={() => setFilter('in-progress')}
-                                className={`px-6 py-3 font-bold uppercase border-4 transition-all ${filter === 'in-progress'
-                                        ? 'bg-blue-900 text-white border-blue-950'
-                                        : 'bg-white text-gray-700 border-gray-900 hover:bg-gray-50'
-                                    }`}
-                            >
-                                In Progress
-                            </button>
-                            <button
-                                onClick={() => setFilter('completed')}
-                                className={`px-6 py-3 font-bold uppercase border-4 transition-all ${filter === 'completed'
-                                        ? 'bg-gray-600 text-white border-gray-700'
-                                        : 'bg-white text-gray-700 border-gray-900 hover:bg-gray-50'
-                                    }`}
-                            >
-                                Completed
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Loading State */}
-                {loading ? (
-                    <div className="flex flex-col items-center justify-center py-24 bg-white border-4 border-gray-900 shadow-[4px_4px_0_0_#111827] mb-8">
-                        <Loader2 className="text-blue-900 animate-spin mb-4" size={48} strokeWidth={3} />
-                        <p className="text-gray-700 text-xl font-bold uppercase">
-                            Loading projects...
-                        </p>
-                    </div>
-                ) : (
-                    <>
-                        {/* Projects Table */}
-                        {filteredProjects.length > 0 ? (
-                            <div className="bg-white border-4 border-gray-900 shadow-[4px_4px_0_0_#111827] mb-8 overflow-x-auto">
-                                <table className="w-full">
-                                    <thead className="bg-blue-950 text-white border-b-4 border-gray-900">
-                                        <tr>
-                                            <th className="text-left p-4 font-black uppercase text-sm">Project</th>
-                                            <th className="text-left p-4 font-black uppercase text-sm">Domain</th>
-                                            <th className="text-left p-4 font-black uppercase text-sm">Stage</th>
-                                            <th className="text-left p-4 font-black uppercase text-sm">Team Type</th>
-                                            <th className="text-left p-4 font-black uppercase text-sm">Created</th>
-                                            <th className="text-left p-4 font-black uppercase text-sm">Status</th>
-                                            <th className="text-center p-4 font-black uppercase text-sm">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {filteredProjects.map((project, index) => (
-                                            <tr key={project.id} className={`border-b-4 border-gray-900 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                                                <td className="p-4">
-                                                    <div className="font-black text-lg text-blue-950 min-w-[200px]">{project.name}</div>
-                                                    <div className="text-sm text-gray-600 font-medium italic line-clamp-2">{project.short_description}</div>
-                                                </td>
-                                                <td className="p-4">
-                                                    <span className="bg-blue-900 text-white px-3 py-1 text-xs font-black uppercase border-2 border-blue-950 whitespace-nowrap">
-                                                        {project.domain}
-                                                    </span>
-                                                </td>
-                                                <td className="p-4">
-                                                    <span className="px-3 py-1 text-xs font-black uppercase border-2 border-blue-900 bg-blue-100 text-blue-900 whitespace-nowrap">
-                                                        {project.stage === 'in-progress' ? 'In Progress' : project.stage}
-                                                    </span>
-                                                </td>
-                                                <td className="p-4 font-bold text-gray-700 capitalize whitespace-nowrap">
-                                                    {project.team_type?.replace('-', ' ') || 'N/A'}
-                                                </td>
-                                                <td className="p-4 text-gray-600 font-medium whitespace-nowrap">
-                                                    {new Date(project.created_at).toLocaleDateString('en-GB')}
-                                                </td>
-                                                <td className="p-4">
-                                                    <div className="flex flex-col gap-2">
-                                                        {project.status === 'idea' && (
-                                                            <span className="bg-blue-500 text-white px-3 py-1 text-xs font-black uppercase border-2 border-blue-600 whitespace-nowrap">
-                                                                💡 Idea
-                                                            </span>
-                                                        )}
-                                                        {project.status === 'in-progress' && (
-                                                            <span className="bg-blue-700 text-white px-3 py-1 text-xs font-black uppercase border-2 border-blue-800 whitespace-nowrap">
-                                                                ⚙️ In Progress
-                                                            </span>
-                                                        )}
-                                                        {project.status === 'completed' && (
-                                                            <span className="bg-gray-600 text-white px-3 py-1 text-xs font-black uppercase border-2 border-gray-700 whitespace-nowrap">
-                                                                ✓ Completed
-                                                            </span>
-                                                        )}
-
-                                                        {/* Approval Status */}
-                                                        {project.approved ? (
-                                                            <span className="bg-green-600 text-white px-3 py-1 text-xs font-black uppercase border-2 border-green-700 whitespace-nowrap">
-                                                                ✓ Approved
-                                                            </span>
-                                                        ) : (
-                                                            <span className="bg-red-600 text-white px-3 py-1 text-xs font-black uppercase border-2 border-red-700 whitespace-nowrap">
-                                                                ✗ Rejected
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                </td>
-                                                <td className="p-4">
-                                                    <div className="flex flex-col gap-2 items-center min-w-[120px]">
-                                                        <button
-                                                            onClick={() => handleViewProject(project)}
-                                                            className="bg-gray-700 text-white px-4 py-2 font-black text-sm uppercase border-2 border-gray-800 hover:bg-gray-800 transition-all flex items-center gap-2 w-full justify-center"
-                                                        >
-                                                            <Eye size={16} />
-                                                            View
-                                                        </button>
-
-                                                        {project.status === 'idea' && (
-                                                            <button
-                                                                onClick={() => handleUpdateStatus(project.id, 'in-progress')}
-                                                                className="bg-blue-900 text-white px-4 py-2 font-black text-sm uppercase border-2 border-blue-950 hover:bg-blue-950 transition-all flex items-center gap-1 w-full justify-center"
-                                                            >
-                                                                <PlayCircle size={16} />
-                                                                Start
-                                                            </button>
-                                                        )}
-
-                                                        {project.status === 'in-progress' && (
-                                                            <button
-                                                                onClick={() => handleUpdateStatus(project.id, 'completed')}
-                                                                className="bg-gray-600 text-white px-4 py-2 font-black text-sm uppercase border-2 border-gray-700 hover:bg-gray-700 transition-all flex items-center gap-1 w-full justify-center"
-                                                            >
-                                                                <CheckCircle size={16} />
-                                                                Complete
-                                                            </button>
-                                                        )}
-
-                                                        {/* Toggle Approval Button */}
-                                                        <button
-                                                            onClick={() => handleToggleApproved(project.id, project.approved)}
-                                                            className={`px-4 py-2 font-black text-sm uppercase border-2 transition-all flex items-center gap-1 w-full justify-center ${project.approved
-                                                                    ? 'bg-red-600 text-white border-red-700 hover:bg-red-700'
-                                                                    : 'bg-green-600 text-white border-green-700 hover:bg-green-700'
-                                                                }`}
-                                                        >
-                                                            {project.approved ? (
-                                                                <>
-                                                                    <X size={16} />
-                                                                    Reject
-                                                                </>
-                                                            ) : (
-                                                                <>
-                                                                    <Check size={16} />
-                                                                    Approve
-                                                                </>
-                                                            )}
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        ) : (
-                            <div className="bg-white border-4 border-gray-900 p-16 text-center mb-8 shadow-[4px_4px_0_0_#111827]">
-                                <FolderOpen size={64} className="mx-auto mb-4 text-gray-400" />
-                                <h3 className="text-2xl font-black uppercase mb-2 text-blue-950">No Projects Found</h3>
-                                <p className="text-gray-600 font-medium">Try adjusting your filters</p>
-                            </div>
-                        )}
-                    </>
-                )}
-            </div>
-
-            {/* Project Details Modal */}
-            {showDetails && (
-                <ProjectDetails
-                    project={selectedProject}
-                    onClose={handleCloseDetails}
-                    onUpdateStatus={handleUpdateStatus}
-                />
-            )}
+      <div className="p-6 lg:p-10 max-w-[1920px] mx-auto">
+        {/* Header */}
+        <div className="mb-12">
+          <span className="bg-black text-white px-3 py-1 font-bold text-sm uppercase tracking-wider mb-2 inline-block transform -rotate-1">
+            Pipeline Overview
+          </span>
+          <h1 className="text-5xl md:text-6xl font-black text-black mb-2 uppercase tracking-tighter">
+            Projects{" "}
+            <span className="bg-[#4f46e5] text-white px-2 border-4 border-black shadow-[4px_4px_0px_0px_#000] italic inline-block transform rotate-1">
+              Management
+            </span>
+          </h1>
+          <p className="text-xl text-slate-600 font-medium border-l-4 border-[#4f46e5] pl-4 italic mt-4">
+            Track progress, approve ideas, and manage deliverables.
+          </p>
         </div>
-    );
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          <StatCard
+            title="Total Projects"
+            value={stats.total}
+            icon={Layers}
+            bgClass="bg-[#0f172a]"
+            textClass="text-white"
+          />
+          <StatCard
+            title="Idea Stage"
+            value={stats.idea}
+            icon={Lightbulb}
+            bgClass="bg-[#f59e0b]"
+            textClass="text-black"
+          />
+          <StatCard
+            title="In Progress"
+            value={stats.in_progress}
+            icon={Activity}
+            bgClass="bg-[#4f46e5]"
+            textClass="text-white"
+          />
+          <StatCard
+            title="Completed"
+            value={stats.completed}
+            icon={Archive}
+            bgClass="bg-[#0d9488]"
+            textClass="text-white"
+          />
+        </div>
+
+        {/* Search and Filters */}
+        <div className="bg-white p-6 border-4 border-black shadow-[6px_6px_0px_0px_#000] mb-8 flex flex-col xl:flex-row gap-6 items-center justify-between">
+          <div className="relative flex-1 w-full xl:w-auto">
+            <Search
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+              size={20}
+              strokeWidth={2.5}
+            />
+            <input
+              type="text"
+              placeholder="SEARCH PROJECTS..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border-2 border-black bg-[#FFFDF5] focus:outline-none focus:ring-0 focus:bg-white font-bold text-black placeholder-gray-500 transition-all uppercase"
+            />
+          </div>
+
+          <div className="flex flex-wrap gap-2 w-full xl:w-auto">
+            {["all", "idea", "in-progress", "completed"].map((status) => (
+              <button
+                key={status}
+                onClick={() => setFilter(status)}
+                className={`px-6 py-3 font-bold uppercase border-2 border-black transition-all shadow-[2px_2px_0_0_black] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_black] ${
+                  filter === status
+                    ? "bg-black text-white"
+                    : "bg-white text-black"
+                }`}
+              >
+                {status.replace("-", " ")}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Table/Content */}
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-24 bg-white border-4 border-black border-dashed">
+            <Loader2
+              className="text-black animate-spin mb-4"
+              size={40}
+              strokeWidth={2}
+            />
+            <p className="text-black font-black text-xl uppercase">
+              Loading projects...
+            </p>
+          </div>
+        ) : filteredProjects.length > 0 ? (
+          <div className="bg-white border-4 border-black shadow-[8px_8px_0px_0px_#000] overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[1000px]">
+                <thead>
+                  <tr className="bg-[#0f172a] border-b-4 border-black text-white">
+                    <th className="p-5 font-black uppercase text-sm border-r-2 border-black">
+                      Project
+                    </th>
+                    <th className="p-5 font-black uppercase text-sm border-r-2 border-black">
+                      Domain
+                    </th>
+                    <th className="p-5 font-black uppercase text-sm border-r-2 border-black">
+                      Stage
+                    </th>
+                    <th className="p-5 font-black uppercase text-sm border-r-2 border-black">
+                      Team Type
+                    </th>
+                    <th className="p-5 font-black uppercase text-sm border-r-2 border-black">
+                      Created
+                    </th>
+                    <th className="p-5 font-black uppercase text-sm border-r-2 border-black">
+                      Status
+                    </th>
+                    <th className="p-5 font-black uppercase text-sm text-center">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y-2 divide-black">
+                  {filteredProjects.map((project) => (
+                    <tr
+                      key={project.id}
+                      className="hover:bg-blue-50 transition-colors group"
+                    >
+                      <td className="p-5 border-r-2 border-black">
+                        <div className="font-black text-lg text-black uppercase">
+                          {project.name}
+                        </div>
+                        <div className="text-sm text-gray-600 font-bold italic line-clamp-1">
+                          {project.short_description}
+                        </div>
+                      </td>
+                      <td className="p-5 border-r-2 border-black">
+                        <span className="bg-black text-white px-3 py-1 text-xs font-black uppercase border-2 border-black shadow-[2px_2px_0_0_gray] whitespace-nowrap">
+                          {project.domain}
+                        </span>
+                      </td>
+                      <td className="p-5 border-r-2 border-black">
+                        <span
+                          className={`px-3 py-1 text-xs font-black uppercase border-2 border-black shadow-[2px_2px_0_0_black] whitespace-nowrap ${
+                            project.stage === "completed"
+                              ? "bg-[#0d9488] text-white"
+                              : project.stage === "in-progress"
+                                ? "bg-[#4f46e5] text-white"
+                                : "bg-[#f59e0b] text-black"
+                          }`}
+                        >
+                          {project.stage === "in-progress"
+                            ? "In Progress"
+                            : project.stage}
+                        </span>
+                      </td>
+                      <td className="p-5 border-r-2 border-black font-bold text-gray-800 capitalize whitespace-nowrap">
+                        {project.team_type?.replace("-", " ") || "N/A"}
+                      </td>
+                      <td className="p-5 border-r-2 border-black text-gray-700 font-bold text-sm">
+                        {new Date(project.created_at).toLocaleDateString(
+                          "en-GB",
+                        )}
+                      </td>
+                      <td className="p-5 border-r-2 border-black">
+                        <div className="flex flex-col gap-2">
+                          <span
+                            className={`flex items-center gap-1 font-bold text-xs uppercase ${project.status === "completed" ? "text-green-600" : project.status === "in-progress" ? "text-purple-600" : "text-blue-600"}`}
+                          >
+                            <div
+                              className={`w-2 h-2 rounded-full ${project.status === "completed" ? "bg-green-600" : "animate-pulse " + (project.status === "in-progress" ? "bg-purple-600" : "bg-blue-600")}`}
+                            ></div>
+                            {project.status}
+                          </span>
+                          <span
+                            className={`px-2 py-0.5 text-[10px] font-black uppercase border-2 w-fit ${project.approved ? "bg-green-100 text-green-800 border-green-800" : "bg-red-100 text-red-800 border-red-800"}`}
+                          >
+                            {project.approved ? "APPROVED" : "REJECTED"}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="p-5 text-center">
+                        <div className="flex gap-2 justify-center items-center">
+                          <button
+                            onClick={() => handleViewProject(project)}
+                            className="p-2 bg-white text-black border-2 border-black shadow-[2px_2px_0_0_black] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0_0_black] transition-all"
+                          >
+                            <Eye size={18} strokeWidth={2.5} />
+                          </button>
+                          {project.status === "idea" && (
+                            <button
+                              onClick={() =>
+                                handleUpdateStatus(project.id, "in-progress")
+                              }
+                              className="p-2 bg-blue-600 text-white border-2 border-black shadow-[2px_2px_0_0_black] hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
+                            >
+                              <PlayCircle size={18} strokeWidth={2.5} />
+                            </button>
+                          )}
+                          {project.status === "in-progress" && (
+                            <button
+                              onClick={() =>
+                                handleUpdateStatus(project.id, "completed")
+                              }
+                              className="p-2 bg-[#0d9488] text-white border-2 border-black shadow-[2px_2px_0_0_black] hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
+                            >
+                              <CheckCircle size={18} strokeWidth={2.5} />
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleToggleApproved(project.id)}
+                            className={`p-2 text-white border-2 border-black shadow-[2px_2px_0_0_black] hover:translate-x-[1px] hover:translate-y-[1px] transition-all ${project.approved ? "bg-red-500" : "bg-green-500"}`}
+                          >
+                            {project.approved ? (
+                              <X size={18} strokeWidth={2.5} />
+                            ) : (
+                              <Check size={18} strokeWidth={2.5} />
+                            )}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-24 bg-white border-4 border-black border-dashed text-center">
+            <div className="p-6 bg-gray-100 border-2 border-black rounded-full mb-6">
+              <FolderOpen className="text-black" size={48} strokeWidth={1.5} />
+            </div>
+            <h2 className="text-2xl font-black text-black uppercase mb-2">
+              No projects found
+            </h2>
+            <p className="text-gray-600 text-lg font-medium max-w-sm mb-8">
+              Try adjusting your search or filters to see results.
+            </p>
+          </div>
+        )}
+      </div>
+
+      {showDetails && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+          <div className="bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto border-4 border-black shadow-[8px_8px_0_0_black] animate-in fade-in zoom-in duration-200">
+            <div className="p-4 border-b-4 border-black flex justify-end bg-[#FFFDF5]">
+              <button
+                onClick={handleCloseDetails}
+                className="p-2 hover:bg-red-100 border-2 border-transparent hover:border-black transition-all"
+              >
+                <X size={24} strokeWidth={2.5} />
+              </button>
+            </div>
+            <ProjectDetails
+              project={selectedProject}
+              onClose={handleCloseDetails}
+              onUpdateStatus={handleUpdateStatus}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }

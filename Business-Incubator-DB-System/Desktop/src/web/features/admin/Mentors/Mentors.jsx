@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Plus,
   Briefcase,
@@ -9,10 +9,11 @@ import {
   Pin,
   X,
   Filter,
+  GraduationCap,
 } from "lucide-react";
 import MentorTable from "./MentorTable";
 import AddMentorForm from "./AddMentorForm";
-
+import StatCard from "../../../components/StatCard";
 
 const Mentors = () => {
   const [mentors, setMentors] = useState([]);
@@ -21,25 +22,27 @@ const Mentors = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterExpertise, setFilterExpertise] = useState("all");
 
-  const fetchMentors = async () => {
+  const fetchMentors = useCallback(async () => {
     try {
+      setLoading(true);
       const data = await window.electron.invoke("mentors:get-all");
       setMentors(data || []);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching mentors:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchMentors();
-  }, []);
+  }, [fetchMentors]);
 
   const handleAddMentor = () => {
     setShowAddForm(false);
     fetchMentors();
   };
+
   const filteredMentors = mentors.filter(
     (m) =>
       (filterExpertise === "all" ||
@@ -49,38 +52,58 @@ const Mentors = () => {
   );
 
   return (
-    <div className="flex-1 overflow-y-auto bg-gray-50 font-sans h-screen">
-      <div className="p-4 md:p-6 lg:p-8">
-        {/* Header Section (Neo-Brutalism Style) */}
-        <div className="bg-white border-b-4 border-blue-900 mb-8 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+    <div className="flex-1 overflow-y-auto bg-[#FFFDF5] h-screen font-sans scrollbar-hide">
+      <style jsx global>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+
+      <div className="p-6 lg:p-10 max-w-[1920px] mx-auto">
+        {/* Header Section */}
+        <div className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div>
-            <h1 className="text-4xl font-black uppercase text-blue-950">
-              Mentors
+            <span className="bg-black text-white px-3 py-1 font-bold text-sm uppercase tracking-wider mb-2 inline-block transform -rotate-1">
+              Expert Guidance
+            </span>
+            <h1 className="text-5xl md:text-6xl font-black text-black mb-2 uppercase tracking-tighter">
+              Mentors{" "}
+              <span className="bg-[#4f46e5] text-white px-2 border-4 border-black shadow-[4px_4px_0px_0px_#000] italic inline-block transform rotate-1">
+                Directory
+              </span>
             </h1>
-            <p className="text-gray-600 mt-2 font-medium">
+            <p className="text-xl text-slate-600 font-medium border-l-4 border-[#4f46e5] pl-4 italic mt-4">
               Manage experts, assign projects & track activity.
             </p>
           </div>
           <button
             onClick={() => setShowAddForm(true)}
-            className="bg-blue-950 text-white px-6 py-3 font-bold uppercase border-2 border-black shadow-[4px_4px_0_0_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center gap-2"
+            className="bg-black text-white px-8 py-4 font-bold uppercase border-4 border-black shadow-[4px_4px_0_0_#4f46e5] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center gap-3 text-lg"
           >
-            <Plus size={20} strokeWidth={3} />
+            <Plus size={24} strokeWidth={3} />
             Add Mentor
           </button>
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <StatCard
             title="Total Mentors"
             value={mentors.length}
             icon={Briefcase}
+            bgClass="bg-[#4f46e5]"
+            textClass="text-white"
           />
           <StatCard
             title="Active"
             value={mentors.filter((m) => m.status === "active").length}
             icon={UserCheck}
+            bgClass="bg-[#0d9488]"
+            textClass="text-white"
           />
           <StatCard
             title="Assigned Projects"
@@ -89,6 +112,8 @@ const Mentors = () => {
               0,
             )}
             icon={Briefcase}
+            bgClass="bg-[#0f172a]"
+            textClass="text-white"
           />
           <StatCard
             title="Workshops Led"
@@ -96,13 +121,15 @@ const Mentors = () => {
               (acc, m) => acc + parseInt(m.workshops_count || 0),
               0,
             )}
-            icon={Briefcase}
+            icon={GraduationCap}
+            bgClass="bg-white"
+            textClass="text-black"
           />
         </div>
 
         {/* Filters & Actions Bar */}
-        <div className="bg-white p-6 border-4 border-gray-900 shadow-[4px_4px_0_0_#111827] mb-8 flex flex-col sm:flex-row gap-4 items-center justify-between">
-          <div className="relative flex-1 w-full sm:w-auto">
+        <div className="bg-white p-6 border-4 border-black shadow-[6px_6px_0px_0px_#000] mb-8 flex flex-col xl:flex-row gap-6 items-center justify-between">
+          <div className="relative flex-1 w-full xl:w-auto">
             <Search
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
               size={20}
@@ -113,11 +140,11 @@ const Mentors = () => {
               placeholder="SEARCH MENTORS..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border-2 border-gray-900 bg-gray-50 focus:outline-none focus:ring-0 focus:bg-white font-bold text-gray-800 placeholder-gray-500 transition-all uppercase"
+              className="w-full pl-10 pr-4 py-3 border-2 border-black bg-[#FFFDF5] focus:outline-none focus:ring-0 focus:bg-white font-bold text-black placeholder-gray-500 transition-all uppercase"
             />
           </div>
 
-          <div className="relative w-full sm:w-auto">
+          <div className="relative w-full xl:w-auto">
             <Filter
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
               size={18}
@@ -126,7 +153,7 @@ const Mentors = () => {
             <select
               value={filterExpertise}
               onChange={(e) => setFilterExpertise(e.target.value)}
-              className="w-full sm:w-56 pl-10 pr-8 py-3 border-2 border-gray-900 bg-gray-50 focus:outline-none focus:ring-0 focus:bg-white font-bold text-gray-800 cursor-pointer appearance-none uppercase"
+              className="w-full xl:w-64 pl-10 pr-8 py-3 border-2 border-black bg-white text-black font-bold uppercase outline-none focus:bg-blue-50 cursor-pointer shadow-[2px_2px_0_0_black]"
             >
               <option value="all">All Expertise</option>
               <option value="technology">Technology</option>
@@ -134,13 +161,13 @@ const Mentors = () => {
               <option value="marketing">Marketing</option>
               <option value="design">Design</option>
             </select>
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-black">
               <svg
-                className="w-5 h-5 text-gray-900"
+                className="w-5 h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                strokeWidth="2.5"
+                strokeWidth={3}
               >
                 <path
                   strokeLinecap="round"
@@ -154,14 +181,18 @@ const Mentors = () => {
 
         {/* Table Section */}
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-24 bg-white border-4 border-gray-900 border-dashed">
-            <Loader2 className="text-4xl text-blue-900 animate-spin mb-4" />
-            <p className="text-gray-900 text-xl font-bold uppercase">
+          <div className="flex flex-col items-center justify-center py-24 bg-white border-4 border-black border-dashed">
+            <Loader2
+              className="text-black animate-spin mb-4"
+              size={40}
+              strokeWidth={2}
+            />
+            <p className="text-black font-black text-xl uppercase">
               Loading mentors...
             </p>
           </div>
         ) : filteredMentors.length > 0 ? (
-          <div className="bg-white border-4 border-gray-900 shadow-[4px_4px_0_0_#111827]">
+          <div className="bg-white border-4 border-black shadow-[8px_8px_0px_0px_#000]">
             <MentorTable
               mentors={filteredMentors}
               loading={false}
@@ -169,11 +200,11 @@ const Mentors = () => {
             />
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-24 bg-white border-4 border-gray-900 border-dashed text-center">
-            <div className="p-6 bg-gray-100 border-2 border-gray-900 rounded-full mb-6">
-              <Inbox className="text-5xl text-gray-900" strokeWidth={1.5} />
+          <div className="flex flex-col items-center justify-center py-24 bg-white border-4 border-black border-dashed text-center">
+            <div className="p-6 bg-gray-100 border-2 border-black rounded-full mb-6">
+              <Inbox className="text-black" size={48} strokeWidth={1.5} />
             </div>
-            <h3 className="text-2xl font-black text-blue-950 uppercase mb-2">
+            <h3 className="text-2xl font-black text-black uppercase mb-2">
               No mentors found
             </h3>
             <p className="text-gray-600 text-lg font-medium max-w-md mt-1 mb-8">
@@ -181,8 +212,9 @@ const Mentors = () => {
             </p>
             <button
               onClick={() => setShowAddForm(true)}
-              className="bg-blue-950 hover:bg-blue-900 text-white px-8 py-3 font-bold uppercase border-2 border-black shadow-[4px_4px_0_0_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+              className="bg-black text-white px-8 py-3 font-bold uppercase border-2 border-black shadow-[4px_4px_0_0_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center gap-2"
             >
+              <Plus size={20} strokeWidth={3} />
               Add First Mentor
             </button>
           </div>
@@ -190,10 +222,10 @@ const Mentors = () => {
 
         {/* Add Mentor Modal */}
         {showAddForm && (
-          <div className="fixed inset-0 bg-blue-900/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
             <div className="bg-white w-full max-w-lg max-h-[90vh] border-4 border-black shadow-[8px_8px_0_0_black] flex flex-col animate-in fade-in zoom-in duration-200">
-              <div className="p-6 border-b-4 border-black flex items-center justify-between bg-blue-50">
-                <h2 className="text-2xl font-black text-blue-950 uppercase flex items-center gap-3">
+              <div className="p-6 border-b-4 border-black flex items-center justify-between bg-[#FFFDF5]">
+                <h2 className="text-2xl font-black text-black uppercase flex items-center gap-3">
                   <div className="p-2 border-2 border-black bg-white">
                     <Pin size={20} strokeWidth={3} />
                   </div>
@@ -219,21 +251,5 @@ const Mentors = () => {
     </div>
   );
 };
-
-// Reusable Stat Card Component (Matched to Dashboard Style)
-// eslint-disable-next-line no-unused-vars
-const StatCard = ({ title, value, icon: Icon }) => (
-  <div className="bg-blue-50 border-4 border-blue-900 p-6 shadow-[4px_4px_0_0_#1e3a8a] hover:-translate-y-1 transition-transform">
-    <div className="flex items-start justify-between mb-4">
-      <div className="bg-white p-3 border-2 border-blue-950">
-        <Icon className="text-blue-900" size={24} strokeWidth={2.5} />
-      </div>
-    </div>
-    <div>
-      <p className="text-sm font-bold uppercase text-gray-600 mb-1">{title}</p>
-      <h3 className="text-4xl font-black text-blue-950">{value}</h3>
-    </div>
-  </div>
-);
 
 export default Mentors;

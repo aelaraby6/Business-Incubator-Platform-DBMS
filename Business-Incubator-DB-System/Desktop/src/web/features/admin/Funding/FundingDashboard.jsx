@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState, useEffect, useCallback } from "react";
 import {
-  faChartBar,
-  faTrendingUp,
-  faSpinner,
-  faDollarSign,
-  faTarget,
-} from "@fortawesome/free-solid-svg-icons";
+  BarChart,
+  TrendingUp,
+  Loader2,
+  DollarSign,
+  Target,
+} from "lucide-react";
+import StatCard from "../../../components/StatCard";
 
 const electron = window.electron || {};
 const invoke =
@@ -27,7 +27,7 @@ export default function FundingDashboard() {
     totalPending: 0,
   });
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     setLoading(true);
     try {
       const [dashData, stageData] = await Promise.all([
@@ -35,285 +35,278 @@ export default function FundingDashboard() {
         invoke("funding:getByStage"),
       ]);
 
-      setDashboardData(dashData?.data || []);
-      setFundingByStage(stageData?.data || []);
+      const projects = dashData?.data || [];
 
-      // Calculate summary
-      if (dashData?.data) {
-        const summary = {
-          totalProjects: dashData.data.length,
-          totalRequested: dashData.data.reduce(
-            (sum, p) => sum + (parseFloat(p.total_amount) || 0),
-            0,
-          ),
-          totalApproved: dashData.data.reduce(
-            (sum, p) => sum + (parseFloat(p.approved_amount) || 0),
-            0,
-          ),
-          totalPending: dashData.data.reduce(
-            (sum, p) => sum + (parseFloat(p.pending_amount) || 0),
-            0,
-          ),
-        };
-        setSummary(summary);
+      if (projects.length > 0) {
+        const calculatedSummary = projects.reduce(
+          (acc, p) => {
+            acc.totalRequested += parseFloat(p.total_amount) || 0;
+            acc.totalApproved += parseFloat(p.approved_amount) || 0;
+            acc.totalPending += parseFloat(p.pending_amount) || 0;
+            return acc;
+          },
+          {
+            totalProjects: projects.length,
+            totalRequested: 0,
+            totalApproved: 0,
+            totalPending: 0,
+          },
+        );
+
+        setSummary(calculatedSummary);
       }
+
+      setDashboardData(projects);
+      setFundingByStage(stageData?.data || []);
     } catch (error) {
       console.error("Error fetching dashboard:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchDashboardData();
   }, []);
 
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
+
+  const getStatusColor = (status) => {
+    const s = status.toLowerCase();
+    if (s === "approved") return "bg-green-500";
+    if (s === "pending") return "bg-yellow-500";
+    if (s === "rejected") return "bg-red-500";
+    return "bg-gray-500";
+  };
+
   return (
-    <div className="p-6">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-black text-gray-900 uppercase mb-2">
-          Funding Dashboard
-        </h1>
-        <p className="text-gray-600">
-          Overview of funding requests and approvals by project and stage
-        </p>
-      </div>
-
-      {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white border-4 border-purple-500 p-4 shadow-[4px_4px_0_0_#A855F7]">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-bold text-purple-700 uppercase mb-1">
-                Total Projects
-              </p>
-              <p className="text-3xl font-black text-gray-900">
-                {summary.totalProjects}
-              </p>
-            </div>
-            <FontAwesomeIcon
-              icon={faTarget}
-              size="lg"
-              className="text-purple-500"
-            />
-          </div>
+    <div className="flex-1 overflow-y-auto bg-[#FFFDF5] h-screen font-sans">
+      <div className="p-6 lg:p-10 max-w-[1920px] mx-auto">
+        <div className="mb-12">
+          <span className="bg-black text-white px-3 py-1 font-bold text-sm uppercase tracking-wider mb-2 inline-block transform -rotate-1">
+            Financial Overview
+          </span>
+          <h1 className="text-5xl md:text-6xl font-black text-black mb-2 uppercase tracking-tighter">
+            Funding{" "}
+            <span className="bg-[#f59e0b] text-black px-2 border-4 border-black shadow-[4px_4px_0px_0px_#000] italic inline-block transform rotate-1">
+              Dashboard
+            </span>
+          </h1>
+          <p className="text-xl text-slate-600 font-medium border-l-4 border-[#f59e0b] pl-4 italic mt-4">
+            Overview of funding requests and approvals by project and stage.
+          </p>
         </div>
 
-        <div className="bg-white border-4 border-blue-500 p-4 shadow-[4px_4px_0_0_#3B82F6]">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-bold text-blue-700 uppercase mb-1">
-                Total Requested
-              </p>
-              <p className="text-2xl font-black text-gray-900">
-                $
-                {(summary.totalRequested || 0).toLocaleString("en-US", {
-                  maximumFractionDigits: 0,
-                })}
-              </p>
-            </div>
-            <FontAwesomeIcon
-              icon={faDollarSign}
-              size="lg"
-              className="text-blue-500"
-            />
-          </div>
-        </div>
-
-        <div className="bg-white border-4 border-green-500 p-4 shadow-[4px_4px_0_0_#22C55E]">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-bold text-green-700 uppercase mb-1">
-                Total Approved
-              </p>
-              <p className="text-2xl font-black text-gray-900">
-                $
-                {(summary.totalApproved || 0).toLocaleString("en-US", {
-                  maximumFractionDigits: 0,
-                })}
-              </p>
-            </div>
-            <FontAwesomeIcon
-              icon={faTrendingUp}
-              size="lg"
-              className="text-green-500"
-            />
-          </div>
-        </div>
-
-        <div className="bg-white border-4 border-yellow-500 p-4 shadow-[4px_4px_0_0_#EAB308]">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-bold text-yellow-700 uppercase mb-1">
-                Total Pending
-              </p>
-              <p className="text-2xl font-black text-gray-900">
-                $
-                {(summary.totalPending || 0).toLocaleString("en-US", {
-                  maximumFractionDigits: 0,
-                })}
-              </p>
-            </div>
-            <FontAwesomeIcon
-              icon={faChartBar}
-              size="lg"
-              className="text-yellow-500"
-            />
-          </div>
-        </div>
-      </div>
-
-      {loading ? (
-        <div className="bg-white border-4 border-gray-900 p-8 text-center shadow-[4px_4px_0_0_#000000]">
-          <FontAwesomeIcon
-            icon={faSpinner}
-            className="animate-spin mx-auto text-gray-400 mb-4 text-4xl"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <StatCard
+            title="Total Projects"
+            value={summary.totalProjects}
+            icon={Target}
+            bgClass="bg-[#a855f7]"
+            textClass="text-white"
           />
-          <p className="text-gray-600 font-medium">Loading dashboard data...</p>
+          <StatCard
+            title="Total Requested"
+            value={`$${(summary.totalRequested || 0).toLocaleString("en-US", {
+              maximumFractionDigits: 0,
+            })}`}
+            icon={DollarSign}
+            bgClass="bg-[#3b82f6]"
+            textClass="text-white"
+          />
+          <StatCard
+            title="Total Approved"
+            value={`$${(summary.totalApproved || 0).toLocaleString("en-US", {
+              maximumFractionDigits: 0,
+            })}`}
+            icon={TrendingUp}
+            bgClass="bg-[#22c55e]"
+            textClass="text-white"
+          />
+          <StatCard
+            title="Total Pending"
+            value={`$${(summary.totalPending || 0).toLocaleString("en-US", {
+              maximumFractionDigits: 0,
+            })}`}
+            icon={BarChart}
+            bgClass="bg-[#eab308]"
+            textClass="text-black"
+          />
         </div>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Projects by Funding Status */}
-          <div className="bg-white border-4 border-gray-900 p-6 shadow-[4px_4px_0_0_#000000]">
-            <h2 className="text-2xl font-black text-gray-900 uppercase mb-6 border-b-4 border-gray-900 pb-4">
-              Projects by Funding Status
-            </h2>
 
-            {dashboardData.length > 0 ? (
-              <div className="space-y-4">
-                {dashboardData.slice(0, 10).map((project, index) => (
-                  <div
-                    key={project.id}
-                    className={`border-2 border-gray-300 p-4 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <p className="font-black text-gray-900">
-                          {project.name}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          {project.domain}
-                        </p>
-                      </div>
-                      <span className="inline-block px-2 py-1 bg-gray-200 text-gray-900 text-xs font-bold border-2 border-gray-400 uppercase">
-                        {project.stage}
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-3">
-                      <div>
-                        <p className="text-xs font-bold text-gray-600 uppercase">
-                          Requests
-                        </p>
-                        <p className="text-xl font-black text-gray-900">
-                          {project.total_requests || 0}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold text-green-700 uppercase">
-                          Approved
-                        </p>
-                        <p className="text-lg font-black text-green-600">
-                          $
-                          {(
-                            parseFloat(project.approved_amount) || 0
-                          ).toLocaleString("en-US", {
-                            maximumFractionDigits: 0,
-                          })}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold text-yellow-700 uppercase">
-                          Pending
-                        </p>
-                        <p className="text-lg font-black text-yellow-600">
-                          $
-                          {(
-                            parseFloat(project.pending_amount) || 0
-                          ).toLocaleString("en-US", {
-                            maximumFractionDigits: 0,
-                          })}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500 text-center py-8">
-                No project data available
-              </p>
-            )}
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-24 bg-white border-4 border-black border-dashed">
+            <Loader2
+              className="text-black animate-spin mb-4"
+              size={40}
+              strokeWidth={2}
+            />
+            <p className="text-black font-black text-xl uppercase">
+              Loading dashboard data...
+            </p>
           </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_#000]">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="bg-black text-white px-4 py-2 font-bold text-xl uppercase tracking-widest border-2 border-transparent">
+                  01
+                </div>
+                <h2 className="text-2xl font-black uppercase text-black tracking-tight">
+                  Projects by Funding Status
+                </h2>
+              </div>
 
-          {/* Funding Status by Stage */}
-          <div className="bg-white border-4 border-gray-900 p-6 shadow-[4px_4px_0_0_#000000]">
-            <h2 className="text-2xl font-black text-gray-900 uppercase mb-6 border-b-4 border-gray-900 pb-4">
-              Funding Status by Stage
-            </h2>
-
-            {fundingByStage.length > 0 ? (
-              <div className="space-y-4">
-                {fundingByStage.map((stage) => (
-                  <div
-                    key={stage.stage}
-                    className="border-2 border-gray-300 p-4 bg-gray-50"
-                  >
-                    <div className="mb-3">
-                      <p className="font-black text-gray-900 uppercase">
-                        {stage.stage}
-                      </p>
-                    </div>
-
-                    <div className="space-y-2">
-                      {stage.statuses &&
-                        Object.entries(stage.statuses).map(
-                          ([statusKey, statusData]) => (
-                            <div
-                              key={statusKey}
-                              className="flex items-center justify-between text-sm"
-                            >
-                              <div className="flex items-center gap-2">
-                                <span className="capitalize font-bold text-gray-700">
-                                  {statusKey}
-                                </span>
-                                <span className="text-gray-600">
-                                  ({statusData.count})
-                                </span>
-                              </div>
-                              <span className="font-black text-gray-900">
-                                $
-                                {(
-                                  parseFloat(statusData.amount) || 0
-                                ).toLocaleString("en-US", {
-                                  maximumFractionDigits: 0,
-                                })}
-                              </span>
-                            </div>
-                          ),
-                        )}
-                      <div className="border-t-2 border-gray-300 pt-2 mt-2 font-bold flex items-center justify-between">
-                        <span>Total</span>
-                        <span className="text-gray-900">
-                          $
-                          {(stage.total_amount || 0).toLocaleString("en-US", {
-                            maximumFractionDigits: 0,
-                          })}
+              {dashboardData.length > 0 ? (
+                <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-black scrollbar-track-gray-100">
+                  {dashboardData.slice(0, 10).map((project, index) => (
+                    <div
+                      key={project.id}
+                      className={`border-2 border-black p-4 transition-colors hover:bg-gray-50 ${
+                        index % 2 === 0 ? "bg-white" : "bg-[#FFFDF5]"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <p className="font-black text-black text-lg uppercase">
+                            {project.name}
+                          </p>
+                          <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                            {project.domain}
+                          </p>
+                        </div>
+                        <span className="inline-block px-3 py-1 bg-black text-white text-xs font-black border-2 border-black uppercase">
+                          {project.stage}
                         </span>
                       </div>
+
+                      <div className="grid grid-cols-3 gap-4 border-t-2 border-gray-200 pt-4">
+                        <div>
+                          <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
+                            Requests
+                          </p>
+                          <p className="text-xl font-black text-black">
+                            {project.total_requests || 0}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-green-600 uppercase tracking-wider mb-1">
+                            Approved
+                          </p>
+                          <p className="text-lg font-black text-green-600">
+                            $
+                            {(
+                              parseFloat(project.approved_amount) || 0
+                            ).toLocaleString("en-US", {
+                              maximumFractionDigits: 0,
+                            })}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-yellow-600 uppercase tracking-wider mb-1">
+                            Pending
+                          </p>
+                          <p className="text-lg font-black text-yellow-600">
+                            $
+                            {(
+                              parseFloat(project.pending_amount) || 0
+                            ).toLocaleString("en-US", {
+                              maximumFractionDigits: 0,
+                            })}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 border-2 border-dashed border-gray-300">
+                  <p className="text-gray-500 font-bold uppercase">
+                    No project data available
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_#000]">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="bg-black text-white px-4 py-2 font-bold text-xl uppercase tracking-widest border-2 border-transparent">
+                  02
+                </div>
+                <h2 className="text-2xl font-black uppercase text-black tracking-tight">
+                  Funding Status by Stage
+                </h2>
               </div>
-            ) : (
-              <p className="text-gray-500 text-center py-8">
-                No stage data available
-              </p>
-            )}
+
+              {fundingByStage.length > 0 ? (
+                <div className="space-y-6">
+                  {fundingByStage.map((stage) => (
+                    <div
+                      key={stage.stage}
+                      className="border-4 border-black p-5 shadow-[4px_4px_0px_0px_#000] bg-white hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#000] transition-all"
+                    >
+                      <div className="mb-4 pb-2 border-b-2 border-black">
+                        <p className="font-black text-xl text-black uppercase tracking-tight">
+                          {stage.stage}
+                        </p>
+                      </div>
+
+                      <div className="space-y-3">
+                        {stage.statuses &&
+                          Object.entries(stage.statuses).map(
+                            ([statusKey, statusData]) => (
+                              <div
+                                key={statusKey}
+                                className="flex items-center justify-between text-sm group"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div
+                                    className={`w-3 h-3 border-2 border-black ${getStatusColor(
+                                      statusKey,
+                                    )}`}
+                                  ></div>
+                                  <span className="font-bold text-gray-700 uppercase text-xs tracking-wide">
+                                    {statusKey}
+                                  </span>
+                                  <span className="bg-gray-100 px-2 py-0.5 text-xs font-bold border border-gray-300 rounded-sm">
+                                    {statusData.count}
+                                  </span>
+                                </div>
+                                <span className="font-black text-black text-base group-hover:text-blue-600 transition-colors">
+                                  $
+                                  {(
+                                    parseFloat(statusData.amount) || 0
+                                  ).toLocaleString("en-US", {
+                                    maximumFractionDigits: 0,
+                                  })}
+                                </span>
+                              </div>
+                            ),
+                          )}
+                        <div className="border-t-2 border-black pt-3 mt-3 flex items-center justify-between bg-gray-50 -mx-5 -mb-5 px-5 py-3">
+                          <span className="font-black text-sm uppercase">
+                            Total Volume
+                          </span>
+                          <span className="font-black text-xl text-black">
+                            $
+                            {(stage.total_amount || 0).toLocaleString("en-US", {
+                              maximumFractionDigits: 0,
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 border-2 border-dashed border-gray-300">
+                  <p className="text-gray-500 font-bold uppercase">
+                    No stage data available
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
