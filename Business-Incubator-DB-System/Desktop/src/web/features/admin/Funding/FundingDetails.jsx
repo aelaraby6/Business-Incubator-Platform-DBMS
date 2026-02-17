@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowLeft,
-  faUser,
-  faDollarSign,
-  faCalendar,
-  faFile,
-  faSave,
-  faCircleExclamation,
-} from "@fortawesome/free-solid-svg-icons";
+  ArrowLeft,
+  User,
+  DollarSign,
+  Calendar,
+  FileText,
+  Save,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
 
 const electron = window.electron || {};
 const invoke =
@@ -55,13 +55,14 @@ export default function FundingDetails({ request, onBack }) {
 
   const getStatusColor = (status) => {
     const statusLower = status?.toLowerCase() || "";
-    if (statusLower === "approved")
-      return "bg-green-100 border-green-500 text-green-900";
-    if (statusLower === "pending")
-      return "bg-yellow-100 border-yellow-500 text-yellow-900";
-    if (statusLower === "rejected")
-      return "bg-red-100 border-red-500 text-red-900";
-    return "bg-blue-100 border-blue-500 text-blue-900";
+    const base =
+      "inline-flex items-center gap-2 px-3 py-1 text-xs font-black border-2 border-black uppercase shadow-[2px_2px_0_0_black]";
+
+    if (statusLower === "approved") return `${base} bg-green-400 text-black`;
+    if (statusLower === "pending") return `${base} bg-yellow-400 text-black`;
+    if (statusLower === "rejected") return `${base} bg-red-400 text-black`;
+    if (statusLower === "under review") return `${base} bg-blue-400 text-black`;
+    return `${base} bg-gray-200 text-gray-600`;
   };
 
   if (!request) {
@@ -69,172 +70,171 @@ export default function FundingDetails({ request, onBack }) {
       <div className="p-6">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white border-2 border-black hover:bg-gray-700 font-bold transition-all mb-4"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white border-2 border-black hover:bg-white hover:text-black font-bold uppercase transition-all shadow-[4px_4px_0_0_black] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] mb-4"
         >
-          <FontAwesomeIcon icon={faArrowLeft} />
+          <ArrowLeft size={20} strokeWidth={2.5} />
           Back
         </button>
-        <div className="bg-white border-4 border-gray-900 p-8 text-center">
-          <FontAwesomeIcon
-            icon={faCircleExclamation}
-            className="mx-auto text-red-400 mb-4 text-5xl"
+        <div className="bg-white border-4 border-black p-8 text-center border-dashed">
+          <AlertCircle
+            className="mx-auto text-black mb-4"
+            size={48}
+            strokeWidth={1.5}
           />
-          <p className="text-gray-600 font-medium">Funding request not found</p>
+          <p className="text-black font-bold text-xl uppercase">
+            Funding request not found
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
-      {/* Header */}
+    <div className="p-6 lg:p-10 max-w-[1920px] mx-auto bg-[#FFFDF5] min-h-screen">
       <button
         onClick={onBack}
-        className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white border-2 border-black hover:bg-gray-700 font-bold transition-all mb-6"
+        className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white border-2 border-black hover:bg-white hover:text-black font-black uppercase transition-all shadow-[4px_4px_0_0_black] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] mb-8"
       >
-        <FontAwesomeIcon icon={faArrowLeft} />
+        <ArrowLeft size={20} strokeWidth={3} />
         Back
       </button>
 
-      <div className="mb-8">
-        <h1 className="text-4xl font-black text-gray-900 uppercase mb-2">
-          Funding Request Review
+      <div className="mb-10 border-b-4 border-black pb-6">
+        <h1 className="text-4xl md:text-5xl font-black text-black uppercase mb-2 tracking-tight">
+          Funding Review
         </h1>
-        <p className="text-gray-600">
-          Review and update the status of this funding request
+        <p className="text-xl text-gray-600 font-bold border-l-4 border-black pl-4">
+          // Review details and update application status
         </p>
       </div>
 
-      {/* Message */}
       {message && (
         <div
-          className={`mb-6 border-4 p-4 font-bold ${
+          className={`mb-8 border-4 border-black p-4 font-bold uppercase shadow-[4px_4px_0_0_black] flex items-center gap-3 ${
             message.type === "success"
-              ? "bg-green-100 border-green-500 text-green-900"
-              : "bg-red-100 border-red-500 text-red-900"
+              ? "bg-green-400 text-black"
+              : "bg-red-400 text-black"
           }`}
         >
+          {message.type === "error" && (
+            <AlertCircle size={24} strokeWidth={2.5} />
+          )}
           {message.text}
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Content */}
-        <div className="lg:col-span-2">
-          {/* Project Information */}
-          <div className="bg-white border-4 border-gray-900 p-6 mb-6 shadow-[4px_4px_0_0_#000000]">
-            <h2 className="text-2xl font-black text-gray-900 uppercase mb-6 border-b-4 border-gray-900 pb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-8">
+          <div className="bg-white border-4 border-black p-8 shadow-[8px_8px_0_0_black]">
+            <h2 className="text-2xl font-black text-black uppercase mb-6 border-b-4 border-black pb-2 inline-block">
               Project Information
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <p className="text-sm font-bold text-gray-600 uppercase mb-2">
+                <p className="text-xs font-black text-gray-500 uppercase mb-1 tracking-wider">
                   Project Name
                 </p>
-                <p className="text-lg font-black text-gray-900">
+                <p className="text-xl font-black text-black uppercase">
                   {request.project?.name}
                 </p>
               </div>
               <div>
-                <p className="text-sm font-bold text-gray-600 uppercase mb-2">
+                <p className="text-xs font-black text-gray-500 uppercase mb-1 tracking-wider">
                   Domain
                 </p>
-                <p className="text-lg font-black text-gray-900">
+                <p className="text-xl font-black text-black uppercase">
                   {request.project?.domain}
                 </p>
               </div>
               <div>
-                <p className="text-sm font-bold text-gray-600 uppercase mb-2">
+                <p className="text-xs font-black text-gray-500 uppercase mb-1 tracking-wider">
                   Stage
                 </p>
-                <span className="inline-block px-3 py-1 bg-gray-200 text-gray-900 text-sm font-bold border-2 border-gray-400 uppercase">
+                <span className="inline-block px-3 py-1 bg-black text-white text-sm font-bold border-2 border-black uppercase shadow-[2px_2px_0_0_gray]">
                   {request.project?.stage || request.funding_stage}
                 </span>
               </div>
               <div>
-                <p className="text-sm font-bold text-gray-600 uppercase mb-2">
-                  Status
+                <p className="text-xs font-black text-gray-500 uppercase mb-1 tracking-wider">
+                  Current Status
                 </p>
-                <span
-                  className={`inline-block px-3 py-1 text-sm font-bold border-2 uppercase ${getStatusColor(request.project?.status)}`}
-                >
+                <div className={getStatusColor(request.project?.status)}>
                   {request.project?.status}
-                </span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Founder Information */}
-          <div className="bg-white border-4 border-gray-900 p-6 mb-6 shadow-[4px_4px_0_0_#000000]">
-            <h2 className="text-2xl font-black text-gray-900 uppercase mb-6 border-b-4 border-gray-900 pb-4">
+          <div className="bg-white border-4 border-black p-8 shadow-[8px_8px_0_0_black]">
+            <h2 className="text-2xl font-black text-black uppercase mb-6 border-b-4 border-black pb-2 inline-block">
               Founder Information
             </h2>
 
             {request.founders && request.founders.length > 0 ? (
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {request.founders.map((founder, index) => (
-                  <div key={index} className="border-2 border-gray-300 p-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="flex items-center gap-4">
-                        {founder.profile_image ? (
-                          <img
-                            src={founder.profile_image}
-                            alt={founder.name}
-                            className="w-16 h-16 rounded-lg border-2 border-gray-400 object-cover"
+                  <div
+                    key={index}
+                    className="border-2 border-black p-6 bg-[#FFFDF5] hover:bg-white transition-colors"
+                  >
+                    <div className="flex items-center gap-6">
+                      {founder.profile_image ? (
+                        <img
+                          src={founder.profile_image}
+                          alt={founder.name}
+                          className="w-20 h-20 border-2 border-black object-cover shadow-[4px_4px_0_0_black]"
+                        />
+                      ) : (
+                        <div className="w-20 h-20 border-2 border-black bg-gray-200 flex items-center justify-center shadow-[4px_4px_0_0_black]">
+                          <User
+                            size={32}
+                            strokeWidth={2}
+                            className="text-black"
                           />
-                        ) : (
-                          <div className="w-16 h-16 rounded-lg border-2 border-gray-400 bg-gray-200 flex items-center justify-center">
-                            <FontAwesomeIcon
-                              icon={faUser}
-                              size="lg"
-                              className="text-gray-600"
-                            />
-                          </div>
-                        )}
-                        <div>
-                          <p className="font-black text-gray-900">
-                            {founder.name}
-                          </p>
-                          <p className="text-sm text-gray-600">
-                            {founder.email}
-                          </p>
                         </div>
+                      )}
+                      <div>
+                        <p className="text-xl font-black text-black uppercase mb-1">
+                          {founder.name}
+                        </p>
+                        <p className="text-sm font-bold text-gray-500 lowercase">
+                          {founder.email}
+                        </p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500">No founder information available</p>
+              <p className="text-gray-500 font-bold uppercase border-2 border-dashed border-gray-300 p-4 text-center">
+                No founder information available
+              </p>
             )}
           </div>
 
-          {/* Funding Request Details */}
-          <div className="bg-white border-4 border-gray-900 p-6 shadow-[4px_4px_0_0_#000000]">
-            <h2 className="text-2xl font-black text-gray-900 uppercase mb-6 border-b-4 border-gray-900 pb-4">
+          <div className="bg-white border-4 border-black p-8 shadow-[8px_8px_0_0_black]">
+            <h2 className="text-2xl font-black text-black uppercase mb-6 border-b-4 border-black pb-2 inline-block">
               Request Details
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div>
-                <p className="text-sm font-bold text-gray-600 uppercase mb-2 flex items-center gap-2">
-                  <FontAwesomeIcon icon={faDollarSign} />
-                  Amount Requested
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div className="border-2 border-black p-4 bg-gray-50">
+                <p className="text-xs font-black text-gray-500 uppercase mb-2 flex items-center gap-2">
+                  <DollarSign size={16} /> Amount Requested
                 </p>
-                <p className="text-3xl font-black text-gray-900">
+                <p className="text-4xl font-black text-black tracking-tighter">
                   $
                   {parseFloat(request.amount || 0).toLocaleString("en-US", {
                     maximumFractionDigits: 2,
                   })}
                 </p>
               </div>
-              <div>
-                <p className="text-sm font-bold text-gray-600 uppercase mb-2 flex items-center gap-2">
-                  <FontAwesomeIcon icon={faCalendar} />
-                  Requested Date
+              <div className="border-2 border-black p-4 bg-gray-50">
+                <p className="text-xs font-black text-gray-500 uppercase mb-2 flex items-center gap-2">
+                  <Calendar size={16} /> Requested Date
                 </p>
-                <p className="text-lg font-bold text-gray-900">
+                <p className="text-xl font-black text-black uppercase">
                   {request.requested_at
                     ? new Date(request.requested_at).toLocaleDateString(
                         "en-US",
@@ -248,23 +248,21 @@ export default function FundingDetails({ request, onBack }) {
                 </p>
               </div>
               <div className="md:col-span-2">
-                <p className="text-sm font-bold text-gray-600 uppercase mb-2 flex items-center gap-2">
-                  <FontAwesomeIcon icon={faFile} />
-                  Description
+                <p className="text-xs font-black text-gray-500 uppercase mb-3 flex items-center gap-2">
+                  <FileText size={16} /> Description
                 </p>
-                <p className="text-gray-800 border-l-4 border-gray-300 pl-4 py-2">
+                <div className="text-black font-medium border-l-4 border-black pl-6 py-2 leading-relaxed">
                   {request.description || "No description provided"}
-                </p>
+                </div>
               </div>
             </div>
 
-            {/* Review Information */}
             {request.reviewed_at && (
-              <div className="bg-gray-100 border-2 border-gray-300 p-4 mb-6">
-                <p className="text-sm font-bold text-gray-600 uppercase mb-2">
+              <div className="bg-black text-white p-4 border-2 border-black shadow-[4px_4px_0_0_gray]">
+                <p className="text-xs font-bold uppercase mb-1 opacity-70">
                   Last Review
                 </p>
-                <p className="text-gray-800">
+                <p className="font-bold uppercase tracking-wide">
                   {new Date(request.reviewed_at).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
@@ -279,102 +277,112 @@ export default function FundingDetails({ request, onBack }) {
           </div>
         </div>
 
-        {/* Sidebar - Status Update */}
-        <div className="lg:col-span-1">
-          {/* Current Status */}
+        <div className="lg:col-span-1 space-y-8">
           <div
-            className={`border-4 p-6 mb-6 shadow-[4px_4px_0_0_#000000] ${getStatusColor(status)} bg-opacity-10`}
+            className={`border-4 border-black p-8 shadow-[8px_8px_0_0_black] ${
+              status.toLowerCase() === "approved"
+                ? "bg-green-50"
+                : status.toLowerCase() === "rejected"
+                  ? "bg-red-50"
+                  : "bg-yellow-50"
+            }`}
           >
-            <div
-              className={`inline-block px-3 py-1 text-sm font-bold border-2 uppercase ${getStatusColor(status)}`}
-            >
+            <div className="inline-block px-3 py-1 text-xs font-black border-2 border-black bg-white uppercase mb-4 shadow-[2px_2px_0_0_black]">
               Current Status
             </div>
             <p
-              className={`text-3xl font-black mt-4 ${getStatusColor(status).split(" ")[2]}`}
+              className={`text-4xl font-black uppercase tracking-tight ${
+                status.toLowerCase() === "approved"
+                  ? "text-green-600"
+                  : status.toLowerCase() === "rejected"
+                    ? "text-red-600"
+                    : "text-yellow-600"
+              }`}
             >
               {request.status}
             </p>
           </div>
 
-          {/* Update Status Form */}
-          <div className="bg-white border-4 border-gray-900 p-6 shadow-[4px_4px_0_0_#000000]">
-            <h3 className="text-xl font-black text-gray-900 uppercase mb-4 border-b-4 border-gray-900 pb-3">
+          <div className="bg-white border-4 border-black p-8 shadow-[8px_8px_0_0_black]">
+            <h3 className="text-xl font-black text-black uppercase mb-6 border-b-4 border-black pb-2">
               Update Status
             </h3>
 
-            {/* Status Select */}
-            <div className="mb-4">
-              <label className="block text-sm font-bold text-gray-700 uppercase mb-2">
+            <div className="mb-6">
+              <label className="block text-xs font-black text-gray-700 uppercase mb-2 tracking-wide">
                 Status
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 focus:border-gray-900 focus:outline-none font-bold"
+                className="w-full px-4 py-3 border-2 border-black bg-white focus:outline-none focus:bg-blue-50 font-bold uppercase cursor-pointer shadow-[4px_4px_0_0_black] transition-all"
               >
-                <option value="Pending">Pending</option>
-                <option value="Under Review">Under Review</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
+                <option value="Pending">PENDING</option>
+                <option value="Under Review">UNDER REVIEW</option>
+                <option value="Approved">APPROVED</option>
+                <option value="Rejected">REJECTED</option>
               </select>
             </div>
 
-            {/* Notes */}
-            <div className="mb-6">
-              <label className="block text-sm font-bold text-gray-700 uppercase mb-2">
+            <div className="mb-8">
+              <label className="block text-xs font-black text-gray-700 uppercase mb-2 tracking-wide">
                 Review Notes
               </label>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Add notes about your decision..."
-                className="w-full px-4 py-3 border-2 border-gray-300 focus:border-gray-900 focus:outline-none font-medium min-h-32 resize-none"
+                placeholder="ADD DECISION NOTES HERE..."
+                className="w-full px-4 py-3 border-2 border-black bg-white focus:outline-none focus:bg-blue-50 font-bold min-h-[150px] resize-none shadow-[4px_4px_0_0_black] transition-all placeholder:text-gray-400"
               />
             </div>
 
-            {/* Action Buttons */}
             <button
               onClick={handleUpdateStatus}
               disabled={loading}
-              className={`w-full px-4 py-3 font-black uppercase border-2 transition-all flex items-center justify-center gap-2 ${
+              className={`w-full px-6 py-4 font-black uppercase border-2 border-black transition-all flex items-center justify-center gap-3 text-lg ${
                 loading
-                  ? "bg-gray-400 text-gray-600 border-gray-400 cursor-not-allowed"
-                  : "bg-gray-900 text-white border-black hover:shadow-[4px_4px_0_0_#000] shadow-[2px_2px_0_0_#000]"
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed translate-x-[2px] translate-y-[2px] shadow-none"
+                  : "bg-black text-white hover:bg-white hover:text-black shadow-[6px_6px_0_0_black] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]"
               }`}
             >
-              <FontAwesomeIcon icon={faSave} />
-              {loading ? "Updating..." : "Update Status"}
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin" size={24} /> Updating...
+                </>
+              ) : (
+                <>
+                  <Save size={24} strokeWidth={3} /> Update Status
+                </>
+              )}
             </button>
 
-            {/* Color Indicator */}
-            <div className="mt-6 pt-6 border-t-2 border-gray-300">
-              <p className="text-xs font-bold text-gray-600 uppercase mb-3">
+            <div className="mt-8 pt-6 border-t-4 border-black">
+              <p className="text-xs font-black text-gray-500 uppercase mb-4 tracking-widest">
                 Status Legend
               </p>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 bg-yellow-500 border border-yellow-700"></span>
-                  <span className="text-sm font-medium text-gray-700">
-                    Pending - Awaiting review
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <span className="w-4 h-4 bg-yellow-400 border-2 border-black shadow-[1px_1px_0_0_black]"></span>
+                  <span className="text-sm font-bold text-gray-900 uppercase">
+                    Pending
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 bg-blue-500 border border-blue-700"></span>
-                  <span className="text-sm font-medium text-gray-700">
-                    Under Review - Being evaluated
+                <div className="flex items-center gap-3">
+                  <span className="w-4 h-4 bg-blue-400 border-2 border-black shadow-[1px_1px_0_0_black]"></span>
+                  <span className="text-sm font-bold text-gray-900 uppercase">
+                    Under Review
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 bg-green-500 border border-green-700"></span>
-                  <span className="text-sm font-medium text-gray-700">
-                    Approved - Funding granted
+                <div className="flex items-center gap-3">
+                  <span className="w-4 h-4 bg-green-400 border-2 border-black shadow-[1px_1px_0_0_black]"></span>
+                  <span className="text-sm font-bold text-gray-900 uppercase">
+                    Approved
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 bg-red-500 border border-red-700"></span>
-                  <span className="text-sm font-medium text-gray-700">
-                    Rejected - Not approved
+                <div className="flex items-center gap-3">
+                  <span className="w-4 h-4 bg-red-400 border-2 border-black shadow-[1px_1px_0_0_black]"></span>
+                  <span className="text-sm font-bold text-gray-900 uppercase">
+                    Rejected
                   </span>
                 </div>
               </div>

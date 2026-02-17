@@ -8,6 +8,7 @@ import {
   FileText,
   ChevronDown,
   LogOut,
+  ArrowRight,
 } from "lucide-react";
 
 const Sidebar = ({ activeTab = "Dashboard", setActiveTab = () => {} }) => {
@@ -35,21 +36,29 @@ const Sidebar = ({ activeTab = "Dashboard", setActiveTab = () => {} }) => {
   };
 
   return (
-    <div className="w-64 h-screen bg-gray-50 border-r-4 border-gray-900 flex flex-col shrink-0">
-      {/* Logo */}
-      <div className="p-4 border-b-4 border-gray-900 bg-white">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-gray-900 border-4 border-black flex items-center justify-center shadow-[2px_2px_0_0_#000]">
-            <span className="text-white font-black text-xl">B</span>
+    <div className="w-64 h-screen bg-[#FFFDF5] border-r-4 border-black flex flex-col shrink-0 font-sans overflow-hidden">
+      {/* Logo Section */}
+      <div className="p-6 border-b-4 border-black bg-white">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-black border-4 border-black flex items-center justify-center shadow-[4px_4px_0_0_#4f46e5]">
+            <span className="text-white font-black text-2xl tracking-tighter">
+              B
+            </span>
           </div>
-          <span className="font-black text-xl uppercase text-gray-900">
-            Incubator
-          </span>
+          <div className="flex flex-col">
+            <span className="font-black text-xl uppercase leading-none tracking-tighter text-black">
+              Incubator
+            </span>
+            <span className="text-[10px] font-black uppercase text-[#4f46e5] tracking-widest mt-1">
+              Admin Suite
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Navigation Items */}
-      <nav className="flex-1 p-3 overflow-y-auto">
+      {/* Navigation */}
+      <nav className="flex-1 p-4 overflow-y-auto scrollbar-hide space-y-3">
+
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.label;
@@ -58,65 +67,47 @@ const Sidebar = ({ activeTab = "Dashboard", setActiveTab = () => {} }) => {
             <div key={item.id}>
               <button
                 onClick={() => handleItemClick(item.label)}
-                className={`w-full flex items-center justify-between px-4 py-3 mb-2 transition-all border-4 font-bold uppercase text-sm ${
+                className={`w-full flex items-center justify-between px-4 py-4 transition-all border-4 font-black uppercase text-xs tracking-widest ${
                   isActive
-                    ? "bg-gray-900 text-white border-black shadow-[3px_3px_0_0_#000]"
-                    : "bg-white text-gray-700 border-gray-900 hover:bg-gray-100 shadow-[2px_2px_0_0_#111827]"
+                    ? "bg-[#4f46e5] text-white border-black shadow-[4px_4px_0_0_#000] translate-x-[-2px] translate-y-[-2px]"
+                    : "bg-white text-black border-black hover:bg-[#FFFDF5] hover:shadow-[4px_4px_0_0_#000] hover:translate-x-[-2px] hover:translate-y-[-2px]"
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon size={20} strokeWidth={2.5} />
-                  <span className="font-black">{item.label}</span>
+                  <Icon size={18} strokeWidth={3} />
+                  <span>{item.label}</span>
                 </div>
 
-                {/* Badge */}
                 <div className="flex items-center gap-2">
                   {item.badge === "New" && (
-                    <span className="bg-gray-900 text-white text-xs px-2 py-1 border-2 border-black font-black uppercase">
-                      New
+                    <span
+                      className={`text-[10px] px-2 py-0.5 border-2 border-black font-black ${isActive ? "bg-white text-black" : "bg-[#f59e0b] text-black"}`}
+                    >
+                      NEW
                     </span>
                   )}
-                  {typeof item.badge === "number" && (
-                    <span className="bg-gray-600 text-white text-xs w-6 h-6 border-2 border-gray-800 flex items-center justify-center font-black">
-                      {item.badge}
-                    </span>
-                  )}
-                  {item.hasDropdown && (
-                    <ChevronDown
-                      size={16}
-                      className={`transition-transform ${isElementsOpen && isActive ? "rotate-180" : ""}`}
+                  {isActive && (
+                    <ArrowRight
+                      size={14}
+                      strokeWidth={4}
+                      className="animate-pulse"
                     />
                   )}
                 </div>
               </button>
-
-              {/* Dropdown for Elements */}
-              {item.hasDropdown && isActive && isElementsOpen && (
-                <div className="ml-4 mb-2 border-l-4 border-gray-900 pl-2">
-                  <div className="text-sm text-gray-700 py-2 px-3 hover:bg-gray-100 font-bold cursor-pointer border-2 border-transparent hover:border-gray-900 mb-1">
-                    Buttons
-                  </div>
-                  <div className="text-sm text-gray-700 py-2 px-3 hover:bg-gray-100 font-bold cursor-pointer border-2 border-transparent hover:border-gray-900 mb-1">
-                    Cards
-                  </div>
-                  <div className="text-sm text-gray-700 py-2 px-3 hover:bg-gray-100 font-bold cursor-pointer border-2 border-transparent hover:border-gray-900">
-                    Tables
-                  </div>
-                </div>
-              )}
             </div>
           );
         })}
       </nav>
 
-      {/* Logout Button */}
-      <div className="p-3 border-t-4 border-gray-900 bg-white">
+      {/* Logout Footer */}
+      <div className="p-4 border-t-4 border-black bg-white">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 bg-red-600 text-white border-4 border-black font-bold uppercase text-sm hover:bg-red-700 transition-all shadow-[3px_3px_0_0_#000] hover:shadow-[2px_2px_0_0_#000] hover:translate-x-[1px] hover:translate-y-[1px]"
+          className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-[#ef4444] text-white border-4 border-black font-black uppercase text-xs tracking-widest transition-all shadow-[4px_4px_0_0_#000] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]"
         >
-          <LogOut size={20} strokeWidth={2.5} />
-          <span className="font-black">Logout</span>
+          <LogOut size={18} strokeWidth={3} />
+          <span>Exit System</span>
         </button>
       </div>
     </div>

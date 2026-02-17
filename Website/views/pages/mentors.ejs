@@ -2,118 +2,126 @@
 <html lang="en">
 <%- include('../partials/head') %> 
 
-<body class="bg-neo-white flex flex-col min-h-screen text-neo-black"> 
+<body class="bg-[#FFFDF5] flex flex-col min-h-screen text-black font-sans"> 
     <%- include('../partials/header') %>
 
     <main class="flex-grow">
         
         <div class="container mx-auto px-4 py-16 text-center">
-            <span class="bg-neo-black text-white px-3 py-1 font-bold text-sm uppercase tracking-wider mb-4 inline-block transform -rotate-2 font-display">
+            <span class="bg-black text-white px-3 py-1 font-bold text-sm uppercase tracking-wider mb-4 inline-block transform -rotate-2">
                 Expert Guidance
             </span>
-            <h1 class="text-6xl md:text-7xl font-bold text-neo-black mb-6 font-display uppercase tracking-tighter">
-                MEET THE <span class="bg-brand-indigo text-white px-4 border-4 border-black shadow-neo italic inline-block transform rotate-1">WIZARDS</span>
+            <h1 class="text-6xl md:text-7xl font-black text-black mb-6 uppercase tracking-tighter">
+                MEET THE <span class="bg-[#4f46e5] text-white px-4 border-4 border-black shadow-[4px_4px_0px_0px_#000] italic inline-block transform rotate-1">WIZARDS</span>
             </h1>
-            <p class="text-xl text-slate-600 max-w-2xl mx-auto font-medium font-sans border-l-4 border-brand-indigo pl-6 italic">
-                .Don't learn from mistakes. Learn from people who already made them.
+            <p class="text-xl text-slate-600 max-w-2xl mx-auto font-bold border-l-4 border-[#4f46e5] pl-6 italic">
+                Don't learn from mistakes. Learn from people who already made them.
             </p>
         </div>
 
         <div class="container mx-auto px-4 mb-24 pt-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                
-                <% mentors.forEach(mentor => { 
-                    // Mapping roles to our Formal Palette
-                    let headerColorBg = 'bg-brand-slate'; 
+            
+            <% if (mentors && mentors.length > 0) { %>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                     
-                    if (mentor.role.toLowerCase().includes('frontend') || mentor.role.toLowerCase().includes('ui')) {
-                        headerColorBg = 'bg-brand-indigo'; 
-                    } else if (mentor.role.toLowerCase().includes('devops') || mentor.role.toLowerCase().includes('cloud')) {
-                        headerColorBg = 'bg-teal-600'; 
-                    } else if (mentor.role.toLowerCase().includes('backend')) {
-                        headerColorBg = 'bg-brand-slate'; 
-                    }
-                %>
-                    <div class="bg-white border-4 border-black overflow-hidden shadow-neo flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group">
-                        
-                        <div class="h-28 border-b-4 border-black relative <%= headerColorBg %>" 
-                             style="background-image: radial-gradient(rgba(0,0,0,0.2) 1px, transparent 1px); background-size: 12px 12px;">
+                    <% mentors.forEach(mentor => { %>
+                        <div class="bg-white border-4 border-black overflow-hidden shadow-[6px_6px_0px_0px_#000] flex flex-col h-full transform transition hover:-translate-y-2 duration-300 group">
                             
-                            <div class="absolute -bottom-10 left-6">
-                                <img src="<%= mentor.image %>" alt="<%= mentor.name %>" 
-                                     class="w-24 h-24 rounded-none border-4 border-black bg-white object-cover shadow-neo-sm">
+                            <div class="h-28 border-b-4 border-black relative" 
+                                 style="background-color: <%= mentor.color %>; background-image: radial-gradient(rgba(0,0,0,0.2) 1px, transparent 1px); background-size: 12px 12px;">
+                                
+                                <div class="absolute -bottom-10 left-6">
+                                    <img src="<%= mentor.image %>" alt="<%= mentor.name %>" 
+                                         class="w-24 h-24 rounded-none border-4 border-black bg-white object-cover shadow-[4px_4px_0px_0px_#000]">
+                                </div>
+                                
+                                <button class="absolute top-4 right-4 bg-white border-2 border-black w-8 h-8 flex items-center justify-center hover:bg-black hover:text-white transition-colors shadow-[2px_2px_0px_0px_#000]">
+                                    <i class="fa-regular fa-bookmark"></i>
+                                </button>
                             </div>
-                            
-                            <button class="absolute top-4 right-4 bg-white border-2 border-black w-8 h-8 flex items-center justify-center hover:bg-neo-black hover:text-white transition-colors shadow-neo-sm">
-                                <i class="fa-regular fa-bookmark"></i>
-                            </button>
-                        </div>
 
-                        <div class="pt-14 pb-6 px-6 flex-grow">
-                            <h3 class="text-2xl font-black text-neo-black mb-1 font-display uppercase"><%= mentor.name %></h3>
-                            <div class="flex flex-wrap items-center gap-2 mb-4">
-                                <span class="text-xs font-black bg-neo-black text-white px-2 py-1 uppercase tracking-tight font-sans"><%= mentor.role %></span>
-                                <span class="text-sm font-bold font-sans text-slate-500 italic">@ <%= mentor.company %></span>
+                            <div class="pt-14 pb-6 px-6 flex-grow">
+                                <h3 class="text-2xl font-black text-black mb-1 uppercase tracking-tight"><%= mentor.name %></h3>
+                                
+                                <div class="flex flex-wrap items-center gap-2 mb-4">
+                                    <span class="text-xs font-black bg-black text-white px-2 py-1 uppercase tracking-tight">
+                                        <%= mentor.role %>
+                                    </span>
+                                    <span class="text-sm font-bold text-slate-500 italic">
+                                        @ <%= mentor.company %>
+                                    </span>
+                                </div>
+
+                                <p class="text-slate-700 font-bold leading-relaxed border-l-4 border-slate-200 pl-3 mb-6 italic text-sm line-clamp-3">
+                                    "<%= mentor.bio %>"
+                                </p>
+
+                                <div class="inline-flex items-center gap-2 bg-green-100 border-2 border-green-800 px-3 py-1 text-green-800 text-xs font-black uppercase">
+                                    <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span>
+                                    Available
+                                </div>
                             </div>
-                            <p class="text-slate-700 font-medium leading-relaxed border-l-4 border-slate-200 pl-3 mb-6 font-sans italic">
-                                "<%= mentor.bio %>"
-                            </p>
-                            <div class="inline-flex items-center gap-2 bg-green-100 border-2 border-green-800 px-3 py-1 text-green-800 text-xs font-black uppercase">
-                                <span class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span>
-                                Available this week
+
+                            <div class="p-4 border-t-4 border-black bg-gray-50 flex justify-between items-center gap-4">
+                                <div class="flex space-x-3">
+                                    <a href="#" class="text-black hover:text-[#4f46e5] transition-colors"><i class="fa-brands fa-linkedin text-2xl"></i></a>
+                                    <a href="#" class="text-black hover:text-[#4f46e5] transition-colors"><i class="fa-brands fa-github text-2xl"></i></a>
+                                </div>
+                                <button class="flex-grow bg-black text-white font-bold py-2 border-4 border-black hover:bg-white hover:text-black transition-all tracking-widest uppercase text-sm shadow-none hover:shadow-[2px_2px_0px_0px_#000]">
+                                    BOOK SESSION
+                                </button>
                             </div>
                         </div>
+                    <% }) %>
 
-                        <div class="p-4 border-t-4 border-black bg-slate-50 flex justify-between items-center gap-4">
-                            <div class="flex space-x-3">
-                                <a href="#" class="text-neo-black hover:text-brand-indigo transition-colors"><i class="fa-brands fa-linkedin text-2xl"></i></a>
-                                <a href="#" class="text-neo-black hover:text-brand-indigo transition-colors"><i class="fa-brands fa-github text-2xl"></i></a>
-                            </div>
-                            <button class="flex-grow bg-neo-black text-white font-bold py-2 border-4 border-neo-black hover:bg-white hover:text-black transition-all font-display tracking-widest uppercase text-sm">
-                                BOOK SESSION
-                            </button>
-                        </div>
-                    </div>
-                <% }) %>
-
-            </div>
+                </div>
+            <% } else { %>
+                <div class="text-center py-24 border-4 border-black bg-white shadow-[8px_8px_0px_0px_#000]">
+                    <div class="text-8xl mb-6 grayscale opacity-50">🧙‍♂️</div>
+                    <h3 class="text-4xl font-black mb-4 text-black uppercase tracking-tighter">No Wizards Found</h3>
+                    <p class="text-gray-600 mb-8 font-bold text-xl max-w-md mx-auto">
+                         It seems all our mentors are currently busy building the future. Check back soon!
+                    </p>
+                </div>
+            <% } %>
         </div>
 
-        <div class="bg-brand-slate border-y-4 border-black py-20 mb-20 text-white">
+        <div class="bg-[#0f172a] border-y-4 border-black py-20 mb-20 text-white">
             <div class="container mx-auto px-4 max-w-6xl">
-                <h2 class="text-5xl font-black text-center mb-16 font-display uppercase tracking-tighter">
-                    HOW TO GET <span class="text-brand-amber">MENTORED</span>
+                <h2 class="text-5xl font-black text-center mb-16 uppercase tracking-tighter">
+                    HOW TO GET <span class="text-[#f59e0b]">MENTORED</span>
                 </h2>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-neo-black">
-                    <div class="bg-white border-4 border-black p-8 shadow-neo relative">
-                        <div class="text-6xl font-black text-slate-200 mb-4 font-display">01</div>
-                        <h3 class="text-2xl font-bold mb-3 font-display uppercase">Pick Your Wizard</h3>
-                        <p class="font-medium font-sans text-slate-600 leading-snug">Browse our list of experts. Filter by stack, company, or expertise.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-black">
+                    <div class="bg-white border-4 border-black p-8 shadow-[6px_6px_0px_0px_#f59e0b] relative hover:-translate-y-2 transition-transform">
+                        <div class="text-6xl font-black text-slate-200 mb-4">01</div>
+                        <h3 class="text-2xl font-black mb-3 uppercase">Pick Your Wizard</h3>
+                        <p class="font-bold text-slate-600 leading-snug">Browse our list of experts. Filter by stack, company, or expertise.</p>
                     </div>
-                    <div class="bg-white border-4 border-black p-8 shadow-neo relative md:top-8">
-                        <div class="text-6xl font-black text-slate-200 mb-4 font-display">02</div>
-                        <h3 class="text-2xl font-bold mb-3 font-display uppercase">Book a Slot</h3>
-                        <p class="font-medium font-sans text-slate-600 leading-snug">Sync calendars. It's seamless, professional, and straight to the point.</p>
+                    <div class="bg-white border-4 border-black p-8 shadow-[6px_6px_0px_0px_#f59e0b] relative md:top-8 hover:-translate-y-2 transition-transform">
+                        <div class="text-6xl font-black text-slate-200 mb-4">02</div>
+                        <h3 class="text-2xl font-black mb-3 uppercase">Book a Slot</h3>
+                        <p class="font-bold text-slate-600 leading-snug">Sync calendars. It's seamless, professional, and straight to the point.</p>
                     </div>
-                    <div class="bg-white border-4 border-black p-8 shadow-neo relative md:top-16">
-                        <div class="text-6xl font-black text-slate-200 mb-4 font-display">03</div>
-                        <h3 class="text-2xl font-bold mb-3 font-display uppercase">Level Up</h3>
-                        <p class="font-medium font-sans text-slate-600 leading-snug">Get grilled, get advice, get better. Repeat until you are the lead.</p>
+                    <div class="bg-white border-4 border-black p-8 shadow-[6px_6px_0px_0px_#f59e0b] relative md:top-16 hover:-translate-y-2 transition-transform">
+                        <div class="text-6xl font-black text-slate-200 mb-4">03</div>
+                        <h3 class="text-2xl font-black mb-3 uppercase">Level Up</h3>
+                        <p class="font-bold text-slate-600 leading-snug">Get grilled, get advice, get better. Repeat until you are the lead.</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="container mx-auto px-4 mb-20">
-            <div class="bg-brand-indigo border-4 border-black p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-10 shadow-neo relative overflow-hidden group">
+            <div class="bg-[#4f46e5] border-4 border-black p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-10 shadow-[8px_8px_0px_0px_#000] relative overflow-hidden group">
                 <div class="flex-1 relative z-10">
-                    <h2 class="text-4xl md:text-5xl font-black mb-4 leading-tight text-white font-display uppercase tracking-tighter">ARE YOU A SENIOR <br> DEVELOPER?</h2>
-                    <p class="text-xl font-bold text-indigo-100 font-sans italic">// Pass on the torch. Help the next generation build scalable future.</p>
+                    <h2 class="text-4xl md:text-5xl font-black mb-4 leading-tight text-white uppercase tracking-tighter">ARE YOU A SENIOR <br> DEVELOPER?</h2>
+                    <p class="text-xl font-bold text-indigo-100 italic">Pass on the torch. Help the next generation build scalable future.</p>
                 </div>
                 <div class="relative z-10">
-                    <a href="#" class="inline-block bg-white text-neo-black text-xl font-bold px-10 py-5 border-4 border-black shadow-neo hover:translate-y-1 hover:shadow-none transition-all font-display tracking-widest uppercase">
-                        APPLY AS MENTOR <i class="fa-solid fa-arrow-right ml-2"></i>
+                    <a href="mailto:admin@incubator.com?subject=Mentorship Application" 
+                    class="inline-block bg-white text-black text-xl font-black px-10 py-5 border-4 border-black shadow-[4px_4px_0px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all uppercase">
+                        Contact to Join 📧
                     </a>
                 </div>
                 <div class="absolute top-0 right-0 w-64 h-64 bg-black/10 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
