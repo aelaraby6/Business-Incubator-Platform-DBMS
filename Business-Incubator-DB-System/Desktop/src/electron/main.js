@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import { isDevelopmentMode } from "./util.js";
 import { getPreloadPath, getUIPath } from "./pathResolver.js";
 import loginRequest from "./backend/auth/login.js";
+import { checkDatabaseHealth } from "./backend/debug/health.js";
 import {
   getAllWorkshops,
   getWorkshop,
@@ -66,6 +67,12 @@ app.on("ready", () => {
     return await loginRequest(credentials);
   });
 
+  // Debug handlers
+  ipcMain.handle("debug:health-check", async () => {
+    console.log("🏥 Running database health check...");
+    return await checkDatabaseHealth();
+  });
+
   // Workshop IPC Handlers
   ipcMain.handle("get-workshops", async () => {
     return await getAllWorkshops();
@@ -118,7 +125,7 @@ app.on("ready", () => {
     return await exportFeedbackReportPDF();
   });
 
-  //  Resources Handlers 
+  //  Resources Handlers
   ipcMain.handle("resources:get-all", async () => await getAllResources());
 
   ipcMain.handle(
@@ -139,8 +146,7 @@ app.on("ready", () => {
     return await updateBookingStatus(id, status);
   });
 
-
-  //  Mentors Handlers 
+  //  Mentors Handlers
   ipcMain.handle("mentors:get-all", async () => await getAllMentors());
 
   ipcMain.handle("mentors:add", async (_, data) => await addMentor(data));
@@ -203,6 +209,48 @@ app.on("ready", () => {
 
   ipcMain.handle("funding:delete", async (_event, id) => {
     return await deleteFundingRequest(id);
+  });
+
+  // Workshop IPC Handlers with consistent naming
+  ipcMain.handle("workshops:get-all", async () => {
+    console.log("🔧 IPC: workshops:get-all handler called");
+    try {
+      const workshops = await getAllWorkshops();
+      console.log(`✅ IPC: Returning ${workshops.length} workshops`);
+      return workshops;
+    } catch (err) {
+      console.error("❌ IPC: Error in workshops:get-all:", err);
+      throw err;
+    }
+  });
+
+  ipcMain.handle("workshops:get-by-id", async (_event, id) => {
+    console.log("🔧 IPC: workshops:get-by-id handler called with id:", id);
+    return await getWorkshop(id);
+  });
+
+  ipcMain.handle("workshops:create", async (_event, workshopData) => {
+    console.log("🔧 IPC: workshops:create handler called");
+    return await createWorkshop(workshopData);
+  });
+
+  ipcMain.handle("workshops:update", async (_event, id, workshopData) => {
+    console.log("🔧 IPC: workshops:update handler called with id:", id);
+    return await updateWorkshop(id, workshopData);
+  });
+
+  ipcMain.handle("workshops:delete", async (_event, id) => {
+    console.log("🔧 IPC: workshops:delete handler called with id:", id);
+    return await deleteWorkshop(id);
+  });
+
+  // Reports handlers
+  ipcMain.handle("reports:export-attendance", async () => {
+    return await exportAttendanceReportPDF();
+  });
+
+  ipcMain.handle("reports:export-feedback", async () => {
+    return await exportFeedbackReportPDF();
   });
 
   handleCloseEvents(mainWindow);
