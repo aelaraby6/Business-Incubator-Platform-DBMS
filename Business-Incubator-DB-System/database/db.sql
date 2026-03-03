@@ -66,12 +66,14 @@ CREATE TABLE "funding_requests" (
 );
 
 
-CREATE TABLE "session" (
-    "sid" varchar NOT NULL COLLATE "default",
-    "sess" json NOT NULL,
-    "expire" timestamp(6) NOT NULL
-)
-WITH (OIDS=FALSE);
+CREATE TABLE IF NOT EXISTS "session" (
+  "sid" VARCHAR NOT NULL COLLATE "default",
+  "sess" JSON NOT NULL,
+  "expire" TIMESTAMP(6) NOT NULL,
+  PRIMARY KEY ("sid")
+);
+
+
 
 
 
@@ -94,5 +96,3 @@ ALTER TABLE "project_resources" ADD FOREIGN KEY ("resource_id") REFERENCES "reso
 ALTER TABLE "funding_requests" ADD FOREIGN KEY ("project_id") REFERENCES "projects" ("id");
 
 ALTER TABLE "funding_requests" ADD FOREIGN KEY ("investor_id") REFERENCES "users" ("id");
-
-ALTER TABLE "notifications" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");

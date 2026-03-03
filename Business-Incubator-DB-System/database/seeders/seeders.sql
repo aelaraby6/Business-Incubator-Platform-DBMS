@@ -11,7 +11,6 @@ TRUNCATE TABLE
   workshop_attendance,
   funding_requests,
   project_resources,
-  notifications,
   project_entrepreneurs,
   mentors,
   workshops,
@@ -835,47 +834,6 @@ INSERT INTO "funding_requests" (
  12, 'Innovative approach to job matching. Strong pilot results with 500 candidates. Approved.', 
  '2026-02-14 14:00:00');
 
--- ============================================
--- NOTIFICATIONS TABLE (20 records)
--- ============================================
-INSERT INTO "notifications" ("user_id", "type", "message", "read") VALUES
--- User 1 (Ahmed Hassan)
-(1, 'funding', 'Your funding request for HealthHub (EGP 250,000) has been approved! 🎉', true),
-(1, 'workshop', 'You have been enrolled in "MVP Development Workshop" on March 5th', true),
-(1, 'project', 'Your project HealthHub has been approved by the review team', true),
-(1, 'funding', 'New funding request submitted successfully for review', false),
-
--- User 2 (Sara Mohamed)
-(2, 'funding', 'Congratulations! Your funding request for PharmaNow (EGP 150,000) has been approved', true),
-(2, 'workshop', 'Reminder: Pitch Deck Masterclass starts tomorrow at 2:00 PM', false),
-(2, 'project', 'You have been added as co-founder to FarmLink project', true),
-
--- User 3 (Omar Khaled)
-(3, 'workshop', 'New workshop available: Customer Discovery & Validation - March 12th', false),
-(3, 'project', 'Your project SkillBridge is now visible in the projects marketplace', true),
-
--- User 4 (Nour Abdallah)
-(4, 'project', 'Your project ArabicSTEM is pending admin approval', false),
-(4, 'workshop', 'You have been waitlisted for UI/UX Design Sprint workshop', true),
-
--- User 5 (Youssef Ali)
-(5, 'funding', 'Great news! FlexPay funding request (EGP 500,000) has been approved', true),
-(5, 'project', 'New co-founder has joined your project', true),
-
--- User 6 (Maha Ibrahim)
-(6, 'funding', 'Your funding request for SaveSmart is currently under review', false),
-(6, 'workshop', 'Enrollment confirmed for Financial Modeling workshop', true),
-
--- User 7 (Karim Yasser)
-(7, 'funding', 'FarmLink has received approved funding of EGP 350,000', true),
-(7, 'project', 'Your project has received a new resource allocation: Co-Working Space A', true),
-
--- User 8 (Layla Mahmoud)
-(8, 'funding', 'Funding request for AgroAI is pending review. Expected response in 5 business days.', false),
-(8, 'workshop', 'Workshop attendance recorded. Please provide feedback!', true),
-
--- User 9 (Hassan Farouk)
-(9, 'project', 'LocalCraft has been featured in this month newsletter!', false);
 
 -- ============================================
 -- WORKSHOP_FEEDBACK TABLE (15 records)
@@ -1047,7 +1005,6 @@ SELECT
   (SELECT COUNT(*) FROM resources) as resources_count,
   (SELECT COUNT(*) FROM project_resources) as project_resources_count,
   (SELECT COUNT(*) FROM funding_requests) as funding_requests_count,
-  (SELECT COUNT(*) FROM notifications) as notifications_count,
   (SELECT COUNT(*) FROM workshop_feedback) as feedback_count;
 
 -- Display sample data
@@ -1091,7 +1048,6 @@ SELECT '
 - 12 Resources (spaces, equipment, software, services)
 - 25 Resource allocations
 - 15 Funding requests (various statuses)
-- 20 Notifications
 - 15 Workshop feedbacks
 
 🎯 All data is diverse, realistic, and reflects Egyptian startup ecosystem!
