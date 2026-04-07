@@ -4,6 +4,8 @@
 
 An open-source incubator management system built on **Express.js + PostgreSQL + EJS**, with an **Electron** desktop layer for admins — unifying project tracking, mentorship, workshops, resources, and funding into one server-centric platform. Web-facing for entrepreneurs, desktop-powered for the people running the show.
 
+<img width="1430" height="752" alt="image" src="https://github.com/user-attachments/assets/dc8f73dd-1d25-4e28-8a82-bff386574500" />
+
 ---
 
 ## The Problem
