@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS "workshops" (
   "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 5. WORKSHOP_ATTENDANCE (الجدول القديم اللي السيدر مستنيه)
+-- 5. WORKSHOP_ATTENDANCE 
 CREATE TABLE IF NOT EXISTS "workshop_attendance" (
   "workshop_id" INT,
   "user_id" INT,
