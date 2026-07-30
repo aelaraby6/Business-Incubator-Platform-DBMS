@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { isDevelopmentMode } from "./util.js";
 import { getPreloadPath, getUIPath } from "./pathResolver.js";
