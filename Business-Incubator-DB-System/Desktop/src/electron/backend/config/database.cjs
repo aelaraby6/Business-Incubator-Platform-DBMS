@@ -1,11 +1,16 @@
 const pkg = require("pg");
 const { Pool } = pkg;
+const path = require("path");
+
+// Load environment variables from the Desktop project root .env file
+require("dotenv").config({ path: path.resolve(__dirname, "../../../../.env") });
+
 const pool = new Pool({
-  user: "incubator_user",
-  host: "localhost",
-  database: "incubator_db",
-  password: "strongpassword",
-  port: 5432,
+  user: process.env.DB_USER || "incubator_user",
+  host: process.env.DB_HOST || "localhost",
+  database: process.env.DB_NAME || "incubator_db",
+  password: process.env.DB_PASS || "strongpassword",
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
 });
 console.log("Database connection pool created successfully");
 

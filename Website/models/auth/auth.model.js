@@ -1,5 +1,13 @@
 import pool from "../../config/db.js";
 
+/**
+ * Find a user record by their email address.
+ * @async
+ * @function findUserByEmail
+ * @param {string} email - The email address to look up.
+ * @returns {Promise<Object|null>} The user object if found, otherwise null.
+ * @throws {Error} If the query fails.
+ */
 export const findUserByEmail = async (email) => {
   try {
     const result = await pool.query("SELECT * FROM users WHERE email = $1", [
@@ -17,6 +25,19 @@ export const findUserByEmail = async (email) => {
   }
 };
 
+/**
+ * Create a new user record in the database.
+ * @async
+ * @function createUser
+ * @param {Object} userData - User registration data.
+ * @param {string} userData.name - User's full name.
+ * @param {string} userData.user_code - Generated unique user alphanumeric code.
+ * @param {string} userData.email - User's email address.
+ * @param {string} userData.password - Hashed password.
+ * @param {string} [userData.role="entrepreneur"] - Role assigned to the user (e.g. 'entrepreneur', 'mentor', 'investor').
+ * @returns {Promise<Object>} The newly created user record.
+ * @throws {Error} If insert query fails.
+ */
 export const createUser = async ({
   name,
   user_code,
@@ -39,6 +60,14 @@ export const createUser = async ({
   }
 };
 
+/**
+ * Retrieve a user record by their numeric ID.
+ * @async
+ * @function findUserById
+ * @param {number|string} id - User ID.
+ * @returns {Promise<Object|null>} The user object if found, otherwise null.
+ * @throws {Error} If query fails.
+ */
 export const findUserById = async (id) => {
   try {
     const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
@@ -54,6 +83,15 @@ export const findUserById = async (id) => {
   }
 };
 
+/**
+ * Update the profile image file path for a user.
+ * @async
+ * @function updateUserProfileImage
+ * @param {number|string} userId - User ID.
+ * @param {string} imagePath - File path to the uploaded image.
+ * @returns {Promise<Object>} The updated user record.
+ * @throws {Error} If user does not exist or query fails.
+ */
 export const updateUserProfileImage = async (userId, imagePath) => {
   try {
     const result = await pool.query(
@@ -75,6 +113,15 @@ export const updateUserProfileImage = async (userId, imagePath) => {
   }
 };
 
+/**
+ * Get basic public information of a user.
+ * Excludes sensitive data like hashed passwords.
+ * @async
+ * @function getUserBasicInfo
+ * @param {number|string} userId - User ID.
+ * @returns {Promise<Object>} User information object.
+ * @throws {Error} If user not found.
+ */
 export const getUserBasicInfo = async (userId) => {
   try {
     const result = await pool.query(
@@ -94,6 +141,15 @@ export const getUserBasicInfo = async (userId) => {
   }
 };
 
+/**
+ * Update a user's hashed password.
+ * @async
+ * @function updateUserPassword
+ * @param {number|string} userId - User ID.
+ * @param {string} newHashedPassword - The new hashed password string.
+ * @returns {Promise<Object>} User details (excluding password) after updates.
+ * @throws {Error} If user not found.
+ */
 export const updateUserPassword = async (userId, newHashedPassword) => {
   try {
     const result = await pool.query(
@@ -115,6 +171,15 @@ export const updateUserPassword = async (userId, newHashedPassword) => {
   }
 };
 
+/**
+ * Retrieve notifications of a specific user.
+ * Ordered by creation timestamp descending.
+ * @async
+ * @function getUserNotifications
+ * @param {number|string} userId - User ID.
+ * @returns {Promise<Array<Object>>} List of notifications.
+ * @throws {Error} If database selection fails.
+ */
 export const getUserNotifications = async (userId) => {
   try {
     const result = await pool.query(
@@ -131,6 +196,14 @@ export const getUserNotifications = async (userId) => {
   }
 };
 
+/**
+ * Mark all unread notifications of a user as read.
+ * @async
+ * @function markNotificationsAsRead
+ * @param {number|string} userId - User ID.
+ * @returns {Promise<void>} Resolves on query completion.
+ * @throws {Error} If update fails.
+ */
 export const markNotificationsAsRead = async (userId) => {
   try {
     await pool.query(
@@ -145,6 +218,16 @@ export const markNotificationsAsRead = async (userId) => {
   }
 };
 
+/**
+ * Insert a new notification alert for a user.
+ * @async
+ * @function createNotification
+ * @param {number|string} userId - Target User ID.
+ * @param {string} type - Alert category/type (e.g. 'workshops', 'funding').
+ * @param {string} message - Text notification message.
+ * @returns {Promise<Object>} The created notification record.
+ * @throws {Error} If insertion fails.
+ */
 export const createNotification = async (userId, type, message) => {
   try {
     const result = await pool.query(

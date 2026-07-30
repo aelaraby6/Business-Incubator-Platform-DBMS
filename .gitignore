@@ -1,0 +1,54 @@
+# Dependency directories
+node_modules/
+**/node_modules/
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+**/.env
+**/.env.local
+
+# Log files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swo
+*.swp
+
+# Build and distribution directories
+dist/
+**/dist/
+dist-ssr/
+dist-react/
+release/
+**/release/
+out/
+**/out/
+
+# Public upload directories
+Website/public/uploads/*
+!Website/public/uploads/.gitkeep
