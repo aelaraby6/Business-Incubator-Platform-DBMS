@@ -29,6 +29,12 @@ import { fileURLToPath } from "url";
 import { getUserActivityLogs, getSystemMetrics } from "../../models/analytics/analytics.model.js";
 import eventBus from "../../utils/eventBus.js";
 
+/**
+ * Render the user signup EJS view.
+ * @function signupPage
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ */
 export const signupPage = (req, res) =>
   res.render("auth/signup", {
     pageRoute: "/v1/auth/signup",
@@ -36,6 +42,12 @@ export const signupPage = (req, res) =>
     success: req.flash("success")[0] || null,
   });
 
+/**
+ * Render the user login EJS view.
+ * @function loginPage
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ */
 export const loginPage = (req, res) =>
   res.render("auth/login", {
     pageRoute: "/v1/auth/login",
@@ -43,6 +55,15 @@ export const loginPage = (req, res) =>
     success: req.flash("success")[0] || null,
   });
 
+/**
+ * Retrieve user metrics, logs, notifications, workshops, and render the user dashboard profile EJS view.
+ * Supported roles: entrepreneur, mentor, investor.
+ * @async
+ * @function profilePage
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ */
 export const profilePage = async (req, res, next) => {
   try {
     const user = await getUserBasicInfo(req.session.userId);
@@ -117,6 +138,14 @@ export const profilePage = async (req, res, next) => {
   }
 };
 
+/**
+ * Register a new user into the platform. Hashes passwords and issues user codes.
+ * @async
+ * @function register
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ */
 export const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
@@ -158,6 +187,14 @@ export const register = async (req, res, next) => {
   }
 };
 
+/**
+ * Authenticate user credentials, establish express session variables, and emit login event.
+ * @async
+ * @function login
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ */
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -208,6 +245,13 @@ export const login = async (req, res, next) => {
   }
 };
 
+/**
+ * Terminate user session state, clear browser session cookies, and update client storage.
+ * @function logout
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ */
 export const logout = (req, res, next) => {
   try {
     req.session.destroy((err) => {
@@ -228,6 +272,15 @@ export const logout = (req, res, next) => {
   }
 };
 
+/**
+ * Upload and crop/process profile picture files utilizing sharp.
+ * Saves processed file locally and removes original temporary upload.
+ * @async
+ * @function updateProfileImage
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ */
 export const updateProfileImage = async (req, res, next) => {
   try {
     if (!req.file) {
@@ -340,6 +393,14 @@ export const updateProfileImage = async (req, res, next) => {
   }
 };
 
+/**
+ * Change current password to a new one after validation.
+ * @async
+ * @function changePassword
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ */
 export const changePassword = async (req, res, next) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
@@ -391,6 +452,14 @@ export const changePassword = async (req, res, next) => {
   }
 };
 
+/**
+ * API Endpoint to retrieve JSON payload containing the basic user data.
+ * @async
+ * @function getBasicUserData
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ */
 export const getBasicUserData = async (req, res, next) => {
   try {
     const user = await getUserBasicInfo(req.session.userId);
