@@ -23,10 +23,26 @@ const Resources = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
 
+  /*const fetchResources = async () => {
+    setLoading(true);
+    try {
+      const data = await window.electron.invoke;("resources:get-all");
+      setResources(data || []);
+    } catch (error) {
+      console.error("Failed to fetch resources:", error);
+    } finally {
+      setLoading(false);
+    }
+  };*/
+
+
+  //for web new
+  // Web fetch without useCallback
   const fetchResources = async () => {
     setLoading(true);
     try {
-      const data = await window.electron.invoke("resources:get-all");
+      const response = await fetch('/api/admin/resources');
+      const data = await response.json();
       setResources(data || []);
     } catch (error) {
       console.error("Failed to fetch resources:", error);
@@ -34,7 +50,6 @@ const Resources = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchResources();
   }, []);

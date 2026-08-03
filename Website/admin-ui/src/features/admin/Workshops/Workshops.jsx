@@ -28,11 +28,13 @@ const Workshops = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
 
+  /* old for desktop
   const fetchWorkshops = async () => {
     setLoading(true);
     try {
       console.log("📡 Fetching workshops...");
-      const data = await window.electron.invoke("workshops:get-all");
+      const data = await fetch('/api/admin/workshops');
+          //window.electron.invoke("workshops:get-all");
       console.log("📦 Received data:", data);
       console.log("📦 Data type:", typeof data);
       console.log("📦 Data is array:", Array.isArray(data));
@@ -49,6 +51,19 @@ const Workshops = () => {
       console.error("Error message:", error.message);
       console.error("Error stack:", error.stack);
       setWorkshops([]);
+    } finally {
+      setLoading(false);
+    }
+  };*/
+  //for web
+  const fetchWorkshops = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/admin/workshops');
+      const data = await response.json();
+      setWorkshops(data || []);
+    } catch (error) {
+      console.error("Failed to fetch workshops:", error);
     } finally {
       setLoading(false);
     }

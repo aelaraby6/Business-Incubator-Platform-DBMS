@@ -7,13 +7,13 @@
 
     <main class="flex-1 px-6 py-10">
         <div class="max-w-7xl mx-auto">
-            
+
             <div class="mb-10">
                 <span class="bg-black text-white px-3 py-1 font-bold text-sm uppercase tracking-wider mb-2 inline-block transform -rotate-1">
                     User Settings
                 </span>
                 <h1 class="text-5xl md:text-6xl font-black text-black mb-2 uppercase tracking-tighter">
-                    Your <span class="bg-[#4f46e5] text-white px-2 border-4 border-black shadow-[4px_4px_0px_0px_#000] italic inline-block transform rotate-1">Profile</span>
+                    Your <span class="bg-[#00adef] text-white px-2 border-4 border-black shadow-[4px_4px_0px_0px_#000] italic inline-block transform rotate-1">Profile</span>
                 </h1>
             </div>
 
@@ -24,30 +24,30 @@
                         <nav class="space-y-4">
                             <!-- Tab: Profile Info (All) -->
                             <a href="?tab=info"
-                                class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'info' ? 'bg-[#4f46e5] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
+                                class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'info' ? 'bg-[#00adef] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
                                 <span>🆔 Profile Info</span>
                             </a>
 
                             <% if (user.role === 'entrepreneur') { %>
                                 <!-- Tab: My Projects (Entrepreneur) -->
                                 <a href="?tab=projects"
-                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'projects' ? 'bg-[#4f46e5] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
+                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'projects' ? 'bg-[#00adef] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
                                     <span>🚀 My Projects (<%= dashboard.projects.length %>)</span>
                                 </a>
                                 <!-- Tab: Funding Requests (Entrepreneur) -->
                                 <a href="?tab=funding"
-                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'funding' ? 'bg-[#4f46e5] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
+                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'funding' ? 'bg-[#00adef] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
                                     <span>💵 Funding Requests (<%= dashboard.fundingRequests.length %>)</span>
                                 </a>
                                 <!-- Tab: Enrolled Workshops (Entrepreneur) -->
                                 <a href="?tab=workshops"
-                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'workshops' ? 'bg-[#4f46e5] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
+                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'workshops' ? 'bg-[#00adef] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
                                     <span>🎓 My Workshops (<%= dashboard.workshops.length %>)</span>
                                 </a>
                                 <!-- Tab: Notifications (Entrepreneur) -->
                                 <% let unreadCount = dashboard.notifications.filter(n => !n.read).length; %>
                                 <a href="?tab=notifications"
-                                    class="flex items-center justify-between px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'notifications' ? 'bg-[#4f46e5] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
+                                    class="flex items-center justify-between px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'notifications' ? 'bg-[#00adef] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
                                     <div class="flex items-center gap-3">
                                         <span>🔔 Notifications</span>
                                     </div>
@@ -58,35 +58,35 @@
                             <% } else if (user.role === 'mentor') { %>
                                 <!-- Tab: Assigned Projects (Mentor) -->
                                 <a href="?tab=projects"
-                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'projects' ? 'bg-[#4f46e5] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
+                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'projects' ? 'bg-[#00adef] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
                                     <span>🛠️ Assigned Projects (<%= dashboard.projects.length %>)</span>
                                 </a>
                                 <!-- Tab: Workshops Led (Mentor) -->
                                 <a href="?tab=workshops"
-                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'workshops' ? 'bg-[#4f46e5] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
+                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'workshops' ? 'bg-[#00adef] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
                                     <span>🧑‍🏫 Workshops Led (<%= dashboard.workshops.length %>)</span>
                                 </a>
                             <% } else if (user.role === 'investor') { %>
                                 <!-- Tab: Pending Funding (Investor) -->
                                 <a href="?tab=funding"
-                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'funding' ? 'bg-[#4f46e5] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
+                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'funding' ? 'bg-[#00adef] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
                                     <span>📥 Pending Funding (<%= dashboard.pendingRequests.length %>)</span>
                                 </a>
                                 <!-- Tab: Portfolio (Investor) -->
                                 <a href="?tab=portfolio"
-                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'portfolio' ? 'bg-[#4f46e5] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
+                                    class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'portfolio' ? 'bg-[#00adef] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
                                     <span>💼 My Portfolio (<%= dashboard.portfolio.length %>)</span>
                                 </a>
                             <% } %>
 
                             <!-- Tab: Activity Timeline (All) -->
                             <a href="?tab=timeline"
-                                class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'timeline' ? 'bg-[#4f46e5] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
+                                class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'timeline' ? 'bg-[#00adef] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
                                 <span>📜 Activity Timeline</span>
                             </a>
                             <!-- Tab: Platform Stats (All) -->
                             <a href="?tab=stats"
-                                class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'stats' ? 'bg-[#4f46e5] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
+                                class="flex items-center gap-3 px-4 py-3 border-2 border-black <%= dashboard.activeTab === 'stats' ? 'bg-[#00adef] text-white shadow-none' : 'bg-white text-black hover:-translate-y-1 hover:shadow-[3px_3px_0px_0px_#000]' %> font-black uppercase transition-all">
                                 <span>📊 Platform Stats</span>
                             </a>
                         </nav>
@@ -120,7 +120,7 @@
                         <!-- PROFILE SETTINGS TAB -->
                         <section id="profile-picture" class="bg-white border-4 border-black p-8 shadow-[6px_6px_0px_0px_#000] text-left">
                             <div class="flex items-center gap-3 mb-8 border-b-4 border-black pb-2 w-fit">
-                                <span class="bg-[#f59e0b] p-2 border-2 border-black text-black">📸</span>
+                                <span class="bg-[#e38524] p-2 border-2 border-black text-black">📸</span>
                                 <h2 class="text-2xl font-black uppercase tracking-tight">Avatar Settings</h2>
                             </div>
 
@@ -130,7 +130,7 @@
                                         <img src="<%= user.profilePicture %>?v=<%= Date.now() %>" alt="Profile"
                                             class="w-40 h-40 object-cover border-4 border-black shadow-[4px_4px_0_0_#000]">
                                     <% } else { %>
-                                        <div class="w-40 h-40 bg-[#f59e0b] border-4 border-black flex items-center justify-center shadow-[4px_4px_0_0_#000]">
+                                        <div class="w-40 h-40 bg-[#e38524] border-4 border-black flex items-center justify-center shadow-[4px_4px_0_0_#000]">
                                             <span class="text-6xl font-black text-black"><%= user && user.name ? user.name.charAt(0).toUpperCase() : '?' %></span>
                                         </div>
                                     <% } %>
@@ -140,9 +140,9 @@
                                     <form action="/v1/auth/profile/upload-picture" method="POST" enctype="multipart/form-data" class="space-y-4">
                                         <label class="block text-xs font-black uppercase mb-2 tracking-widest text-gray-500">New Picture</label>
                                         <input name="profilePicture" type="file" accept="image/*" required
-                                            class="w-full p-2 border-2 border-black bg-[#FFFDF5] font-bold file:mr-4 file:py-2 file:px-4 file:border-2 file:border-black file:bg-[#f59e0b] file:text-black file:font-black file:uppercase hover:file:bg-black hover:file:text-white transition-all" />
-                                        
-                                        <button type="submit" class="bg-black text-white px-6 py-3 font-black uppercase border-2 border-black shadow-[4px_4px_0_0_#4f46e5] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                                            class="w-full p-2 border-2 border-black bg-[#FFFDF5] font-bold file:mr-4 file:py-2 file:px-4 file:border-2 file:border-black file:bg-[#e38524] file:text-black file:font-black file:uppercase hover:file:bg-black hover:file:text-white transition-all" />
+
+                                        <button type="submit" class="bg-black text-white px-6 py-3 font-black uppercase border-2 border-black shadow-[4px_4px_0_0_#00adef] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
                                             Update Avatar
                                         </button>
                                     </form>
@@ -152,7 +152,7 @@
 
                         <section id="profile-info" class="bg-white border-4 border-black p-8 shadow-[6px_6px_0px_0px_#000] text-left">
                             <div class="flex items-center gap-3 mb-8 border-b-4 border-black pb-2 w-fit">
-                                <span class="bg-[#4f46e5] p-2 border-2 border-black text-white">🆔</span>
+                                <span class="bg-[#00adef] p-2 border-2 border-black text-white">🆔</span>
                                 <h2 class="text-2xl font-black uppercase tracking-tight">Identity Data</h2>
                             </div>
 
@@ -168,7 +168,7 @@
                                         class="w-full px-4 py-3 border-2 border-black bg-gray-100 font-bold text-gray-500 cursor-not-allowed" />
                                 </div>
                             </div>
-                            
+
                             <% if (user.role === 'mentor' || user.role === 'investor') { %>
                                 <div class="grid grid-cols-1 gap-6">
                                     <% if (user.expertise) { %>
@@ -197,7 +197,7 @@
 
                         <section id="change-password" class="bg-white border-4 border-black p-8 shadow-[6px_6px_0px_0px_#000] text-left">
                             <div class="flex items-center gap-3 mb-8 border-b-4 border-black pb-2 w-fit">
-                                <span class="bg-[#0f172a] p-2 border-2 border-black text-white">🔐</span>
+                                <span class="bg-[#000000] p-2 border-2 border-black text-white">🔐</span>
                                 <h2 class="text-2xl font-black uppercase tracking-tight">Security Access</h2>
                             </div>
 
@@ -221,7 +221,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="bg-black text-white px-10 py-4 font-black uppercase border-2 border-black shadow-[4px_4px_0_0_#f59e0b] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                                <button type="submit" class="bg-black text-white px-10 py-4 font-black uppercase border-2 border-black shadow-[4px_4px_0_0_#e38524] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
                                     Update Credentials
                                 </button>
                             </form>
@@ -232,7 +232,7 @@
                         <section class="bg-white border-4 border-black p-8 shadow-[6px_6px_0px_0px_#000] text-left">
                             <div class="flex items-center justify-between gap-4 mb-8 border-b-4 border-black pb-4">
                                 <div class="flex items-center gap-3">
-                                    <span class="bg-[#4f46e5] p-2 border-2 border-black text-white">🚀</span>
+                                    <span class="bg-[#00adef] p-2 border-2 border-black text-white">🚀</span>
                                     <h2 class="text-2xl font-black uppercase tracking-tight">Assigned Projects</h2>
                                 </div>
                                 <% if (user.role === 'entrepreneur') { %>
@@ -307,7 +307,7 @@
                                                 </div>
                                                 <div class="flex sm:flex-col items-start sm:items-end justify-between sm:justify-center gap-2">
                                                     <span class="text-xl font-black text-brand-indigo">$<%= parseFloat(request.amount).toLocaleString() %></span>
-                                                    <% 
+                                                    <%
                                                         let badgeBg = 'bg-yellow-100 text-yellow-800 border-yellow-800';
                                                         if (request.status === 'Approved') badgeBg = 'bg-green-100 text-green-800 border-green-800';
                                                         else if (request.status === 'Rejected') badgeBg = 'bg-red-100 text-red-800 border-red-800';
@@ -402,7 +402,7 @@
                         <section class="bg-white border-4 border-black p-8 shadow-[6px_6px_0px_0px_#000] text-left">
                             <div class="flex items-center justify-between gap-4 mb-8 border-b-4 border-black pb-4">
                                 <div class="flex items-center gap-3">
-                                    <span class="bg-[#4f46e5] p-2 border-2 border-black text-white">🎓</span>
+                                    <span class="bg-[#00adef] p-2 border-2 border-black text-white">🎓</span>
                                     <h2 class="text-2xl font-black uppercase tracking-tight">
                                         <%= user.role === 'mentor' ? 'Workshops I Lead' : 'My Enrolled Workshops' %>
                                     </h2>
@@ -454,7 +454,7 @@
                         <!-- NOTIFICATIONS TAB -->
                         <section class="bg-white border-4 border-black p-8 shadow-[6px_6px_0px_0px_#000] text-left">
                             <div class="flex items-center gap-3 mb-8 border-b-4 border-black pb-4">
-                                <span class="bg-[#4f46e5] p-2 border-2 border-black text-white">🔔</span>
+                                <span class="bg-[#00adef] p-2 border-2 border-black text-white">🔔</span>
                                 <h2 class="text-2xl font-black uppercase tracking-tight">Notifications</h2>
                             </div>
 
@@ -487,7 +487,7 @@
                         <!-- ACTIVITY TIMELINE TAB -->
                         <section class="bg-white border-4 border-black p-8 shadow-[6px_6px_0px_0px_#000] text-left">
                             <div class="flex items-center gap-3 mb-8 border-b-4 border-black pb-4">
-                                <span class="bg-[#4f46e5] p-2 border-2 border-black text-white">📜</span>
+                                <span class="bg-[#00adef] p-2 border-2 border-black text-white">📜</span>
                                 <h2 class="text-2xl font-black uppercase tracking-tight">Activity Timeline</h2>
                             </div>
 
@@ -497,7 +497,7 @@
                                         <div class="relative">
                                             <!-- Timeline Dot -->
                                             <div class="absolute -left-[34px] top-1.5 w-4 h-4 bg-black border-4 border-white rounded-full"></div>
-                                            
+
                                             <div class="bg-[#FFFDF5] border-2 border-black p-4 shadow-[3px_3px_0px_0px_#000] relative">
                                                 <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
                                                     <span class="bg-black text-white text-[10px] font-black px-2 py-0.5 border-2 border-black uppercase tracking-wider">
@@ -525,12 +525,12 @@
                         <!-- PLATFORM STATS TAB -->
                         <section class="bg-white border-4 border-black p-8 shadow-[6px_6px_0px_0px_#000] text-left">
                             <div class="flex items-center gap-3 mb-8 border-b-4 border-black pb-4">
-                                <span class="bg-[#f59e0b] p-2 border-2 border-black text-black">📊</span>
+                                <span class="bg-[#e38524] p-2 border-2 border-black text-black">📊</span>
                                 <h2 class="text-2xl font-black uppercase tracking-tight">Platform Aggregated Stats</h2>
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                                <% 
+                                <%
                                    const metricsMap = {
                                        'total_users': { label: 'Total Members', color: 'bg-brand-indigo', icon: '👥' },
                                        'total_projects': { label: 'Projects Registered', color: 'bg-green-500', icon: '🚀' },
@@ -576,7 +576,7 @@
         // Update funding request status (Investor dashboard)
         async function updateRequestStatus(requestId, newStatus) {
             if (!confirm(`Are you sure you want to set this funding request to '${newStatus}'?`)) return;
-            
+
             try {
                 const response = await fetch(`/v1/funding/${requestId}/status`, {
                     method: 'PUT',
@@ -585,11 +585,11 @@
                     },
                     body: JSON.stringify({ status: newStatus, notes: `Reviewed by investor.` })
                 });
-                
+
                 const result = await response.json();
                 if (response.ok && result.success) {
                     alert(`Funding request successfully ${newStatus.toLowerCase()}!`);
-                    
+
                     // Remove card or reload page
                     const card = document.getElementById(`request-card-${requestId}`);
                     if (card) {
@@ -610,7 +610,7 @@
         // Cancel workshop enrollment (Entrepreneur dashboard)
         async function cancelEnrollment(workshopId) {
             if (!confirm('Are you sure you want to cancel your enrollment in this workshop?')) return;
-            
+
             try {
                 const response = await fetch(`/v1/workshop/${workshopId}/attend`, {
                     method: 'DELETE',
@@ -618,11 +618,11 @@
                         'Content-Type': 'application/json',
                     }
                 });
-                
+
                 const result = await response.json();
                 if (response.ok) {
                     alert('Workshop enrollment successfully cancelled!');
-                    
+
                     // Remove card or reload page
                     const card = document.getElementById(`workshop-card-${workshopId}`);
                     if (card) {

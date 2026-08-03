@@ -40,10 +40,17 @@ const Sidebar = ({ activeTab = "Dashboard", setActiveTab = () => {} }) => {
       {/* Logo Section */}
       <div className="p-6 border-b-4 border-black bg-white">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-black border-4 border-black flex items-center justify-center shadow-[4px_4px_0_0_#4f46e5]">
-            <span className="text-white font-black text-2xl tracking-tighter">
-              B
-            </span>
+          <div className="w-12 h-12 border-4 border-black flex items-center justify-center bg-white">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+                className="w-8 h-8"
+            >
+              <path
+                  fill="#00A8FF"
+                  d="M352 128c-42.3 0-80 20.3-104 52.3-24-32-61.7-52.3-104-52.3C75.8 128 16 187.8 16 256s59.8 128 128 128c42.3 0 80-20.3 104-52.3 24 32 61.7 52.3 104 52.3 68.2 0 128-59.8 128-128s-59.8-128-128-128zm-208 192c-35.3 0-64-28.7-64-64s28.7-64 64-64 64 28.7 64 64-28.7 64-64 64zm208 0c-35.3 0-64-28.7-64-64s28.7-64 64-64 64 28.7 64 64-28.7 64-64 64z"
+              />
+            </svg>
           </div>
           <div className="flex flex-col">
             <span className="font-black text-xl uppercase leading-none tracking-tighter text-black">

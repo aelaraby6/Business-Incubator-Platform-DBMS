@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+/*import React, { useState, useEffect, useCallback } from "react";
 import {
   Eye,
   Search,
@@ -100,19 +100,120 @@ export default function Projects() {
     } catch (error) {
       console.error("Error toggling approved status:", error);
     }
+  };*/
+
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  Eye,
+  Search,
+  FolderOpen,
+  Loader2,
+  PlayCircle,
+  CheckCircle,
+  Check,
+  X,
+  Layers,
+  Lightbulb,
+  Activity,
+  Archive,
+} from "lucide-react";
+import ProjectDetails from "./project-detailes";
+import StatCard from "../../../components/StatCard";
+
+export default function Projects() {
+  const [filter, setFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [showDetails, setShowDetails] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [stats, setStats] = useState({
+    total: 0,
+    idea: 0,
+    in_progress: 0,
+    completed: 0,
+  });
+
+  const fetchProjects = useCallback(async () => {
+    setLoading(true);
+    try {
+      // WEB FETCH: Calling your Node.js backend!
+      const response = await fetch('/api/admin/projects');
+      const data = await response.json();
+      setProjects(data || []);
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchStats = useCallback(async () => {
+    try {
+      // WEB FETCH: Getting project statistics
+      const response = await fetch('/api/admin/projects/stats');
+      const data = await response.json();
+      setStats({
+        total: parseInt(data?.total) || 0,
+        idea: parseInt(data?.idea) || 0,
+        in_progress: parseInt(data?.in_progress) || 0,
+        completed: parseInt(data?.completed) || 0,
+      });
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchProjects();
+    fetchStats();
+  }, [fetchProjects, fetchStats]);
+
+  const handleUpdateStatus = async (projectId, newStatus) => {
+    try {
+      // WEB FETCH: Updating project status
+      await fetch(`/api/admin/projects/${projectId}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+      await fetchProjects();
+      await fetchStats();
+
+      if (selectedProject && selectedProject.id === projectId) {
+        const res = await fetch(`/api/admin/projects/${projectId}`);
+        const updatedProject = await res.json();
+        setSelectedProject(updatedProject);
+      }
+    } catch (error) {
+      console.error("Error updating project status:", error);
+    }
   };
 
-  const filteredProjects = projects.filter((project) => {
-    const matchesFilter = filter === "all" || project.stage === filter;
-    const matchesSearch =
-      project.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.domain?.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesFilter && matchesSearch;
-  });
+  const handleToggleApproved = async (projectId) => {
+    try {
+      // WEB FETCH: Toggling approval
+      await fetch(`/api/admin/projects/${projectId}/toggle-approve`, {
+        method: 'PUT'
+      });
+      await fetchProjects();
+      await fetchStats();
+
+      if (selectedProject && selectedProject.id === projectId) {
+        const res = await fetch(`/api/admin/projects/${projectId}`);
+        const updatedProject = await res.json();
+        setSelectedProject(updatedProject);
+      }
+    } catch (error) {
+      console.error("Error toggling approved status:", error);
+    }
+  };
 
   const handleViewProject = async (project) => {
     try {
-      const fullProject = await invoke("projects:getById", project.id);
+      // WEB FETCH: Getting single project details
+      const response = await fetch(`/api/admin/projects/${project.id}`);
+      const fullProject = await response.json();
       setSelectedProject(fullProject);
       setShowDetails(true);
     } catch (error) {
@@ -124,6 +225,29 @@ export default function Projects() {
     setShowDetails(false);
     setSelectedProject(null);
   };
+
+  const filteredProjects = projects.filter((project) => {
+    const matchesFilter = filter === "all" || project.stage === filter;
+    const matchesSearch =
+      project.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.domain?.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
+
+  /* const handleViewProject = async (project) => {
+    try {
+      const fullProject = await invoke("projects:getById", project.id);
+      setSelectedProject(fullProject);
+      setShowDetails(true);
+    } catch (error) {
+      console.error("Error fetching project details:", error);
+    }
+  };
+*/
+  /*const handleCloseDetails = () => {
+    setShowDetails(false);
+    setSelectedProject(null);
+  };*/
 
   return (
     <div className="flex-1 overflow-y-auto bg-[#FFFDF5] h-screen font-sans scrollbar-hide">

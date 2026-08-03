@@ -22,10 +22,27 @@ const Mentors = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterExpertise, setFilterExpertise] = useState("all");
 
+  /* the old for desktop
   const fetchMentors = useCallback(async () => {
     try {
       setLoading(true);
       const data = await window.electron.invoke("mentors:get-all");
+      setMentors(data || []);
+    } catch (error) {
+      console.error("Error fetching mentors:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+   */
+  // For web
+  const fetchMentors = useCallback(async () => {
+    try {
+      setLoading(true);
+      // WEB FETCH: Calling  Node.js backend!
+      const response = await fetch('/api/admin/mentors');
+      const data = await response.json();
       setMentors(data || []);
     } catch (error) {
       console.error("Error fetching mentors:", error);

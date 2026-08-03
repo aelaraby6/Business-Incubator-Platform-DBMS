@@ -8,6 +8,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  /*old handlesubmitfunction!
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -27,6 +28,42 @@ export default function LoginPage() {
 
         // Trigger auth change event for App.jsx to pick up
         window.dispatchEvent(new Event("auth-change"));
+      } else {
+        setError(response?.message || "Login failed. Please try again.");
+      }
+    } catch (err) {
+      setError(err?.message || "Invalid email or password");
+    } finally {
+      setLoading(false);
+    }
+  };
+  */
+  //new handlesubmit function
+
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+    try {
+      const response = await login({ email, password });
+
+      if (response?.success) {
+        setSuccess("Login successful! Welcome back.");
+        setEmail("");
+        setPassword("");
+
+        sessionStorage.setItem("isLoggedIn", "true");
+        sessionStorage.setItem("user", JSON.stringify(response.user));
+        sessionStorage.setItem("loginTime", new Date().toISOString());
+
+        // Trigger auth change event for App.jsx to pick up
+        window.dispatchEvent(new Event("auth-change"));
+
+        // --- NEW REDIRECT LOGIC HERE ---
+
       } else {
         setError(response?.message || "Login failed. Please try again.");
       }
